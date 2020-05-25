@@ -1,0 +1,55 @@
+﻿@page "/person"
+@inject HttpClient client
+
+
+<h3>Person</h3>
+
+<hr />
+
+<EditForm Model="person">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group row">
+        <label for="name" class="col-2 col-form-label">Name</label>
+        <div class="col-10">
+            <input @bind="person.Name" id="name" name="name" placeholder="Name" type="text" aria-describedby="nameHelpBlock" required="required" class="form-control">
+            <span id="nameHelpBlock" class="form-text text-muted">Complete person's name</span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="birth" class="col-2 col-form-label">Birth Date</label>
+        <div class="col-10">
+            <input @bind="person.BirthDate" id="birth" name="birth" placeholder="Birth Date" type="text" aria-describedby="birthHelpBlock" required="required" class="form-control">
+            <span id="birthHelpBlock" class="form-text text-muted">Birth date</span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="email" class="col-2 col-form-label">Email</label>
+        <div class="col-10">
+            <input @bind="person.Email" id="email" name="email" placeholder="Email" type="text" aria-describedby="emailHelpBlock" required="required" class="form-control">
+            <span id="emailHelpBlock" class="form-text text-muted">Personal primary email</span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="offset-2 col-10">
+            <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    Person person = new Person();
+    Result<Person> result = new Result<Person>(null);
+
+    public async Task HandleOnSubmit()
+    {
+        var response = await client.PostAsync("Person", JsonContent.Create(person));
+        result = await response.Content.ReadFromJsonAsync<Result<Person>>();
+
+        if (result.IsValid)
+        {
+            person = result.Item;
+        }
+    }
+}
