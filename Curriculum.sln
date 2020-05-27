@@ -3,11 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Server", "Curriculum\Server\Curriculum.Server.csproj", "{375E4B9C-8659-4298-808A-3A190193A96B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Server", "Curriculum\Server\Curriculum.Server.csproj", "{375E4B9C-8659-4298-808A-3A190193A96B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Client", "Curriculum\Client\Curriculum.Client.csproj", "{E2514B01-6006-446F-AA10-8479569E7152}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Client", "Curriculum\Client\Curriculum.Client.csproj", "{E2514B01-6006-446F-AA10-8479569E7152}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Shared", "Curriculum\Shared\Curriculum.Shared.csproj", "{093BAEA6-F10D-453D-AFD9-A2E393345A08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Shared", "Curriculum\Shared\Curriculum.Shared.csproj", "{093BAEA6-F10D-453D-AFD9-A2E393345A08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Data", "Curriculum.Data\Curriculum.Data.csproj", "{D42D6D34-1E0B-4F40-BB38-F5B5AE49D0C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Business", "Curriculum.Business\Curriculum.Business.csproj", "{9206D873-2D4F-4625-B3A5-93276B859414}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Entities", "Curriculum.Entities\Curriculum.Entities.csproj", "{C87B15F8-92A4-4927-9059-548E4636C7C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Api.Common", "Curriculum.Api.Common\Curriculum.Api.Common.csproj", "{ECC4EA2A-0C10-4ACC-B372-EF24C85C84B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +35,22 @@ Global
 		{093BAEA6-F10D-453D-AFD9-A2E393345A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{093BAEA6-F10D-453D-AFD9-A2E393345A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{093BAEA6-F10D-453D-AFD9-A2E393345A08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D42D6D34-1E0B-4F40-BB38-F5B5AE49D0C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D42D6D34-1E0B-4F40-BB38-F5B5AE49D0C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D42D6D34-1E0B-4F40-BB38-F5B5AE49D0C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D42D6D34-1E0B-4F40-BB38-F5B5AE49D0C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9206D873-2D4F-4625-B3A5-93276B859414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9206D873-2D4F-4625-B3A5-93276B859414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9206D873-2D4F-4625-B3A5-93276B859414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9206D873-2D4F-4625-B3A5-93276B859414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C87B15F8-92A4-4927-9059-548E4636C7C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C87B15F8-92A4-4927-9059-548E4636C7C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C87B15F8-92A4-4927-9059-548E4636C7C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C87B15F8-92A4-4927-9059-548E4636C7C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECC4EA2A-0C10-4ACC-B372-EF24C85C84B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC4EA2A-0C10-4ACC-B372-EF24C85C84B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC4EA2A-0C10-4ACC-B372-EF24C85C84B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC4EA2A-0C10-4ACC-B372-EF24C85C84B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

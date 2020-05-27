@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Curriculum.Shared
+namespace Curriculum.Api.Common
 {
-    public class Result
+    public class Result 
     {
         private readonly List<string> errors = new List<string>();
 
@@ -11,19 +11,9 @@ namespace Curriculum.Shared
         public bool IsInvalid => errors.Any();
         public bool IsValid => !IsInvalid;
 
-        public void AddError(string error)
+        internal void AddError(string error)
         {
             errors.Add(error);
         }
-    }
-
-    public class Result<T> : Result
-    {
-        public Result(T item)
-        {
-            Item = item;
-        }
-
-        public T Item { get; }
     }
 }

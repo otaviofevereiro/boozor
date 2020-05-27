@@ -5,10 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Curriculum.Api.Common\Curriculum.Api.Common.csproj" />
+    <ProjectReference Include="..\..\Curriculum.Business\Curriculum.Business.csproj" />
+    <ProjectReference Include="..\..\Curriculum.Entities\Curriculum.Entities.csproj" />
     <ProjectReference Include="..\Client\Curriculum.Client.csproj" />
     <ProjectReference Include="..\Shared\Curriculum.Shared.csproj" />
   </ItemGroup>

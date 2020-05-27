@@ -8,4 +8,8 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Curriculum.Api.Common\Curriculum.Api.Common.csproj" />
+  </ItemGroup>
+
 </Project>
