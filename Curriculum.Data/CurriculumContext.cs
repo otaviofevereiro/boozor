@@ -1,5 +1,6 @@
 ﻿using Curriculum.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Curriculum.Server.Data
 {
@@ -7,9 +8,15 @@ namespace Curriculum.Server.Data
     {
         public DbSet<Person> Persons { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public CurriculumContext(DbContextOptions options) : base(options)
+        { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Database=CurriculumDb;Username=postgres;Password=1234");
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

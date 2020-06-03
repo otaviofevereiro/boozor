@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Curriculum.Business
 {
-    public class EntityService<TEntity>
-        where TEntity : Entity
+    class EntityService<TEntity> : IEntityService<TEntity> where TEntity : Entity
     {
         private readonly CurriculumContext context;
 

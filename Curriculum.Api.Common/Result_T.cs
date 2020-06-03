@@ -11,6 +11,6 @@
             Item = item;
         }
 
-        public T Item { get; internal set; }
+        public T Item { get; set; }
     }
 }

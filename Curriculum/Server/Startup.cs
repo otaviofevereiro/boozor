@@ -1,8 +1,13 @@
+using Curriculum.Business;
+using Curriculum.Server.Data;
+using Curriculum.Server.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AutoMapper;
 
 namespace Curriculum.Server
 {
@@ -22,6 +27,9 @@ namespace Curriculum.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddDbContext<CurriculumContext>(options => options.UseNpgsql(Configuration.GetConnectionString("CurrriculumDb")));
+            services.AddAutoMapper(typeof(CurriculumServerProfile));
+            services.UseBusinessLayer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

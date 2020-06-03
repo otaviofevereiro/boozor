@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Client", "Curric
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Shared", "Curriculum\Shared\Curriculum.Shared.csproj", "{093BAEA6-F10D-453D-AFD9-A2E393345A08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Data", "Curriculum.Data\Curriculum.Data.csproj", "{D42D6D34-1E0B-4F40-BB38-F5B5AE49D0C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Data", "Curriculum.Data\Curriculum.Data.csproj", "{D42D6D34-1E0B-4F40-BB38-F5B5AE49D0C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Business", "Curriculum.Business\Curriculum.Business.csproj", "{9206D873-2D4F-4625-B3A5-93276B859414}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Business", "Curriculum.Business\Curriculum.Business.csproj", "{9206D873-2D4F-4625-B3A5-93276B859414}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Entities", "Curriculum.Entities\Curriculum.Entities.csproj", "{C87B15F8-92A4-4927-9059-548E4636C7C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Entities", "Curriculum.Entities\Curriculum.Entities.csproj", "{C87B15F8-92A4-4927-9059-548E4636C7C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curriculum.Api.Common", "Curriculum.Api.Common\Curriculum.Api.Common.csproj", "{ECC4EA2A-0C10-4ACC-B372-EF24C85C84B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Api.Common", "Curriculum.Api.Common\Curriculum.Api.Common.csproj", "{ECC4EA2A-0C10-4ACC-B372-EF24C85C84B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

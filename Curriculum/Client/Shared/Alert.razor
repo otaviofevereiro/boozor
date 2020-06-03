@@ -1,0 +1,39 @@
+﻿
+@if (Result != null)
+{
+    @if (Result.HasErrors)
+    {
+        <div class="alert alert-danger" role="alert">
+            @foreach (var error in Result.Errors)
+            {
+                @error
+            }
+        </div>
+    }
+
+    @if (Result.HasWarnings)
+    {
+        <div class="alert alert-warning" role="alert">
+            @foreach (var warning in Result.Warnings)
+            {
+                @warning
+            }
+        </div>
+    }
+
+    @if (Result.HasInformations)
+    {
+        <div class="alert alert-primary" role="alert">
+            @foreach (var information in Result.Informations)
+            {
+                @information
+            }
+        </div>
+    }
+}
+
+@code {
+
+    [Parameter] public Result Result { get; set; }
+
+}

@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace Curriculum.Server.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class EntityController<TViewModel, TEntity> : ControllerBase
         where TEntity : Entity
     {
-        private readonly EntityService<TEntity> entityService;
+        private readonly IEntityService<TEntity> entityService;
         private readonly IMapper mapper;
 
-        public EntityController(EntityService<TEntity> entityService, IMapper mapper)
+        public EntityController(IEntityService<TEntity> entityService, IMapper mapper)
         {
             this.entityService = entityService;
             this.mapper = mapper;
@@ -93,7 +95,7 @@ namespace Curriculum.Server.Controllers
             return result;
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<Result<TViewModel>> Put([FromBody] TViewModel view, CancellationToken cancellationToken = default)
         {
             var result = new Result<TViewModel>();
