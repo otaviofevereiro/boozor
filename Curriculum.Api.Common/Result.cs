@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Curriculum.Api.Common
 {
-    public class Result
+    public class Result : IResult
     {
         private List<string> warnings = new List<string>();
         private List<string> errors = new List<string>();

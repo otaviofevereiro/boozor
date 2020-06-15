@@ -1,6 +1,6 @@
 ﻿namespace Curriculum.Api.Common
 {
-    public class Result<T> : Result
+    public class Result<T> : Result, IResultObject
     {
         public Result()
         {
@@ -12,5 +12,10 @@
         }
 
         public T Item { get; set; }
+
+        public object GetItem()
+        {
+            return Item;
+        }
     }
 }

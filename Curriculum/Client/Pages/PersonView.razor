@@ -1,14 +1,6 @@
 ﻿@page "/person"
-@inject HttpClient client
 
-<h3>Person</h3>
-
-<hr />
-
-<EditForm Model="person" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <Alert Result="@result"></Alert>
-
+<EntityForm Entity="person" EntityChanged="OnEntityChanged" RequestUri="api/persons" Title="Persons" EntityId="48">
     <div class="form-group row">
         <label for="Id" class="col-2 col-form-label">Id</label>
         <div class="col-10">
@@ -42,38 +34,14 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </div>
-</EditForm>
-
-<Spinner Loading="loading"></Spinner>
+</EntityForm>
 
 @code {
     Person person = new Person();
-    Result<Person> result = new Result<Person>();
-    bool loading = false;
 
-    private async Task HandleValidSubmit()
+    public void OnEntityChanged(Entity entity)
     {
-        loading = true;
-
-        HttpResponseMessage response = null;
-
-        if (person.Id > 0)
-        {
-            response = await client.PutAsync("api/persons", JsonContent.Create(person));
-        }
-        else
-        {
-            response = await client.PostAsync("api/persons", JsonContent.Create(person));
-        }
-
-        result = await response.Content.ReadFromJsonAsync<Result<Person>>();
-
-        if (result.IsValid)
-        {
-            person = result.Item;
-        }
-
-        loading = false;
+        person = (Person)entity;
     }
 }
 
