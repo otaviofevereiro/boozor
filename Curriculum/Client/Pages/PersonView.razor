@@ -1,6 +1,6 @@
 ﻿@page "/person"
 
-<EntityForm Entity="person" EntityChanged="OnEntityChanged" RequestUri="api/persons" Title="Persons" EntityId="48">
+<EntityForm @bind-Entity="person" TEntity="Person" RequestUri="api/persons" Title="Person">
     <div class="form-group row">
         <label for="Id" class="col-2 col-form-label">Id</label>
         <div class="col-10">
@@ -38,10 +38,5 @@
 
 @code {
     Person person = new Person();
-
-    public void OnEntityChanged(Entity entity)
-    {
-        person = (Person)entity;
-    }
 }
 

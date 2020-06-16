@@ -114,7 +114,6 @@ namespace Curriculum.Server.Controllers
         protected virtual TEntity ConvertToEntity(TViewModel view)
         {
             return mapper.Map<TViewModel, TEntity>(view);
-
         }
 
         protected virtual TViewModel ConvertToView(TEntity entity)

@@ -1,5 +1,4 @@
 ﻿@typeparam TEntity
-@inject HttpClient client
 
 @if (!string.IsNullOrEmpty(Title))
 {
@@ -13,76 +12,3 @@
     @ChildContent
 </EditForm>
 <Spinner Loading="loading"></Spinner>
-
-@code {
-    [Parameter]
-    public Entity Entity { get; set; }
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
-    [Parameter]
-    public string RequestUri { get; set; }
-    [Parameter]
-    public string Title { get; set; }
-    [Parameter]
-    public int? EntityId { get; set; }
-    [Parameter]
-    public EventCallback<Entity> EntityChanged { get; set; }
-
-    bool loading = false;
-    IResultObject result = new Result<Entity>();
-    Type entityType;
-    Type resultType;
-
-    protected override async Task OnInitializedAsync()
-    {
-        entityType = Entity.GetType();
-        resultType = typeof(Result<>).MakeGenericType(entityType);
-
-        if (EntityId > 0)
-            await GetEntity();
-
-        await base.OnInitializedAsync();
-    }
-
-    private async Task GetEntity()
-    {
-        await Execute(() => client.GetAsync($"{RequestUri}\\{EntityId}"));
-    }
-
-    private async Task Execute(Func<Task<HttpResponseMessage>> func)
-    {
-        loading = true;
-
-        try
-        {
-            var response = await func.Invoke();
-            var responseResult = await response.Content.ReadFromJsonAsync(resultType);
-
-            resultType.GetProperty("Item").GetValue(responseResult);
-            result = (IResultObject)responseResult;
-
-            if (result.IsValid)
-            {
-                Entity = (Entity)result.GetItem();
-
-                await EntityChanged.InvokeAsync(Entity);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }
-        finally
-        {
-            loading = false;
-        }
-    }
-
-    private async Task HandleValidSubmit()
-    {
-        if (Entity.Id > 0)
-            await Execute(() => client.PutAsync(RequestUri, JsonContent.Create(Entity, entityType)));
-        else
-            await Execute(() => client.PostAsync(RequestUri, JsonContent.Create(Entity, entityType)));
-    }
-}

@@ -49,7 +49,7 @@ namespace Curriculum.Business
 
         public async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
-            context.Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
 
             await context.SaveChangesAsync(cancellationToken);
 

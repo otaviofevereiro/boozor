@@ -1,0 +1,77 @@
+﻿@page "/experience"
+
+<EntityForm @bind-Entity="experience" TEntity="Experience" RequestUri="api/experiences" Title="Experience" EntityId="48">
+
+    <div class="form-group row">
+        <label for="Title" class="col-2 col-form-label">Title</label>
+        <div class="col-10">
+            <InputText @bind-Value="experience.Title" placeholder="Title of your job" class="form-control"></InputText>
+            <ValidationMessage For="@(() => experience.Title)" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="CompanyName" class="col-2 col-form-label">Company Name</label>
+        <div class="col-10">
+            <InputText @bind-Value="experience.CompanyName" placeholder="Name of Company" class="form-control"></InputText>
+            <ValidationMessage For="@(() => experience.CompanyName)" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="EmploymentType" class="col-2 col-form-label">Employment Type</label>
+        <div class="col-10">
+            <InputEnum @bind-Value="experience.EmploymentType" TEnum="EmploymentType"></InputEnum>
+
+            <ValidationMessage For="@(() => experience.EmploymentType)" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="StartDate" class="col-2 col-form-label">Start Date</label>
+        <div class="col-10">
+            <InputDate @bind-Value="experience.StartDate" format-value="dd/MM/yyyy" placeholder="Start Date" class="form-control"></InputDate>
+            <ValidationMessage For="@(() => experience.StartDate)" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="EndDate" class="col-2 col-form-label">End Date</label>
+        <div class="col-10">
+            <InputDate @bind-Value="experience.EndDate" format-value="dd/MM/yyyy" placeholder="End Date" class="form-control"></InputDate>
+            <ValidationMessage For="@(() => experience.EndDate)" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="CurrentJob" class="col-2 col-form-label">Current Job</label>
+        <div class="col-10">
+            <div class="form-check">
+                <InputCheckbox @bind-Value="experience.CurrentJob" class="form-check-input"></InputCheckbox>
+                <label class="form-check-label" for="defaultCheck1">
+                    This is my current job
+                </label>
+            </div>
+
+            <ValidationMessage For="@(() => experience.CurrentJob)" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="Description" class="col-2 col-form-label">Description</label>
+        <div class="col-10">
+            <InputTextArea @bind-Value="experience.Description" placeholder="Description of your job" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() => experience.Description)" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="offset-2 col-10">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</EntityForm>
+
+@code {
+    Experience experience = new Experience();
+}
