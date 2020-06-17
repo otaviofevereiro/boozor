@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,13 +8,23 @@ using System.Linq;
 
 namespace Curriculum.Client.Shared
 {
-    public partial class InputEnum<TEnum>
+    public class CustomSelect<TEnum> : InputSelect<TEnum>
+        where TEnum : IConvertible
+    {
+        protected override bool TryParseValueFromString(string value, out TEnum result, out string validationErrorMessage)
+        {
+            return base.TryParseValueFromString(value, out result, out validationErrorMessage);
+        }
+
+    }
+
+    public partial class InputEnumSelect<TEnum> 
         where TEnum : IConvertible
     {
         private IReadOnlyCollection<KeyValuePair<int, string>> itens;
 
         [Parameter]
-        public object Value { get; set; }
+        public TEnum Value { get; set; }
 
         [Parameter]
         public EventCallback<TEnum> ValueChanged { get; set; }

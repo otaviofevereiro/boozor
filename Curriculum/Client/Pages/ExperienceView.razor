@@ -21,7 +21,7 @@
     <div class="form-group row">
         <label for="EmploymentType" class="col-2 col-form-label">Employment Type</label>
         <div class="col-10">
-            <InputEnum @bind-Value="experience.EmploymentType" TEnum="EmploymentType"></InputEnum>
+            <InputEnumSelect @bind-Value="experience.EmploymentType" TEnum="EmploymentType"></InputEnumSelect>
 
             <ValidationMessage For="@(() => experience.EmploymentType)" />
         </div>

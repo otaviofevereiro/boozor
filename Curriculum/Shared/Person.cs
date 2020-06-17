@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Curriculum.Shared.Base;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Curriculum.Shared

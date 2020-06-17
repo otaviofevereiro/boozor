@@ -1,4 +1,4 @@
-﻿namespace Curriculum.Shared
+﻿namespace Curriculum.Shared.Base
 {
     public abstract class Entity
     {

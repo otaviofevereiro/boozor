@@ -1,5 +1,5 @@
 ﻿using Curriculum.Api.Common;
-using Curriculum.Shared;
+using Curriculum.Shared.Base;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Net.Http;

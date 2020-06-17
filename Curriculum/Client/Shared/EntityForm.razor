@@ -7,7 +7,7 @@
 }
 
 <EditForm Model="Entity" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
+    <FluentValidation TEntity="TEntity"></FluentValidation>
     <Alert Result="@result"></Alert>
     @ChildContent
 </EditForm>
