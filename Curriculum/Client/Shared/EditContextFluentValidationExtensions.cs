@@ -39,9 +39,13 @@ namespace Curriculum.Client.Shared
 
         private static void ValidateField(EditContext editContext, ValidationMessageStore messages, in FieldIdentifier fieldIdentifier)
         {
+            var validatableEntity = fieldIdentifier.Model as IValidatableEntity;
+
+            if (validatableEntity == null)
+                return;
+
             var properties = new[] { fieldIdentifier.FieldName };
             var context = new ValidationContext(fieldIdentifier.Model, new PropertyChain(), new MemberNameValidatorSelector(properties));
-            var validatableEntity = (IValidatableEntity)fieldIdentifier.Model;
             var validator = validatableEntity.GetValidator();
             var validationResults = validator.Validate(context);
 
@@ -54,5 +58,36 @@ namespace Curriculum.Client.Shared
 
             editContext.NotifyValidationStateChanged();
         }
+
+        //private static bool TryGetFieldIndentifier(object model, in FieldIdentifier fieldIdentifier, out FieldIdentifier entityFieldIdentifier)
+        //{
+        //    var validatableEntity = fieldIdentifier.Model as IValidatableEntity;
+
+        //    if (validatableEntity == null)
+        //    {
+        //        var type = fieldIdentifier.Model.GetType();
+        //        var fieldIdentifierProperty = type.GetProperty("FieldIdentifier", System.Reflection.BindingFlags.Public);
+
+        //        if (fieldIdentifierProperty != null)
+        //        {
+        //            var newFieldIdentifierValue = fieldIdentifierProperty.GetValue(fieldIdentifier.Model);
+
+        //            if (newFieldIdentifierValue != null && newFieldIdentifierValue.GetType() == type)
+        //            {
+        //                entityFieldIdentifier = (FieldIdentifier)newFieldIdentifierValue;
+
+        //                if (entityFieldIdentifier.Model == model)
+        //                    return true;
+        //                else
+        //                    return TryGetFieldIndentifier(model, in fieldIdentifier, out entityFieldIdentifier);
+        //            }
+        //        }
+        //    }
+
+        //    entityFieldIdentifier = default;
+
+        //    return false;
+
+        //}
     }
 }

@@ -43,8 +43,8 @@ namespace Curriculum.Shared
                      .NotEmpty()
                      .MaximumLength(500);
 
-            validator.RuleFor(x => x.EmploymentType)
-                     .NotEmpty();
+            //validator.RuleFor(x => x.EmploymentType)
+            //         .NotEmpty();
         }
     }
 }

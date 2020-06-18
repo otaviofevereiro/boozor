@@ -1,27 +1,19 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Curriculum.Shared;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Curriculum.Client.Shared
 {
-    public class CustomSelect<TEnum> : InputSelect<TEnum>
+    public partial class InputEnumSelect<TEnum>
         where TEnum : IConvertible
     {
-        protected override bool TryParseValueFromString(string value, out TEnum result, out string validationErrorMessage)
-        {
-            return base.TryParseValueFromString(value, out result, out validationErrorMessage);
-        }
-
-    }
-
-    public partial class InputEnumSelect<TEnum> 
-        where TEnum : IConvertible
-    {
-        private IReadOnlyCollection<KeyValuePair<int, string>> itens;
+        private IReadOnlyCollection<KeyValuePair<object, string>> itens;
 
         [Parameter]
         public TEnum Value { get; set; }
@@ -36,7 +28,7 @@ namespace Curriculum.Client.Shared
             base.OnInitialized();
         }
 
-        private IEnumerable<KeyValuePair<int, string>> GetItens()
+        private IEnumerable<KeyValuePair<object, string>> GetItens()
         {
             var type = typeof(TEnum);
 
@@ -47,9 +39,9 @@ namespace Curriculum.Client.Shared
                                                         .FirstOrDefault() as DescriptionAttribute;
 
                 if (descriptionAttribute != null)
-                    yield return new KeyValuePair<int, string>(((TEnum)value).ToInt32(CultureInfo.InvariantCulture), descriptionAttribute.Description);
+                    yield return new KeyValuePair<object, string>(value, descriptionAttribute.Description);
                 else
-                    yield return new KeyValuePair<int, string>(((TEnum)value).ToInt32(CultureInfo.InvariantCulture), Enum.GetName(type, value));
+                    yield return new KeyValuePair<object, string>(value, Enum.GetName(type, value));
             }
         }
     }

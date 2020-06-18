@@ -1,8 +1,8 @@
 ﻿@typeparam TEnum
 
-<CustomSelect @bind-Value="Value" class="form-control">
+<InputSelect @bind-Value="Value" class="form-control">
     @foreach (var item in itens)
     {
         <option value="@item.Key">@item.Value</option>
     }
-</CustomSelect>
+</InputSelect>

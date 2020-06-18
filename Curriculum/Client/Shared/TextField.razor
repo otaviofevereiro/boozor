@@ -1,0 +1,46 @@
+﻿@inherits InputBase<string>
+
+<div class="form-group row">
+    <label class="col-2 col-form-label">@Label</label>
+    <div class="col-10">
+        <input @bind="@CurrentValue" class="form-control @CssClass" @attributes="AdditionalAttributes" />
+        <ValidationMessage For="@For" />
+    </div>
+</div>
+
+@code {
+    [Parameter] public System.Linq.Expressions.Expression<Func<string>> For { get; set; }
+    [Parameter] public string Label { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GetLabel();
+
+        base.OnInitialized();
+    }
+
+    protected override bool TryParseValueFromString(string value, out string result, out string validationErrorMessage)
+    {
+        validationErrorMessage = null;
+        result = value;
+
+        return true;
+    }
+
+    private void GetLabel()
+    {
+        if (!string.IsNullOrEmpty(Label))
+            return;
+
+        var modelType = EditContext.Model.GetType();
+        var memberExpression = (System.Linq.Expressions.MemberExpression)For.Body;
+        var property = modelType.GetProperty(memberExpression.Member.Name);
+        var displayAttribute =  property.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), true)
+                                            .FirstOrDefault() as System.ComponentModel.DataAnnotations.DisplayAttribute;
+
+        if (displayAttribute == null && string.IsNullOrEmpty(displayAttribute.Name))
+            Label = memberExpression.Member.Name;
+        else
+            Label = displayAttribute.Name;
+    }
+}
