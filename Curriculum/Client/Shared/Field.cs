@@ -11,7 +11,14 @@ namespace Curriculum.Client.Shared
 
         protected abstract void BuildInput(RenderTreeBuilder builder, int sequence);
 
-        protected override void BuildRenderTree(RenderTreeBuilder builder)
+        protected override void OnInitialized()
+        {
+            EnsureLabel();
+
+            base.OnInitialized();
+        }
+
+        protected sealed override void BuildRenderTree(RenderTreeBuilder builder)
         {
             builder.OpenElement(0, "div");
             builder.AddAttribute(1, "class", "form-group row");
@@ -36,9 +43,6 @@ namespace Curriculum.Client.Shared
         {
             builder.OpenElement(0, "label");
             builder.AddAttribute(1, "class", "col-2 col-form-label");
-
-            EnsureLabel();
-
             builder.AddContent(0, Label);
             builder.CloseElement();
         }

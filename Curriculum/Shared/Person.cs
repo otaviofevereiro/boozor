@@ -1,22 +1,32 @@
 ﻿using Curriculum.Shared.Base;
+using FluentValidation;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Curriculum.Shared
 {
-
-    public class Person : Entity
+    public class Person : Entity<Person>
     {
-        [Required]
         [Display(Name = "Birth Date")]
         public DateTime? BirthDate { get; set; }
 
-        [Required]
-        [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(60, ErrorMessage = "Name is too long.")]
         public string Name { get; set; }
+
+        protected override void Configure(EntityValidator<Person> validator)
+        {
+            validator.RuleFor(x => x.BirthDate)
+                     .NotEmpty();
+
+            validator.RuleFor(x => x.Email)
+                     .NotEmpty()
+                     .MaximumLength(250)
+                     .EmailAddress();
+
+            validator.RuleFor(x => x.Name)
+                     .NotEmpty()
+                     .MaximumLength(250);
+        }
     }
 }

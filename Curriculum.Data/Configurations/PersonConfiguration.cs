@@ -10,7 +10,7 @@ namespace Curriculum.Data.Configurations
         {
             builder.Property(x => x.Name)
                    .IsRequired()
-                   .HasMaxLength(60);
+                   .HasMaxLength(250);
 
             builder.Property(x => x.Email)
                    .IsRequired()

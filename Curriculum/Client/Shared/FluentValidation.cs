@@ -1,14 +1,11 @@
-﻿using Curriculum.Shared.Base;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
 
 namespace Curriculum.Client.Shared
 {
-    public class FluentValidation<TEntity> : ComponentBase
-        where TEntity : Entity
+    public class FluentValidation : ComponentBase
     {
-
         [CascadingParameter] EditContext CurrentEditContext { get; set; }
 
         protected override void OnInitialized()

@@ -24,7 +24,11 @@ namespace Curriculum.Client.Shared
 
         private static void ValidateModel(EditContext editContext, ValidationMessageStore messages)
         {
-            var validatableEntity = (IValidatableEntity)editContext.Model;
+            var validatableEntity = editContext.Model as IValidatableEntity;
+
+            if (validatableEntity == null)
+                throw new InvalidCastException($"O model {editContext.Model.GetType().Name} não pode ser validado, para isso é necessário herdar do tipo Entity<TEntity>");
+
             var validator = validatableEntity.GetValidator();
             var validationResults = validator.Validate(editContext.Model);
 

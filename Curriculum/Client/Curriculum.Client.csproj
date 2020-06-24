@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Shared\Curriculum.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Shared\Fields\" />
+  </ItemGroup>
+
 </Project>
