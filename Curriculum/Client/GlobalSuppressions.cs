@@ -7,3 +7,4 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Minor Code Smell", "S1199:Nested code blocks should not be used", Justification = "<Pending>", Scope = "member", Target = "~M:Curriculum.Client.Shared.Field`1.BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)")]
 [assembly: SuppressMessage("Minor Code Smell", "S1199:Nested code blocks should not be used", Justification = "<Pending>", Scope = "member", Target = "~M:Curriculum.Client.Shared.CheckboxField.BuildInput(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder,System.Int32)")]
+[assembly: SuppressMessage("Minor Code Smell", "S1199:Nested code blocks should not be used", Justification = "<Pending>", Scope = "member", Target = "~M:Curriculum.Client.Shared.DataTable`1.BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)")]

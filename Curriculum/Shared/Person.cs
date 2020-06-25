@@ -10,6 +10,8 @@ namespace Curriculum.Shared
         [Display(Name = "Birth Date")]
         public DateTime? BirthDate { get; set; }
 
+        [Display(Name = "Current Email")]
+
         public string Email { get; set; }
 
         public string Name { get; set; }

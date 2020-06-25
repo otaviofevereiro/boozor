@@ -1,13 +1,26 @@
 ﻿@page "/person"
 
-    <EntityForm @bind-Entity="person" TEntity="Person" RequestUri="api/persons" Title="Person">
-        <NumberField @bind-Value="person.Id" readonly />
-        <TextField @bind-Value="person.Name" />
-        <TextField @bind-Value="person.Email" />
-        <DateField @bind-Value="person.BirthDate" />
-    </EntityForm>
+<EntityForm @bind-Entity="person" TEntity="Person" RequestUri="api/persons" Title="Person">
+    <NumberField @bind-Value="person.Id" readonly />
+    <TextField @bind-Value="person.Name" />
+    <TextField @bind-Value="person.Email" />
+    <DateField @bind-Value="person.BirthDate" />
+</EntityForm>
+
+<DataTable Itens="persons">
+    <Column ValueExpression="(()=> person.Name)" Title="Name teste"></Column>
+    <Column ValueExpression="(()=> person.Email)"></Column>
+</DataTable>
 
 @code {
     Person person = new Person();
+
+    List<Person> persons = new List<Person>()
+{
+        new Person(){ Name ="nome1", Email = "email1" },
+        new Person(){ Name ="nome2", Email = "email2" },
+        new Person(){ Name ="nome3", Email = "email3" },
+    };
+
 }
 
