@@ -1,6 +1,6 @@
 ﻿@page "/person"
 
-<EntityForm @bind-Entity="person" TEntity="Person" RequestUri="api/persons" Title="Person">
+<EntityForm Model="person" RequestUri="api/persons" Title="Person">
     <NumberField @bind-Value="person.Id" readonly />
     <TextField @bind-Value="person.Name" />
     <TextField @bind-Value="person.Email" />
@@ -8,8 +8,8 @@
 </EntityForm>
 
 <DataTable Itens="persons">
-    <Column ValueExpression="(()=> person.Name)" Title="Name teste"></Column>
-    <Column ValueExpression="(()=> person.Email)"></Column>
+    <Column TModel="Person" ValueExpression="(x=> x.Name)" Title="Name teste"></Column>
+    <Column TModel="Person" ValueExpression="(x=> x.Email)"></Column>
 </DataTable>
 
 @code {
