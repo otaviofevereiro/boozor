@@ -16,7 +16,7 @@ namespace Curriculum.Client.Shared
 
         public override string GetValue(Expression<Func<TModel, object>> expression)
         {
-            var memberExpression = ((MemberExpression)expression.Body);
+            var memberExpression = GetMemberExpression(expression);
             var property = typeof(TModel).GetProperty(memberExpression.Member.Name);
 
             var displayAttribute = property?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), true)
@@ -26,6 +26,19 @@ namespace Curriculum.Client.Shared
                 return memberExpression.Member.Name;
             else
                 return displayAttribute.Name;
+        }
+
+        private MemberExpression GetMemberExpression(Expression<Func<TModel, object>> expression)
+        {
+            var memberExpression = expression.Body as MemberExpression;
+
+            if (memberExpression == null)
+            {
+                var unaryExpression = expression.Body as UnaryExpression;
+                memberExpression = unaryExpression.Operand as MemberExpression;
+            }
+
+            return memberExpression;
         }
     }
 }

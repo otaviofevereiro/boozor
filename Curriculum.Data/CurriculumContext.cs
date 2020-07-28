@@ -7,6 +7,7 @@ namespace Curriculum.Server.Data
     public class CurriculumContext : DbContext
     {
         public DbSet<Person> Persons { get; set; }
+        public DbSet<Experience> Experiences { get; set; }
 
 
         public CurriculumContext(DbContextOptions options) : base(options)

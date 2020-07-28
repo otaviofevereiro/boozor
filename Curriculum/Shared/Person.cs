@@ -30,5 +30,10 @@ namespace Curriculum.Shared
                      .NotEmpty()
                      .MaximumLength(250);
         }
+
+        public override string ToString()
+        {
+            return $"{BirthDate} - {Email} - {Name}";
+        }
     }
 }

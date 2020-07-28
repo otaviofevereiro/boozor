@@ -4,6 +4,8 @@ using Curriculum.Business;
 using Curriculum.Entities.Base;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,93 +26,100 @@ namespace Curriculum.Server.Controllers
         }
 
         [HttpDelete]
-        public async Task<Result<TViewModel>> Delete(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = new Result<TViewModel>();
 
             try
             {
                 result.Item = ConvertToView(await entityService.Delete(id, cancellationToken));
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 result.AddError(ex.Message);
+                
+                return BadRequest(result);
             }
-
-            return result;
         }
 
         [HttpGet]
-        public async Task<ListResult<TViewModel>> Get(CancellationToken cancellationToken = default)
+        public IActionResult Get()
         {
-            var result = new ListResult<TViewModel>();
+            var result = new Result<IReadOnlyList<TViewModel>>();
 
             try
             {
-                foreach (var entity in await entityService.All(cancellationToken))
-                {
-                    result.Add(ConvertToView(entity));
-                }
+                result.Item = mapper.ProjectTo<TViewModel>(entityService.AsQueryable()).ToImmutableArray();
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 result.AddError(ex.Message);
-            }
 
-            return result;
+                return BadRequest(result);
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<Result<TViewModel>> Get(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Get(int id, CancellationToken cancellationToken = default)
         {
             var result = new Result<TViewModel>();
 
             try
             {
                 result.Item = ConvertToView(await entityService.Find(id, cancellationToken));
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 result.AddError(ex.Message);
+
+                return BadRequest(result);
             }
-
-            return result;
-
         }
 
         [HttpPost]
-        public async Task<Result<TViewModel>> Post([FromBody] TViewModel view, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Post([FromBody] TViewModel view, CancellationToken cancellationToken = default)
         {
             var result = new Result<TViewModel>();
 
             try
             {
                 result.Item = ConvertToView(await entityService.Add(ConvertToEntity(view), cancellationToken));
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 result.AddError(ex.Message);
-            }
 
-            return result;
+                return BadRequest(result);
+            }
         }
 
         [HttpPut]
-        public async Task<Result<TViewModel>> Put([FromBody] TViewModel view, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Put([FromBody] TViewModel view, CancellationToken cancellationToken = default)
         {
             var result = new Result<TViewModel>();
 
             try
             {
                 result.Item = ConvertToView(await entityService.Update(ConvertToEntity(view), cancellationToken));
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 result.AddError(ex.Message);
-            }
 
-            return result;
+                return BadRequest(result);
+            }
         }
+
         protected virtual TEntity ConvertToEntity(TViewModel view)
         {
             return mapper.Map<TViewModel, TEntity>(view);

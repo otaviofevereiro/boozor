@@ -1,6 +1,6 @@
 ﻿@page "/experience"
 
-<EntityForm Model="experience" RequestUri="api/experiences" Title="Experience">
+<EntityForm TEntity="Experience" Model="experience" RequestUri="api/experiences" Title="Experience">
     <TextField @bind-Value="experience.Title" />
     <TextField @bind-Value="experience.CompanyName" />
     <SelectEnumField @bind-Value="experience.EmploymentType"></SelectEnumField>

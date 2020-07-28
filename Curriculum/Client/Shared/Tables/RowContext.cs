@@ -15,8 +15,8 @@ namespace Curriculum.Client.Shared
         public override string GetValue(Expression<Func<TModel, object>> expression)
         {
             return expression.Compile()
-                             .Invoke(item)
-                             .ToString();
+                             ?.Invoke(item)
+                             ?.ToString();
         }
     }
 }

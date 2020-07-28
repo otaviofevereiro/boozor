@@ -14,13 +14,14 @@ namespace Curriculum.Client.Shared
     /// <summary>
     /// Renders a form element that cascades an <see cref="EditContext"/> to descendants.
     /// </summary>
-    public class EntityForm : ComponentBase
+    public class EntityForm<TEntity> : ComponentBase
+        where TEntity : Entity
     {
         private readonly Func<Task> _handleSubmitDelegate;
         private EditContext? _fixedEditContext;
         private bool loading;
 
-        Result<object> result = new Result<object>();
+        Result<TEntity> result = new Result<TEntity>();
 
         // Cache to avoid per-render allocations
         /// <summary>
@@ -59,7 +60,7 @@ namespace Curriculum.Client.Shared
         /// be constructed for this model. If using this parameter, do not also supply
         /// a value for <see cref="EditContext"/>.
         /// </summary>
-        [Parameter] public object? Model { get; set; }
+        [Parameter] public TEntity Model { get; set; }
 
         /// <summary>
         /// A callback that will be invoked when the form is submitted and the
@@ -181,7 +182,8 @@ namespace Curriculum.Client.Shared
             try
             {
                 var response = await func.Invoke();
-                result = await response.Content.ReadFromJsonAsync<Result<object>>();
+                response.EnsureSuccessStatusCode();
+                result = await response.Content.ReadFromJsonAsync<Result<TEntity>>();
 
                 if (result.IsValid)
                 {
@@ -228,37 +230,36 @@ namespace Curriculum.Client.Shared
 
         private async Task HandleValidSubmit()
         {
-            var entity = (Entity)Model;
-
-            if (entity.Id > 0)
-                await Execute(() => Client.PutAsync(RequestUri, JsonContent.Create(entity)));
+            if (Model.Id > 0)
+                await Execute(() => Client.PutAsync(RequestUri, JsonContent.Create(Model)));
             else
-                await Execute(() => Client.PostAsync(RequestUri, JsonContent.Create(entity)));
+                await Execute(() => Client.PostAsync(RequestUri, JsonContent.Create(Model)));
         }
 
         private void RenderAlert(RenderTreeBuilder builder)
         {
             builder.OpenComponent<CascadingValue<IResult>>(3);
-            builder.AddAttribute(0, "Value", result);
-            builder.AddAttribute(1, "ChildContent", CreateAlert());
+            builder.AddAttribute(0, "IsFixed", true);
+            builder.AddAttribute(1, "Value", result);
+            builder.AddAttribute(2, "ChildContent", CreateAlert());
             builder.CloseComponent();
         }
 
         private void RenderFluntValidation(RenderTreeBuilder builder)
         {
-            builder.OpenComponent<CascadingValue<EditContext>>(3);
-            builder.AddAttribute(4, "IsFixed", true);
-            builder.AddAttribute(5, "Value", _fixedEditContext);
-            builder.AddAttribute(7, "ChildContent", CreateFluentValidation());
+            builder.OpenComponent<CascadingValue<EditContext>>(4);
+            builder.AddAttribute(0, "IsFixed", true);
+            builder.AddAttribute(1, "Value", _fixedEditContext);
+            builder.AddAttribute(2, "ChildContent", CreateFluentValidation());
             builder.CloseComponent();
         }
 
         private void RenderSpinner(RenderTreeBuilder builder)
         {
             builder.OpenComponent<CascadingValue<bool>>(5);
-            builder.AddAttribute(0, "Value", loading);
-            builder.AddAttribute(1, "ChildContent", CreateSpinner());
-
+            builder.AddAttribute(0, "IsFixed", true);
+            builder.AddAttribute(1, "Value", loading);
+            builder.AddAttribute(2, "ChildContent", CreateSpinner());
             builder.CloseComponent();
         }
     }

@@ -1,16 +1,26 @@
 ﻿@page "/person"
 
-<EntityForm Model="person" RequestUri="api/persons" Title="Person">
+<EntityForm TEntity="Person" Model="person" RequestUri="api/persons" Title="Person">
     <NumberField @bind-Value="person.Id" readonly />
     <TextField @bind-Value="person.Name" />
     <TextField @bind-Value="person.Email" />
     <DateField @bind-Value="person.BirthDate" />
 </EntityForm>
 
-<DataTable Itens="persons">
-    <Column TModel="Person" ValueExpression="(x=> x.Name)" Title="Name teste"></Column>
+<DataTable TModel="Person" Itens="persons">
+    <Column TModel="Person" ValueExpression="(x=> x.Id)"></Column>
+    <Column TModel="Person" ValueExpression="(x=> x.Name)"></Column>
     <Column TModel="Person" ValueExpression="(x=> x.Email)"></Column>
 </DataTable>
+
+<br/>
+
+<RestDataTable TModel="Person" RequestUri="api/persons" >
+    <Column TModel="Person" ValueExpression="(x=> x.Name)" Title="Name teste"></Column>
+    <Column TModel="Person" ValueExpression="(x=> x.Email)"></Column>
+</RestDataTable>
+
+
 
 @code {
     Person person = new Person();
@@ -21,6 +31,5 @@
         new Person(){ Name ="nome2", Email = "email2" },
         new Person(){ Name ="nome3", Email = "email3" },
     };
-
 }
 

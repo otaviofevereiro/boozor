@@ -2,12 +2,14 @@
 using Curriculum.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Curriculum.Business
 {
-    class EntityService<TEntity> : IEntityService<TEntity> where TEntity : Entity
+    class EntityService<TEntity> : IEntityService<TEntity>
+        where TEntity : Entity
     {
         private readonly CurriculumContext context;
 
@@ -28,6 +30,11 @@ namespace Curriculum.Business
         public async Task<IEnumerable<TEntity>> All(CancellationToken cancellationToken = default)
         {
             return await EntityFrameworkQueryableExtensions.ToListAsync(context.Set<TEntity>().AsNoTracking(), cancellationToken);
+        }
+
+        public IQueryable<TEntity> AsQueryable()
+        {
+            return context.Set<TEntity>().AsNoTracking();
         }
 
         public async Task<TEntity> Delete(int id, CancellationToken cancellationToken = default)
