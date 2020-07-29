@@ -20,8 +20,9 @@ namespace Curriculum.Client.Shared
         private readonly Func<Task> _handleSubmitDelegate;
         private EditContext? _fixedEditContext;
         private bool loading;
-
+        private TEntity originalModel;
         Result<TEntity> result = new Result<TEntity>();
+        private TEntity model;
 
         // Cache to avoid per-render allocations
         /// <summary>
@@ -60,8 +61,7 @@ namespace Curriculum.Client.Shared
         /// be constructed for this model. If using this parameter, do not also supply
         /// a value for <see cref="EditContext"/>.
         /// </summary>
-        [Parameter] public TEntity Model { get; set; }
-
+        [Parameter] public TEntity Model { get => model; set => originalModel = model = value; }
         /// <summary>
         /// A callback that will be invoked when the form is submitted and the
         /// <see cref="EditContext"/> is determined to be invalid.
@@ -106,9 +106,7 @@ namespace Curriculum.Client.Shared
                     builder.AddAttribute(7, "ChildContent", ChildContent?.Invoke(_fixedEditContext));
                     builder.CloseComponent();
 
-
-
-                    RenderSubmitButton(builder);
+                    RenderToolbar(builder);
                 }
                 builder.CloseElement();
 
@@ -136,25 +134,6 @@ namespace Curriculum.Client.Shared
 
             if (_fixedEditContext == null || EditContext != null || Model != _fixedEditContext.Model)
                 _fixedEditContext = EditContext ?? new EditContext(Model!);
-        }
-
-        private static void RenderSubmitButton(RenderTreeBuilder builder)
-        {
-            builder.OpenElement(7, "div");
-            builder.AddAttribute(0, "class", "form-group row");
-            {
-                builder.OpenElement(8, "div");
-                builder.AddAttribute(0, "class", "offset-2 col-10");
-                {
-                    builder.OpenElement(9, "button");
-                    builder.AddAttribute(0, "type", "submit");
-                    builder.AddAttribute(1, "class", "btn btn-primary");
-                    builder.AddContent(0, "Submit");
-                    builder.CloseElement();
-                }
-                builder.CloseElement();
-            }
-            builder.CloseElement();
         }
 
         RenderFragment CreateAlert() => builder =>
@@ -245,6 +224,18 @@ namespace Curriculum.Client.Shared
             builder.CloseComponent();
         }
 
+        private void RenderCancelButton(RenderTreeBuilder builder)
+        {
+            builder.OpenElement(3, "button");
+            builder.AddAttribute(0, "type", "button");
+            builder.AddAttribute(1, "class", "btn btn-light");
+            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, () => { model = originalModel; }));
+            builder.AddContent(0, "Cancel");
+            builder.CloseElement();
+
+            builder.AddContent(4, " ");
+        }
+
         private void RenderFluntValidation(RenderTreeBuilder builder)
         {
             builder.OpenComponent<CascadingValue<EditContext>>(4);
@@ -261,6 +252,33 @@ namespace Curriculum.Client.Shared
             builder.AddAttribute(1, "Value", loading);
             builder.AddAttribute(2, "ChildContent", CreateSpinner());
             builder.CloseComponent();
+        }
+
+        private void RenderSubmitButton(RenderTreeBuilder builder)
+        {
+            builder.OpenElement(1, "button");
+            builder.AddAttribute(0, "type", "button");
+            builder.AddAttribute(1, "class", "btn btn-primary");
+            builder.AddContent(0, "Submit");
+            builder.CloseElement();
+
+            builder.AddContent(2, " ");
+        }
+
+        private void RenderToolbar(RenderTreeBuilder builder)
+        {
+            builder.OpenElement(7, "div");
+            builder.AddAttribute(0, "class", "form-group row");
+            {
+                builder.OpenElement(8, "div");
+                builder.AddAttribute(0, "class", "offset-2 col-10");
+                {
+                    RenderSubmitButton(builder);
+                    RenderCancelButton(builder);
+                }
+                builder.CloseElement();
+            }
+            builder.CloseElement();
         }
     }
 }

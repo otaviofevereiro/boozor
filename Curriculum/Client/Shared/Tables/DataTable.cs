@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Curriculum.Client.Shared
 {
     public class DataTable<TModel> : ComponentBase, IDisposable
+        where TModel : class
     {
         private bool disposedValue;
 
@@ -15,13 +18,26 @@ namespace Curriculum.Client.Shared
         [Parameter]
         public IEnumerable<TModel> Itens { get; set; }
 
+        [Parameter]
+        public bool Multiselect { get; set; } = false;
+
+        [Parameter]
+        public TModel SelectedItem { get; set; }
+
+        [Parameter]
+        public EventCallback<TModel> SelectedItemChanged { get; set; }
+
+
+        private readonly List<TModel> selectedItens = new List<TModel>();
+        public IReadOnlyCollection<TModel> SelectedItens => selectedItens;
+
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             if (Itens == null)
                 return;
 
             builder.OpenElement(0, "table");
-            builder.AddAttribute(1, "class", "table");
+            builder.AddAttribute(1, "class", "table table-striped");
             {
                 builder.OpenElement(2, "thead");
                 {
@@ -41,6 +57,9 @@ namespace Curriculum.Client.Shared
                     foreach (var item in Itens)
                     {
                         builder.OpenElement(9, "tr");
+                        builder.AddAttribute(1, "onclick", EventCallback.Factory.Create(this, () => OnRowClick(item)));
+                        if (selectedItens.Contains(item))
+                            builder.AddAttribute(0, "class", "table-primary");
                         {
                             builder.OpenComponent<CascadingValue<DataTableContext<TModel>>>(10);
                             builder.AddAttribute(11, "Value", new RowContext<TModel>(item));
@@ -56,6 +75,38 @@ namespace Curriculum.Client.Shared
             builder.CloseElement();
         }
 
+        public async Task OnRowClick(TModel item)
+        {
+            Debug.WriteLine($" Item Selecionado - {item}");
+
+            if (Multiselect)
+            {
+                if (selectedItens.Remove(item))
+                {
+                    await OnSelectedItemChange(Activator.CreateInstance<TModel>());
+                    return;
+                }
+            }
+            else
+            {
+                await OnSelectedItemChange(Activator.CreateInstance<TModel>());
+                selectedItens.Clear();
+            }
+
+            selectedItens.Add(item);
+            await OnSelectedItemChange(item);
+        }
+
+        private async Task OnSelectedItemChange(TModel item)
+        {
+            SelectedItem = item;
+
+            if (SelectedItemChanged.HasDelegate)
+                await SelectedItemChanged.InvokeAsync(item);
+        }
+
+
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -63,27 +114,21 @@ namespace Curriculum.Client.Shared
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects)
-
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
                 ChildContent = null;
                 Itens = null;
                 disposedValue = true;
             }
         }
 
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~DataTable()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
+        ~DataTable()
+        {
+            Dispose(disposing: false);
+        }
 
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }

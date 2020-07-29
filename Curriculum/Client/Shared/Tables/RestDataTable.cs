@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace Curriculum.Client.Shared
 {
     public class RestDataTable<TModel> : DataTable<TModel>
+        where TModel : class
     {
         private bool loading;
         private Result<IReadOnlyCollection<TModel>> result = new Result<IReadOnlyCollection<TModel>>();
