@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 
 namespace Curriculum.Shared.Base
 {
@@ -9,21 +10,9 @@ namespace Curriculum.Shared.Base
     {
         public int? Id { get; set; }
 
-
         public object Clone()
         {
-            if (this.GetType().IsSerializable)
-                throw new ArgumentException("The type must be serializable.");
-
-            var formatter = new BinaryFormatter();
-
-            using (var stream = new MemoryStream())
-            {
-                formatter.Serialize(stream, this);
-                stream.Seek(0, SeekOrigin.Begin);
-
-                return formatter.Deserialize(stream);
-            }
+            return JsonSerializer.Deserialize(JsonSerializer.Serialize(this), this.GetType());
         }
     }
 }

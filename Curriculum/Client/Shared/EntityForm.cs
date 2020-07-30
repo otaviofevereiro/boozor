@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -15,14 +17,12 @@ namespace Curriculum.Client.Shared
     /// Renders a form element that cascades an <see cref="EditContext"/> to descendants.
     /// </summary>
     public class EntityForm<TEntity> : ComponentBase
-        where TEntity : Entity
+        where TEntity : Entity<TEntity>
     {
         private readonly Func<Task> _handleSubmitDelegate;
         private EditContext? _fixedEditContext;
         private bool loading;
-        private TEntity originalModel;
         Result<TEntity> result = new Result<TEntity>();
-        private TEntity model;
 
         // Cache to avoid per-render allocations
         /// <summary>
@@ -36,37 +36,42 @@ namespace Curriculum.Client.Shared
         /// <summary>
         /// Gets or sets a collection of additional attributes that will be applied to the created <c>form</c> element.
         /// </summary>
-        [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+        [Parameter(CaptureUnmatchedValues = true)]
+        public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
         /// <summary>
         /// Specifies the content to be rendered inside this <see cref="EditForm"/>.
         /// </summary>
-        [Parameter] public RenderFragment<EditContext>? ChildContent { get; set; }
+        [Parameter]
+        public RenderFragment<EditContext>? ChildContent { get; set; }
 
         [Inject]
         public HttpClient Client { get; set; }
 
         /// <summary>
         /// Supplies the edit context explicitly. If using this parameter, do not
-        /// also supply <see cref="Model"/>, since the model value will be taken
+        /// also supply <see cref="Entity"/>, since the model value will be taken
         /// from the <see cref="EditContext.Model"/> property.
         /// </summary>
-        [Parameter] public EditContext? EditContext { get; set; }
-
         [Parameter]
-        public int? EntityId { get; set; }
+        public EditContext? EditContext { get; set; }
 
         /// <summary>
         /// Specifies the top-level model object for the form. An edit context will
         /// be constructed for this model. If using this parameter, do not also supply
         /// a value for <see cref="EditContext"/>.
         /// </summary>
-        [Parameter] public TEntity Model { get => model; set => originalModel = model = value; }
+        [Parameter]
+        public TEntity Entity { get; set; }
+
+        [Parameter]
+        public int? EntityId { get; set; }
         /// <summary>
         /// A callback that will be invoked when the form is submitted and the
         /// <see cref="EditContext"/> is determined to be invalid.
         /// </summary>
-        [Parameter] public EventCallback<EditContext> OnInvalidSubmit { get; set; }
+        [Parameter]
+        public EventCallback<EditContext> OnInvalidSubmit { get; set; }
 
         /// <summary>
         /// A callback that will be invoked when the form is submitted.
@@ -74,13 +79,15 @@ namespace Curriculum.Client.Shared
         /// If using this parameter, you are responsible for triggering any validation
         /// manually, e.g., by calling <see cref="EditContext.Validate"/>.
         /// </summary>
-        [Parameter] public EventCallback<EditContext> OnSubmit { get; set; }
+        [Parameter]
+        public EventCallback<EditContext> OnSubmit { get; set; }
 
         /// <summary>
         /// A callback that will be invoked when the form is submitted and the
         /// <see cref="EditContext"/> is determined to be valid.
         /// </summary>
-        [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
+        [Parameter]
+        public EventCallback<EditContext> OnValidSubmit { get; set; }
 
         [Parameter]
         public string RequestUri { get; set; }
@@ -115,25 +122,23 @@ namespace Curriculum.Client.Shared
             builder.CloseRegion();
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            if (EntityId > 0)
-                await GetEntity();
-
-            await base.OnInitializedAsync();
-        }
 
         /// <inheritdoc />
         protected override void OnParametersSet()
         {
-            if ((EditContext == null) == (Model == null))
-                throw new InvalidOperationException($"{nameof(EditForm)} requires a {nameof(Model)} parameter, or an {nameof(EditContext)} parameter, but not both.");
+            if ((EditContext == null) == (Entity == null))
+                throw new InvalidOperationException($"{nameof(EditForm)} requires a {nameof(Entity)} parameter, or an {nameof(EditContext)} parameter, but not both.");
 
             if (OnSubmit.HasDelegate && (OnValidSubmit.HasDelegate || OnInvalidSubmit.HasDelegate))
                 throw new InvalidOperationException($"When supplying an {nameof(OnSubmit)} parameter to {nameof(EditForm)}, do not also supply {nameof(OnValidSubmit)} or {nameof(OnInvalidSubmit)}.");
 
-            if (_fixedEditContext == null || EditContext != null || Model != _fixedEditContext.Model)
-                _fixedEditContext = EditContext ?? new EditContext(Model!);
+            if (_fixedEditContext == null || EditContext != null || Entity != _fixedEditContext.Model)
+            {
+                //if (EntityId != null && EntityId > 0)
+                //    GetEntity(EntityId.Value).Wait();
+
+                _fixedEditContext = EditContext ?? new EditContext(Entity!);
+            }
         }
 
         RenderFragment CreateAlert() => builder =>
@@ -154,24 +159,24 @@ namespace Curriculum.Client.Shared
             builder.CloseComponent();
         };
 
-        private async Task Execute(Func<Task<HttpResponseMessage>> func)
+        private async Task<HttpResponseMessage> Execute(Func<Task<HttpResponseMessage>> func)
         {
             loading = true;
 
             try
             {
                 var response = await func.Invoke();
-                response.EnsureSuccessStatusCode();
-                result = await response.Content.ReadFromJsonAsync<Result<TEntity>>();
 
-                if (result.IsValid)
+                if (response.IsSuccessStatusCode)
                 {
-                    Model = result.Item;
+                    result = await response.Content.ReadFromJsonAsync<Result<TEntity>>();
+
+                    if (result.IsValid)
+                        Entity = result.Item;
+
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
+
+                return response;
             }
             finally
             {
@@ -179,9 +184,15 @@ namespace Curriculum.Client.Shared
             }
         }
 
-        private async Task GetEntity()
+        private async Task GetEntity(int entityId)
         {
-            await Execute(() => Client.GetAsync($"{RequestUri}\\{EntityId}"));
+            var response = await Execute(() => Client.GetAsync($"{RequestUri}\\{entityId}"));
+
+            if (!response.IsSuccessStatusCode &&
+                response.StatusCode == HttpStatusCode.NotFound)
+            {
+                result.AddAlert($"Not found {typeof(TEntity).GetDisplay()} with Id {entityId} ");
+            }
         }
 
         private async Task HandleSubmitAsync()
@@ -209,10 +220,10 @@ namespace Curriculum.Client.Shared
 
         private async Task HandleValidSubmit()
         {
-            if (Model.Id > 0)
-                await Execute(() => Client.PutAsync(RequestUri, JsonContent.Create(Model)));
+            if (Entity.Id > 0)
+                await Execute(() => Client.PutAsync(RequestUri, JsonContent.Create(Entity)));
             else
-                await Execute(() => Client.PostAsync(RequestUri, JsonContent.Create(Model)));
+                await Execute(() => Client.PostAsync(RequestUri, JsonContent.Create(Entity)));
         }
 
         private void RenderAlert(RenderTreeBuilder builder)
@@ -229,7 +240,16 @@ namespace Curriculum.Client.Shared
             builder.OpenElement(3, "button");
             builder.AddAttribute(0, "type", "button");
             builder.AddAttribute(1, "class", "btn btn-light");
-            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, () => { model = originalModel; }));
+            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, async () =>
+            {
+                if (Entity.Id != null && Entity.Id > 0)
+                    await GetEntity(Entity.Id.Value);
+                else if (EntityId != null && EntityId > 0)
+                    await GetEntity(EntityId.Value);
+                else
+                    Entity = Activator.CreateInstance<TEntity>();
+            }));
+
             builder.AddContent(0, "Cancel");
             builder.CloseElement();
 
@@ -257,7 +277,7 @@ namespace Curriculum.Client.Shared
         private void RenderSubmitButton(RenderTreeBuilder builder)
         {
             builder.OpenElement(1, "button");
-            builder.AddAttribute(0, "type", "button");
+            builder.AddAttribute(0, "type", "submit");
             builder.AddAttribute(1, "class", "btn btn-primary");
             builder.AddContent(0, "Submit");
             builder.CloseElement();

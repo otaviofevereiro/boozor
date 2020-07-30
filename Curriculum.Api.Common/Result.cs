@@ -20,17 +20,17 @@ namespace Curriculum.Api.Common
         public bool HasInformations => informations.Any();
         public bool HasErrors => errors.Any();
 
-        internal void AddAlert(string alert)
+        public void AddAlert(string alert)
         {
             warnings.Add(alert);
         }
 
-        internal void AddError(string error)
+        public void AddError(string error)
         {
             errors.Add(error);
         }
 
-        internal void AddInformation(string information)
+        public void AddInformation(string information)
         {
             informations.Add(information);
         }

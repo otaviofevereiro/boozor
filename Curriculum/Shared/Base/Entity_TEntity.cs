@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using System;
+using System.Text.Json;
 
 namespace Curriculum.Shared.Base
 {
@@ -27,6 +28,11 @@ namespace Curriculum.Shared.Base
             Configure(validator);
 
             return validator;
+        }
+
+        public new TEntity Clone()
+        {
+            return JsonSerializer.Deserialize<TEntity>(JsonSerializer.Serialize((TEntity)this));
         }
     }
 }

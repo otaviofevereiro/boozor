@@ -12,5 +12,9 @@ namespace Curriculum.Api.Common
         bool IsInvalid { get; }
         bool IsValid { get; }
         IReadOnlyCollection<string> Warnings { get; set; }
+
+        void AddAlert(string alert);
+        void AddError(string error);
+        void AddInformation(string information);
     }
 }
