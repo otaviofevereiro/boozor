@@ -1,36 +1,14 @@
 ﻿@page "/person"
 
-    <EntityForm TEntity="Person" Entity="person" RequestUri="api/persons" Title="Person">
-        <NumberField @bind-Value="person.Id" readonly />
-        <TextField @bind-Value="person.Name" />
-        <TextField @bind-Value="person.Email" />
-        <DateField @bind-Value="person.BirthDate" />
-    </EntityForm>
-
-@*<DataTable TModel="Person" Itens="persons" Multiselect="true" @bind-SelectedItem="person">
-    <Column TModel="Person" ValueExpression="(x=> x.Id)"></Column>
-    <Column TModel="Person" ValueExpression="(x=> x.Name)"></Column>
-    <Column TModel="Person" ValueExpression="(x=> x.Email)"></Column>
-</DataTable>*@
-
-@*<br/>
-
-    <RestDataTable TModel="Person" RequestUri="api/persons" >
-        <Column TModel="Person" ValueExpression="(x=> x.Name)" Title="Name teste"></Column>
-        <Column TModel="Person" ValueExpression="(x=> x.Email)"></Column>
-    </RestDataTable>*@
-
-
-
+<EntityForm TEntity="Person" Entity="person" RequestUri="api/persons" Title="Person" EntityId="1">
+    <NumberField @bind-Value="person.Id" readonly />
+    <TextField @bind-Value="person.Name" />
+    <TextField @bind-Value="person.Email" />
+    <DateField @bind-Value="person.BirthDate" />
+</EntityForm>
 
 
 @code {
     Person person = new Person();
-
-    //List<Person> persons = new List<Person>(){
-    //    new Person(){ Name ="nome1", Email = "email1" },
-    //    new Person(){ Name ="nome2", Email = "email2" },
-    //    new Person(){ Name ="nome3", Email = "email3" },
-    //};
 }
 

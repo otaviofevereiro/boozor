@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Curriculum.Client.Shared
@@ -32,6 +33,9 @@ namespace Curriculum.Client.Shared
         {
             _handleSubmitDelegate = HandleSubmitAsync;
         }
+
+        [Inject]
+        public AppState AppState { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of additional attributes that will be applied to the created <c>form</c> element.
@@ -63,6 +67,7 @@ namespace Curriculum.Client.Shared
         /// </summary>
         [Parameter]
         public TEntity Entity { get; set; }
+
 
         [Parameter]
         public int? EntityId { get; set; }
@@ -98,6 +103,9 @@ namespace Curriculum.Client.Shared
         /// <inheritdoc />
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
+            if (_fixedEditContext == null)
+                return;
+
             builder.OpenRegion(_fixedEditContext.GetHashCode());
             {
                 builder.OpenElement(0, "form");
@@ -116,8 +124,6 @@ namespace Curriculum.Client.Shared
                     RenderToolbar(builder);
                 }
                 builder.CloseElement();
-
-                RenderSpinner(builder);
             }
             builder.CloseRegion();
         }
@@ -134,11 +140,23 @@ namespace Curriculum.Client.Shared
 
             if (_fixedEditContext == null || EditContext != null || Entity != _fixedEditContext.Model)
             {
-                //if (EntityId != null && EntityId > 0)
-                //    GetEntity(EntityId.Value).Wait();
-
                 _fixedEditContext = EditContext ?? new EditContext(Entity!);
             }
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                if (EntityId != null && EntityId > 0)
+                {
+                    await GetEntity(EntityId.Value);
+                    StateHasChanged();
+                }
+
+            }
+
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         RenderFragment CreateAlert() => builder =>
@@ -153,15 +171,9 @@ namespace Curriculum.Client.Shared
             builder.CloseComponent();
         };
 
-        RenderFragment CreateSpinner() => builder =>
-        {
-            builder.OpenComponent<Spinner>(0);
-            builder.CloseComponent();
-        };
-
         private async Task<HttpResponseMessage> Execute(Func<Task<HttpResponseMessage>> func)
         {
-            loading = true;
+            AppState.SetLoading(true);
 
             try
             {
@@ -172,15 +184,16 @@ namespace Curriculum.Client.Shared
                     result = await response.Content.ReadFromJsonAsync<Result<TEntity>>();
 
                     if (result.IsValid)
-                        Entity = result.Item;
-
+                    {
+                        Entity.UpdateInstance(result.Item);
+                    }
                 }
 
                 return response;
             }
             finally
             {
-                loading = false;
+                AppState.SetLoading(false);
             }
         }
 
@@ -229,7 +242,6 @@ namespace Curriculum.Client.Shared
         private void RenderAlert(RenderTreeBuilder builder)
         {
             builder.OpenComponent<CascadingValue<IResult>>(3);
-            builder.AddAttribute(0, "IsFixed", true);
             builder.AddAttribute(1, "Value", result);
             builder.AddAttribute(2, "ChildContent", CreateAlert());
             builder.CloseComponent();
@@ -247,7 +259,7 @@ namespace Curriculum.Client.Shared
                 else if (EntityId != null && EntityId > 0)
                     await GetEntity(EntityId.Value);
                 else
-                    Entity = Activator.CreateInstance<TEntity>();
+                    Entity.UpdateInstance(Activator.CreateInstance<TEntity>());
             }));
 
             builder.AddContent(0, "Cancel");
@@ -259,18 +271,8 @@ namespace Curriculum.Client.Shared
         private void RenderFluntValidation(RenderTreeBuilder builder)
         {
             builder.OpenComponent<CascadingValue<EditContext>>(4);
-            builder.AddAttribute(0, "IsFixed", true);
             builder.AddAttribute(1, "Value", _fixedEditContext);
             builder.AddAttribute(2, "ChildContent", CreateFluentValidation());
-            builder.CloseComponent();
-        }
-
-        private void RenderSpinner(RenderTreeBuilder builder)
-        {
-            builder.OpenComponent<CascadingValue<bool>>(5);
-            builder.AddAttribute(0, "IsFixed", true);
-            builder.AddAttribute(1, "Value", loading);
-            builder.AddAttribute(2, "ChildContent", CreateSpinner());
             builder.CloseComponent();
         }
 

@@ -37,5 +37,14 @@ namespace Curriculum.Api.Common
 
             return displayAttribute.Name;
         }
+
+        public static void UpdateInstance<T>(this T current, T newer)
+            where T : class
+        {
+            foreach (var property in typeof(T).GetProperties())
+            {
+                property.SetValue(current, property.GetValue(newer));
+            }
+        }
     }
 }

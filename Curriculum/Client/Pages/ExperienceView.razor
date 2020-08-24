@@ -1,6 +1,6 @@
 ﻿@page "/experience"
 
-<EntityForm TEntity="Experience" Model="experience" RequestUri="api/experiences" Title="Experience">
+<EntityForm TEntity="Experience" Entity="experience" RequestUri="api/experiences" Title="Experience">
     <TextField @bind-Value="experience.Title" />
     <TextField @bind-Value="experience.CompanyName" />
     <SelectEnumField @bind-Value="experience.EmploymentType"></SelectEnumField>
@@ -9,6 +9,13 @@
     <CheckboxField @bind-Value="experience.CurrentJob" placeholder="This is my current job"></CheckboxField>
     <TextAreaField @bind-Value="experience.Description"></TextAreaField>
 </EntityForm>
+
+<RestDataTable TModel="Experience" RequestUri="api/experiences">
+    <Column TModel="Experience" ValueExpression="(x=> x.Title)"></Column>
+    <Column TModel="Experience" ValueExpression="(x=> x.CompanyName)"></Column>
+    <Column TModel="Experience" ValueExpression="(x=> x.StartDate)"></Column>
+    <Column TModel="Experience" ValueExpression="(x=> x.EndDate)"></Column>
+</RestDataTable>
 
 @code {
     Experience experience = new Experience();

@@ -13,7 +13,6 @@ namespace Curriculum.Client.Shared
     public class RestDataTable<TModel> : DataTable<TModel>
         where TModel : class
     {
-        private bool loading;
         private Result<IReadOnlyCollection<TModel>> result = new Result<IReadOnlyCollection<TModel>>();
 
         [Inject]
@@ -22,11 +21,13 @@ namespace Curriculum.Client.Shared
         [Parameter]
         public string RequestUri { get; set; }
 
+        [Inject]
+        public AppState AppState { get; set; }
+
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             RenderAlert(builder);
             base.BuildRenderTree(builder);
-            RenderSpinner(builder);
         }
 
         protected override async Task OnInitializedAsync()
@@ -41,15 +42,9 @@ namespace Curriculum.Client.Shared
             builder.CloseComponent();
         };
 
-        RenderFragment CreateSpinner() => builder =>
-        {
-            builder.OpenComponent<Spinner>(0);
-            builder.CloseComponent();
-        };
-
         private async Task GetItens()
         {
-            loading = true;
+            AppState.SetLoading(true);
 
             try
             {
@@ -67,7 +62,7 @@ namespace Curriculum.Client.Shared
             }
             finally
             {
-                loading = false;
+                AppState.SetLoading(false);
             }
         }
 
@@ -77,16 +72,6 @@ namespace Curriculum.Client.Shared
             builder.AddAttribute(0, "IsFixed", true);
             builder.AddAttribute(1, "Value", result);
             builder.AddAttribute(2, "ChildContent", CreateAlert());
-            builder.CloseComponent();
-        }
-
-        private void RenderSpinner(RenderTreeBuilder builder)
-        {
-            builder.OpenComponent<CascadingValue<bool>>(5);
-            builder.AddAttribute(0, "Value", loading);
-            builder.AddAttribute(1, "IsFixed", true);
-            builder.AddAttribute(2, "ChildContent", CreateSpinner());
-
             builder.CloseComponent();
         }
     }

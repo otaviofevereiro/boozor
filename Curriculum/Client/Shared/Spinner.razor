@@ -1,5 +1,7 @@
 ﻿
-@if (Loading)
+@inject AppState appState
+
+@if (loading)
 {
     <div style="width: 100%; height: 100%; top: 0; left: 0; position: fixed; display: block; opacity: 0.7; background-color: #fff; z-index: 9999;">
         <div class="" style="top:48%; left:48%; position: absolute;">
@@ -11,5 +13,19 @@
 }
 
 @code {
-    [CascadingParameter] public bool Loading { get; set; }
+
+    private bool loading;
+
+    protected override void OnInitialized()
+    {
+        appState.LoadingChanged += OnLoadingChanged;
+
+        base.OnInitialized();
+    }
+
+    public void OnLoadingChanged(bool _loading)
+    {
+        this.loading = _loading;
+        StateHasChanged();
+    }
 }
