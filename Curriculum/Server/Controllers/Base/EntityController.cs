@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Curriculum.Api.Common;
+using Boozor.Common;
 using Curriculum.Business;
 using Curriculum.Entities.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ namespace Curriculum.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class EntityController<TViewModel, TEntity> : ControllerBase
-        where TEntity : Entity
+        where TEntity : Entities.Base.Entity
     {
         private readonly IEntityService<TEntity> entityService;
         private readonly IMapper mapper;

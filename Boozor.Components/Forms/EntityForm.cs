@@ -20,7 +20,6 @@ namespace Boozor.Components.Forms
     {
         private readonly Func<Task> _handleSubmitDelegate;
         private EditContext? _fixedEditContext;
-        private bool loading;
         Result<TEntity> result = new Result<TEntity>();
 
         // Cache to avoid per-render allocations
