@@ -11,6 +11,7 @@ namespace Curriculum.Server.Mappers
         public CurriculumServerProfile()
         {
             CreateMap<Entities.Person, Shared.Person>().ReverseMap();
+            CreateMap<Entities.Experience, Shared.Experience>().ReverseMap();
         }
     }
 }

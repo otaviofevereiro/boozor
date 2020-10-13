@@ -4,6 +4,7 @@ namespace Curriculum.Shared
 {
     public enum EmploymentType
     {
+
         [Description("Full Time")]
         FullTime = 1,
         [Description("Part Time")]

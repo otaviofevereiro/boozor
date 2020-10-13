@@ -10,7 +10,7 @@
     <TextAreaField @bind-Value="experience.Description"></TextAreaField>
 </EntityForm>
 
-<RestDataTable TModel="Experience" RequestUri="api/experiences">
+<RestDataTable TModel="Experience" @bind-SelectedItem="experience" RequestUri="api/experiences">
     <Column TModel="Experience" ValueExpression="(x=> x.Title)"></Column>
     <Column TModel="Experience" ValueExpression="(x=> x.CompanyName)"></Column>
     <Column TModel="Experience" ValueExpression="(x=> x.StartDate)"></Column>
