@@ -13,6 +13,6 @@ namespace Curriculum.Entities
         public EmploymentType EmploymentType { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime StartDate { get; set; }
-        public int Title { get; set; }
+        public string Title { get; set; }
     }
 }

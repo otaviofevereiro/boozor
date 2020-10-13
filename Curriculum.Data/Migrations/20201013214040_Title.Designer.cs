@@ -3,15 +3,17 @@ using System;
 using Curriculum.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Curriculum.Data.Migrations
 {
     [DbContext(typeof(CurriculumContext))]
-    partial class CurriculumContextModelSnapshot : ModelSnapshot
+    [Migration("20201013214040_Title")]
+    partial class Title
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
