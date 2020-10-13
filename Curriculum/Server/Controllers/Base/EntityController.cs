@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,14 +34,16 @@ namespace Curriculum.Server.Controllers
 
             try
             {
-                result.Item = ConvertToView(await entityService.Delete(id, cancellationToken));
+                var entity = await entityService.Delete(id, cancellationToken);
+
+                result.Item = mapper.Map<TEntity, TViewModel>(entity);
 
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 result.AddError(ex.Message);
-                
+
                 return BadRequest(result);
             }
         }
@@ -51,7 +55,13 @@ namespace Curriculum.Server.Controllers
 
             try
             {
-                result.Item = mapper.ProjectTo<TViewModel>(entityService.AsQueryable()).ToImmutableArray();
+                var entities = entityService.AsQueryable();
+
+                result.Item = entities.Select(entity => mapper.Map<TEntity, TViewModel>(entity))
+                                      .ToImmutableArray();
+
+                //Não utilizado projecto por que da erro com enums
+                //result.Item = mapper.ProjectTo<TViewModel>(item).ToImmutableArray();
 
                 return Ok(result);
             }
@@ -70,7 +80,9 @@ namespace Curriculum.Server.Controllers
 
             try
             {
-                result.Item = ConvertToView(await entityService.Find(id, cancellationToken));
+                var entity = await entityService.Find(id, cancellationToken);
+
+                result.Item = mapper.Map<TEntity, TViewModel>(entity);
 
                 return Ok(result);
             }
@@ -89,7 +101,11 @@ namespace Curriculum.Server.Controllers
 
             try
             {
-                result.Item = ConvertToView(await entityService.Add(ConvertToEntity(view), cancellationToken));
+                var entity = mapper.Map<TViewModel, TEntity>(view);
+
+                await entityService.Add(entity, cancellationToken);
+
+                result.Item = mapper.Map<TEntity, TViewModel>(entity);
 
                 return Ok(result);
             }
@@ -108,7 +124,11 @@ namespace Curriculum.Server.Controllers
 
             try
             {
-                result.Item = ConvertToView(await entityService.Update(ConvertToEntity(view), cancellationToken));
+                var entity = mapper.Map<TViewModel, TEntity>(view);
+
+                await entityService.Update(entity, cancellationToken);
+
+                result.Item = mapper.Map<TEntity, TViewModel>(entity);
 
                 return Ok(result);
             }
@@ -118,16 +138,6 @@ namespace Curriculum.Server.Controllers
 
                 return BadRequest(result);
             }
-        }
-
-        protected virtual TEntity ConvertToEntity(TViewModel view)
-        {
-            return mapper.Map<TViewModel, TEntity>(view);
-        }
-
-        protected virtual TViewModel ConvertToView(TEntity entity)
-        {
-            return mapper.Map<TEntity, TViewModel>(entity);
         }
     }
 }
