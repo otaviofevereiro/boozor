@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{28028BAF-0953-487A-A547-86104991627C}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		docker-commands.txt = docker-commands.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curriculum.Client.Tests", "Curriculum.Client.Tests\Curriculum.Client.Tests.csproj", "{ECCFA766-7B46-4F21-82A6-2079A04BAAC2}"
@@ -30,9 +31,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{87E147C7-98D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boozor.Components", "Boozor.Components\Boozor.Components.csproj", "{DD0959EA-0413-4779-B5BD-E92B0B9D0EC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boozor.Common", "Boozor.Common\Boozor.Common.csproj", "{24AD08FC-09EB-407B-8929-45B9687E5A59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boozor.Common", "Boozor.Common\Boozor.Common.csproj", "{24AD08FC-09EB-407B-8929-45B9687E5A59}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{7A5EA498-D86F-4254-996B-E61E41EC97AC}"
+	ProjectSection(SolutionItems) = preProject
+		docker-commands.txt = docker-commands.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
