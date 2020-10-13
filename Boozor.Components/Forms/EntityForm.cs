@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -175,15 +176,17 @@ namespace Boozor.Components.Forms
             {
                 var response = await func.Invoke();
 
-                if (response.IsSuccessStatusCode)
+                try
                 {
                     result = await response.Content.ReadFromJsonAsync<Result<TEntity>>();
-
-                    if (result.IsValid)
-                    {
-                        Entity.UpdateInstance(result.Item);
-                    }
                 }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
+
+                if (result.IsValid)
+                    Entity.UpdateInstance(result.Item);
 
                 return response;
             }
