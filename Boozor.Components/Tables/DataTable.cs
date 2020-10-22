@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 
 namespace Boozor.Components.Tables
 {
+    public enum OrderType
+    {
+        None,
+        Ascending,
+        Descending
+    }
+
     public class DataTable<TModel> : ComponentBase, IDisposable
         where TModel : class
     {
@@ -21,9 +28,6 @@ namespace Boozor.Components.Tables
         public List<TModel> Items { get; set; }
 
         [Parameter]
-        public EventCallback<List<TModel>> ItemsChanged { get; set; }
-
-        [Parameter]
         public bool Multiselect { get; set; } = false;
 
         [Parameter]
@@ -32,6 +36,7 @@ namespace Boozor.Components.Tables
         [Parameter]
         public EventCallback<TModel> SelectedItemChanged { get; set; }
 
+        private OrderType orderType = OrderType.None;
 
         private readonly List<TModel> selectedItens = new List<TModel>();
         public IReadOnlyCollection<TModel> SelectedItens => selectedItens;
@@ -89,7 +94,17 @@ namespace Boozor.Components.Tables
 
         private void TitleContext_OnClickEvent(System.Linq.Expressions.Expression<Func<TModel, object>> valueExpression)
         {
-            Items = Items.OrderBy(valueExpression.Compile()).ToList();
+            if (orderType == OrderType.None || orderType == OrderType.Descending)
+            {
+                Items = Items.OrderBy(valueExpression.Compile()).ToList();
+                orderType = OrderType.Ascending;
+            }
+            else
+            {
+                Items = Items.OrderByDescending(valueExpression.Compile()).ToList();
+                orderType = OrderType.Descending;
+            }
+
             StateHasChanged();
         }
 
