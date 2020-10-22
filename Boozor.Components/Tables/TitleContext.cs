@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -7,14 +9,7 @@ namespace Boozor.Components.Tables
 {
     public class TitleContext<TModel> : DataTableContext<TModel>
     {
-        public TitleContext(IEnumerable Itens)
-        {
-            this.Itens = Itens;
-        }
-
-        public IEnumerable Itens { get; }
-
-        public override string GetValue(Expression<Func<TModel, object>> expression)
+        public override object GetValue(Expression<Func<TModel, object>> expression)
         {
             var memberExpression = GetMemberExpression(expression);
             var property = typeof(TModel).GetProperty(memberExpression.Member.Name);

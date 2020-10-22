@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Boozor.Components.Tables
@@ -16,7 +18,10 @@ namespace Boozor.Components.Tables
         public RenderFragment ChildContent { get; set; }
 
         [Parameter]
-        public IEnumerable<TModel> Itens { get; set; }
+        public List<TModel> Items { get; set; }
+
+        [Parameter]
+        public EventCallback<List<TModel>> ItemsChanged { get; set; }
 
         [Parameter]
         public bool Multiselect { get; set; } = false;
@@ -33,46 +38,59 @@ namespace Boozor.Components.Tables
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            if (Itens == null)
+            if (Items == null)
                 return;
 
-            builder.OpenElement(0, "table");
-            builder.AddAttribute(1, "class", "table table-striped");
+            builder.OpenElement(1, "table");
+            builder.AddAttribute(2, "class", "table table-striped");
             {
                 builder.OpenElement(2, "thead");
                 {
                     builder.OpenElement(3, "tr");
                     {
+                        var titleContext = new TitleContext<TModel>();
+                        titleContext.OnClickEvent += TitleContext_OnClickEvent;
+
                         builder.OpenComponent<CascadingValue<DataTableContext<TModel>>>(4);
-                        builder.AddAttribute(5, "Value", new TitleContext<TModel>(Itens));
-                        builder.AddAttribute(6, "ChildContent", ChildContent);
+                        builder.AddAttribute(0, "Value", titleContext);
+                        builder.AddAttribute(1, "ChildContent", ChildContent);
+                        builder.AddAttribute(2, "Name", "DataTableContext");
                         builder.CloseComponent();
                     }
                     builder.CloseElement();
                 }
                 builder.CloseElement();
 
+
                 builder.OpenElement(8, "tbody");
                 {
-                    foreach (var item in Itens)
+                    foreach (var item in Items)
                     {
                         builder.OpenElement(9, "tr");
-                        builder.AddAttribute(1, "onclick", EventCallback.Factory.Create(this, () => OnRowClick(item)));
-                        if (selectedItens.Contains(item))
-                            builder.AddAttribute(0, "class", "table-primary");
                         {
+                            builder.AddAttribute(1, "onclick", EventCallback.Factory.Create(this, () => OnRowClick(item)));
+
+                            if (selectedItens.Contains(item))
+                                builder.AddAttribute(0, "class", "table-primary");
+
                             builder.OpenComponent<CascadingValue<DataTableContext<TModel>>>(10);
-                            builder.AddAttribute(11, "Value", new RowContext<TModel>(item));
-                            builder.AddAttribute(12, "ChildContent", ChildContent);
+                            builder.AddAttribute(0, "Value", new RowContext<TModel>(item));
+                            builder.AddAttribute(1, "ChildContent", ChildContent);
+                            builder.AddAttribute(2, "Name", "DataTableContext");
                             builder.CloseComponent();
                         }
                         builder.CloseElement();
                     }
                 }
                 builder.CloseElement();
-
             }
             builder.CloseElement();
+        }
+
+        private void TitleContext_OnClickEvent(System.Linq.Expressions.Expression<Func<TModel, object>> valueExpression)
+        {
+            Items = Items.OrderBy(valueExpression.Compile()).ToList();
+            StateHasChanged();
         }
 
         public async Task OnRowClick(TModel item)
@@ -105,8 +123,6 @@ namespace Boozor.Components.Tables
                 await SelectedItemChanged.InvokeAsync(item);
         }
 
-
-
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -117,7 +133,7 @@ namespace Boozor.Components.Tables
                 }
 
                 ChildContent = null;
-                Itens = null;
+                Items = null;
                 disposedValue = true;
             }
         }

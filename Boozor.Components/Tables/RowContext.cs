@@ -12,11 +12,10 @@ namespace Boozor.Components.Tables
             this.item = item;
         }
 
-        public override string GetValue(Expression<Func<TModel, object>> expression)
+        public override object GetValue(Expression<Func<TModel, object>> expression)
         {
             return expression.Compile()
-                             ?.Invoke(item)
-                             ?.ToString();
+                             ?.Invoke(item);
         }
     }
 }

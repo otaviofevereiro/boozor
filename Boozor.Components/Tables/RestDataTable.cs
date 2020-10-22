@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -55,7 +56,7 @@ namespace Boozor.Components.Tables
                 result = await response.Content.ReadFromJsonAsync<Result<IReadOnlyCollection<TModel>>>();
 
                 if (result.IsValid)
-                    Itens = result.Item;
+                    Items = result.Item.ToList();
             }
             catch (Exception ex)
             {
