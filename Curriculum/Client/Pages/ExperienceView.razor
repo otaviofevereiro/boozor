@@ -1,14 +1,22 @@
 ﻿@page "/experience"
 
-<EntityForm TEntity="Experience" Entity="experience" RequestUri="api/experiences" Title="Experience">
-    <TextField @bind-Value="experience.Title" />
-    <TextField @bind-Value="experience.CompanyName" />
-    <SelectEnumField @bind-Value="experience.EmploymentType"></SelectEnumField>
-    <DateField @bind-Value="experience.StartDate"></DateField>
-    <DateField @bind-Value="experience.EndDate"></DateField>
-    <CheckboxField @bind-Value="experience.CurrentJob" placeholder="This is my current job"></CheckboxField>
-    <TextAreaField @bind-Value="experience.Description"></TextAreaField>
-</EntityForm>
+<Modal Size="ModalSize.ExtraLarge" Title="Minha Modal" @ref="modal">
+    <Body>
+        <EntityForm TEntity="Experience" Entity="experience" RequestUri="api/experiences" Title="Experience">
+            <TextField @bind-Value="experience.Title" />
+            <TextField @bind-Value="experience.CompanyName" />
+            <SelectEnumField @bind-Value="experience.EmploymentType"></SelectEnumField>
+            <DateField @bind-Value="experience.StartDate"></DateField>
+            <DateField @bind-Value="experience.EndDate"></DateField>
+            <CheckboxField @bind-Value="experience.CurrentJob" placeholder="This is my current job"></CheckboxField>
+            <TextAreaField @bind-Value="experience.Description"></TextAreaField>
+        </EntityForm>
+    </Body>
+
+    <Footer>
+        <button>teste</button>
+    </Footer>
+</Modal>
 
 <RestDataTable TModel="Experience" @bind-SelectedItem="experience" RequestUri="api/experiences">
     <Column TModel="Experience" ValueExpression="(x=> x.Title)"></Column>
@@ -17,6 +25,14 @@
     <Column TModel="Experience" ValueExpression="(x=> x.EndDate)" Format="dd/MM/yyyy"></Column>
 </RestDataTable>
 
+<!-- Button trigger modal -->
+<button @onclick="() => modal.Open()">Open Modal</button>
+
+<!-- Modal -->
+
+
+
 @code {
+    Modal modal;
     Experience experience = new Experience();
 }
