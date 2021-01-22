@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<PackageId>Boozor</PackageId>
-		<Version>1.0.4</Version>
+		<Version>1.0.5</Version>
 		<Authors>Otavio Fevereiro</Authors>
 		<Company>otavio.fevereiro</Company>
 		<Title>Boozor</Title>
