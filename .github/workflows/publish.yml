@@ -17,9 +17,15 @@ jobs:
         dotnet-version: 5.0.x
     - name: Install dependencies
       run: dotnet restore
+      
     - name: Build
       run: dotnet build Boozor.Components/Boozor.Components.csproj --configuration Release --no-restore
+      
+    - name: Pack Nuget
+      run: dotnet pack Boozor.Common/Boozor.Common.csproj --output nuget-packages --configuration Release
+      
     - name: Pack Nuget
       run: dotnet pack Boozor.Components/Boozor.Components.csproj --output nuget-packages --configuration Release
+    
     - name: Publish Nuget
       run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
