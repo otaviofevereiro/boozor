@@ -2,6 +2,16 @@
 
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
+		<PackageId>Boozor.Common</PackageId>
+		<Version>1.0.4</Version>
+		<Authors>Otavio Fevereiro</Authors>
+		<Company>otavio.fevereiro</Company>
+		<Title>Boozor Common</Title>
+		<PackageDescription>
+		</PackageDescription>
+		<RepositoryUrl>https://github.com/otaviofevereiro/boozor</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>master</RepositoryBranch>
 	</PropertyGroup>
 
 	<ItemGroup>
