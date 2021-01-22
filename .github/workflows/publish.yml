@@ -18,9 +18,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet build Boozor.Components/Boozor.Components.csproj --configuration Release --no-restore
     - name: Pack Nuget
       run: dotnet pack Boozor.Components/Boozor.Components.csproj --output nuget-packages --configuration Release
     - name: Publish Nuget
