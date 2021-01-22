@@ -22,9 +22,6 @@ jobs:
       run: dotnet build Boozor.Components/Boozor.Components.csproj --configuration Release --no-restore
       
     - name: Pack Nuget
-      run: dotnet pack Boozor.Common/Boozor.Common.csproj --output nuget-packages --configuration Release
-      
-    - name: Pack Nuget
       run: dotnet pack Boozor.Components/Boozor.Components.csproj --output nuget-packages --configuration Release
     
     - name: Publish Nuget
