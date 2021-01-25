@@ -29,7 +29,7 @@ namespace Boozor.Components.Forms
             if (validatableEntity == null)
                 throw new InvalidCastException($"O model {editContext.Model.GetType().Name} não pode ser validado, para isso é necessário herdar do tipo Entity<TEntity>");
 
-            var validator = validatableEntity.GetValidator();
+            var validator = validatableEntity.Validator;
             var validationResults = validator.Validate(editContext.Model);
 
             messages.Clear();
@@ -50,7 +50,7 @@ namespace Boozor.Components.Forms
 
             var properties = new[] { fieldIdentifier.FieldName };
             var context = new ValidationContext(fieldIdentifier.Model, new PropertyChain(), new MemberNameValidatorSelector(properties));
-            var validator = validatableEntity.GetValidator();
+            var validator = validatableEntity.Validator;
             var validationResults = validator.Validate(context);
 
             messages.Clear(fieldIdentifier);

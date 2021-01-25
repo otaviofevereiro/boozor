@@ -2,26 +2,22 @@
 using System;
 using System.Text.Json;
 
-namespace Boozor.Common
+namespace DevPack.Data.Core
 {
-    public abstract class Entity<TEntity> : Entity, IValidatableEntity
-        where TEntity : Entity<TEntity>
+    public abstract class Entity<TEntity, TId> : Entity<TId>, IValidatableEntity
+        where TEntity : Entity<TEntity, TId>
     {
         private readonly Lazy<EntityValidator<TEntity>> validatorLazy;
-
         protected Entity()
         {
             validatorLazy = new Lazy<EntityValidator<TEntity>>(CreateValidator());
         }
 
+        public IValidator Validator => validatorLazy.Value;
+
         public new TEntity Clone()
         {
             return JsonSerializer.Deserialize<TEntity>(JsonSerializer.Serialize((TEntity)this));
-        }
-
-        public IValidator GetValidator()
-        {
-            return validatorLazy.Value;
         }
 
         protected abstract void Configure(EntityValidator<TEntity> validator);

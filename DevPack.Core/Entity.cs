@@ -4,11 +4,11 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 
-namespace Boozor.Common
+namespace DevPack.Data.Core
 {
-    public abstract class Entity : ICloneable
+    public abstract class Entity<TId> : ICloneable
     {
-        public int? Id { get; set; }
+        public virtual TId Id { get; set; }
 
         public object Clone()
         {

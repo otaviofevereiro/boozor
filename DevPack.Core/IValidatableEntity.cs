@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 
-namespace Boozor.Common
+namespace DevPack.Data.Core
 {
     public interface IValidatableEntity
     {
-        public IValidator GetValidator();
+        public IValidator Validator { get; }
     }
 }
