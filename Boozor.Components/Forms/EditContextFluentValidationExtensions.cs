@@ -1,4 +1,4 @@
-﻿using Boozor.Common;
+﻿using DevPack.Data.Core;
 using FluentValidation;
 using FluentValidation.Internal;
 using Microsoft.AspNetCore.Components.Forms;

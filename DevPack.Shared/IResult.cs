@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Boozor.Common
+namespace DevPack.Shared
 {
     public interface IResult
     {

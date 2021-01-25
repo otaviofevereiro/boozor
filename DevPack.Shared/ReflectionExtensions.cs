@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Boozor.Common
+namespace DevPack.Shared
 {
     public static class ReflectionExtensions
     {

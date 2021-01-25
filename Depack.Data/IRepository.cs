@@ -1,4 +1,4 @@
-﻿using DevPack.Core;
+﻿using DevPack.Data.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

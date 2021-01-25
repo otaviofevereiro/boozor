@@ -1,4 +1,4 @@
-﻿namespace Boozor.Common
+﻿namespace DevPack.Shared
 {
     public class Result<T> : Result, IResultObject
     {

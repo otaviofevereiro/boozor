@@ -1,4 +1,4 @@
-﻿using Cdv.Data.Base;
+﻿using DevPack.Data.Core;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace DevPack.Data.Mongo
 {
     public class Query<TEntity> : MongoBase<TEntity>, IQuery<TEntity, string>
-        where TEntity : Entity
+        where TEntity : MongoEntity
     {
         public Query(string collectionName, IMongoDatabase mongoDatabase) : base(collectionName, mongoDatabase)
         {

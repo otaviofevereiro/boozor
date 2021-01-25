@@ -21,9 +21,9 @@
 		<PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
 	</ItemGroup>
 
-
 	<ItemGroup>
-		<ProjectReference Include="..\Boozor.Common\Boozor.Common.csproj" />
+	  <ProjectReference Include="..\DevPack.Core\DevPack.Data.Core.csproj" />
+	  <ProjectReference Include="..\DevPack.Shared\DevPack.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

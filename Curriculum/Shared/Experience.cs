@@ -1,5 +1,4 @@
-﻿using Boozor.Common;
-using FluentValidation;
+﻿using FluentValidation;
 using System;
 using System.ComponentModel.DataAnnotations;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Boozor.Common
+namespace DevPack.Shared
 {
     public class Result : IResult
     {
