@@ -1,4 +1,4 @@
-﻿namespace DevPack.Shared
+﻿namespace DevPack.Data.Core
 {
     public interface IResultObject : IResult
     {

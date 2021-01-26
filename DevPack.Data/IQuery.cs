@@ -13,9 +13,8 @@ namespace DevPack.Data
 
     {
         Task<IEnumerable<TEntity>> AllAsync(CancellationToken cancellationToken = default);
-
         IQueryable<TEntity> AsQueryable();
-
         Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default);
+        Task<TEntity> FindAsync(TId id, CancellationToken cancellationToken = default);
     }
 }

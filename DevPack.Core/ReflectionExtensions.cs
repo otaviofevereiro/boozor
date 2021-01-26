@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace DevPack.Shared
+namespace DevPack.Data.Core
 {
     public static class ReflectionExtensions
     {

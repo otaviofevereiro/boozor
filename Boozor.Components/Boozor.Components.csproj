@@ -23,7 +23,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\DevPack.Core\DevPack.Data.Core.csproj" />
-	  <ProjectReference Include="..\DevPack.Shared\DevPack.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

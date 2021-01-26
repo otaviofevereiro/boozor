@@ -1,4 +1,4 @@
-﻿namespace DevPack.Shared
+﻿namespace DevPack.Data.Core
 {
     public class Result<T> : Result, IResultObject
     {

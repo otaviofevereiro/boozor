@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using System;
+using System.Linq;
 using System.Text.Json;
 
 namespace DevPack.Data.Core
@@ -18,6 +19,17 @@ namespace DevPack.Data.Core
         public new TEntity Clone()
         {
             return JsonSerializer.Deserialize<TEntity>(JsonSerializer.Serialize((TEntity)this));
+        }
+
+        public IResult Validate()
+        {
+            var fluentResult = Validator.Validate(this);
+            var result = new Result();
+
+            foreach (var errors in fluentResult.Errors)
+                result.AddError(new Validation(errors.PropertyName, errors.ErrorMessage));
+
+            return result;
         }
 
         protected abstract void Configure(EntityValidator<TEntity> validator);
