@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DevPack.Data
 {
     public interface IRepository<TEntity, TId> : IQuery<TEntity, TId>
-         where TEntity : Entity<TId>
+         where TEntity : Entity<TEntity, TId>
     {
         Task DeleteAsync(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default);
         Task DeleteAsync(TId id, CancellationToken cancellationToken = default);

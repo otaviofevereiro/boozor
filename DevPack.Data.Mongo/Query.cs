@@ -1,5 +1,4 @@
 ﻿using DevPack.Data.Core;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -10,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace DevPack.Data.Mongo
 {
-    public class Query<TEntity> : MongoBase<TEntity>, IQuery<TEntity, string>
-        where TEntity : MongoEntity
+    public class Query<TEntity, TId> : MongoBase<TEntity>, IQuery<TEntity, TId>
+        where TEntity : Entity<TEntity, TId>
     {
         public Query(string collectionName, IMongoDatabase mongoDatabase) : base(collectionName, mongoDatabase)
         {
@@ -36,9 +35,10 @@ namespace DevPack.Data.Mongo
             return cursor.ToEnumerable(cancellationToken: cancellationToken);
         }
 
-        public async Task<TEntity> FindAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<TEntity> FindAsync(TId id, CancellationToken cancellationToken = default)
         {
-            var cursor = await Collection.FindAsync(x => x.Id == id, cancellationToken: cancellationToken);
+            var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
+            var cursor = await Collection.FindAsync(filter, cancellationToken: cancellationToken);
 
             return cursor.Single(cancellationToken: cancellationToken);
         }

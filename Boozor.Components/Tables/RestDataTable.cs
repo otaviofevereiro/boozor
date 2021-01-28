@@ -1,6 +1,6 @@
 ﻿using Boozor.Components.Common;
 using Boozor.Components.Forms;
-using DevPack.Shared;
+using DevPack.Data.Core;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;

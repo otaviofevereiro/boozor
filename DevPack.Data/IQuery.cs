@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DevPack.Data
 {
     public interface IQuery<TEntity, TId>
-          where TEntity : Entity<TId>
+          where TEntity : Entity<TEntity, TId>
 
     {
         Task<IEnumerable<TEntity>> AllAsync(CancellationToken cancellationToken = default);

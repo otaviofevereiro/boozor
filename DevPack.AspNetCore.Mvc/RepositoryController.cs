@@ -1,9 +1,6 @@
 ﻿using DevPack.Data;
 using DevPack.Data.Core;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,61 +20,61 @@ namespace DevPack.AspNetCore.Mvc
         }
 
         [HttpPost]
-        public async Task<IResult> InsertAsync([FromBody] TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<IResult> PostAsync([FromBody] TEntity entity, CancellationToken cancellationToken = default)
         {
             var result = entity.Validate();
 
-            if (result.IsInvalid)
+            if (result.IsValid)
                 await Repository.InsertAsync(entity, cancellationToken);
 
             return result;
         }
 
-        [HttpPost]
-        public async Task<EntityResultCollection<TId>> InsertAsync([FromBody] IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
-        {
-            var results = new EntityResultCollection<TId>();
+        //[HttpPost]
+        //public async Task<EntityResultCollection<TId>> PostAsync([FromBody] IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        //{
+        //    var results = new EntityResultCollection<TId>();
 
-            foreach (var entity in entities)
-            {
-                var result = entity.Validate();
+        //    foreach (var entity in entities)
+        //    {
+        //        var result = entity.Validate();
 
-                if (result.IsValid)
-                    await Repository.InsertAsync(entities, cancellationToken);
-                else
-                    results.Add(entity.Id, result);
-            }
+        //        if (result.IsValid)
+        //            await Repository.InsertAsync(entities, cancellationToken);
+        //        else
+        //            results.Add(entity.Id, result);
+        //    }
 
-            return results;
-        }
+        //    return results;
+        //}
 
         [HttpPut]
-        public async Task<IResult> SaveAsync([FromBody] TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<IResult> PutAsync([FromBody] TEntity entity, CancellationToken cancellationToken = default)
         {
             var result = entity.Validate();
 
-            if (result.IsInvalid)
+            if (result.IsValid)
                 await Repository.SaveAsync(entity, cancellationToken);
 
             return result;
         }
 
-        [HttpPut]
-        public async Task<EntityResultCollection<TId>> SaveAsync([FromBody] IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
-        {
-            var results = new EntityResultCollection<TId>();
+        //[HttpPut]
+        //public async Task<EntityResultCollection<TId>> PutAsync([FromBody] IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        //{
+        //    var results = new EntityResultCollection<TId>();
 
-            foreach (var entity in entities)
-            {
-                var result = entity.Validate();
+        //    foreach (var entity in entities)
+        //    {
+        //        var result = entity.Validate();
 
-                if (result.IsValid)
-                    await Repository.SaveAsync(entities, cancellationToken);
-                else
-                    results.Add(entity.Id, result);
-            }
+        //        if (result.IsValid)
+        //            await Repository.SaveAsync(entities, cancellationToken);
+        //        else
+        //            results.Add(entity.Id, result);
+        //    }
 
-            return results;
-        }
+        //    return results;
+        //}
     }
 }

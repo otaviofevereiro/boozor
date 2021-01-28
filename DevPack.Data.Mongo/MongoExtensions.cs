@@ -1,6 +1,7 @@
 ﻿using DevPack.Data;
+using DevPack.Data.Core;
 using DevPack.Data.Mongo;
-using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -11,20 +12,25 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSingleton(x =>
             {
-                var client = new MongoClient(connectionString);
 
+                var pack = new ConventionPack();
+                pack.Add(new StringObjectIdConvention());
+
+                ConventionRegistry.Register("MyConventions", pack, _ => true);
+
+                var client = new MongoClient(connectionString);
                 return client.GetDatabase(databaseName);
             });
 
             return services;
         }
 
-        public static IServiceCollection AddMongoRepository<TEntity>(this IServiceCollection services, string collectionName)
-            where TEntity : MongoEntity
+        public static IServiceCollection AddMongoRepository<TEntity, TId>(this IServiceCollection services, string collectionName)
+            where TEntity : Entity<TEntity, TId>
         {
-            services.AddTransient<IRepository<TEntity, string>>(sp =>
+            services.AddTransient<IRepository<TEntity, TId>>(sp =>
             {
-                return new Repository<TEntity>(collectionName, sp.GetRequiredService<IMongoDatabase>());
+                return new Repository<TEntity, TId>(collectionName, sp.GetRequiredService<IMongoDatabase>());
             });
 
             return services;

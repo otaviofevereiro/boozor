@@ -1,7 +1,7 @@
-﻿using DevPack.Data.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-namespace DevPack.AspNetCore.Mvc
+namespace DevPack.Data.Core
 {
     public class EntityResultCollection<TId>
     {

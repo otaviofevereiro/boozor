@@ -1,6 +1,6 @@
-﻿using DevPack.Data.Core;
+﻿
 
-namespace DevPack.AspNetCore.Mvc
+namespace DevPack.Data.Core
 {
     public class EntityResult<TId>
     {

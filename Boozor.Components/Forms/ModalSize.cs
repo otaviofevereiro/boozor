@@ -4,7 +4,7 @@
     {
         Small,
         Default,
-        Medium, 
+        Medium,
         Large,
         ExtraLarge
     }

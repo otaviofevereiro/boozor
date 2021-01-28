@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using DevPack.Data.Core;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace DevPack.Data.Mongo
 {
-    public class Repository<TEntity> : Query<TEntity>, IRepository<TEntity, string>
-        where TEntity : MongoEntity
+    public class Repository<TEntity, TId> : Query<TEntity, TId>, IRepository<TEntity, TId>
+        where TEntity : Entity<TEntity, TId>
 
     {
         public Repository(string collectionName, IMongoDatabase mongoDatabase) : base(collectionName, mongoDatabase)
@@ -21,9 +22,11 @@ namespace DevPack.Data.Mongo
             await Collection.DeleteManyAsync<TEntity>(filter, cancellationToken);
         }
 
-        public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(TId id, CancellationToken cancellationToken = default)
         {
-            await Collection.DeleteOneAsync(x => x.Id == id, cancellationToken);
+            var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
+
+            await Collection.DeleteOneAsync(filter, cancellationToken);
         }
 
         public async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -37,7 +40,9 @@ namespace DevPack.Data.Mongo
         }
         public async Task SaveAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            await Collection.ReplaceOneAsync(x => x.Id == entity.Id,
+            var filter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
+
+            await Collection.ReplaceOneAsync(filter,
                                              entity,
                                              options: new ReplaceOptions() { IsUpsert = true },
                                              cancellationToken: cancellationToken);
@@ -46,27 +51,35 @@ namespace DevPack.Data.Mongo
 
         public async Task SaveAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            var replaceModel = entities.Select(record => new ReplaceOneModel<TEntity>(Builders<TEntity>.Filter.Where(x => x.Id == record.Id), record)
-            {
-                IsUpsert = true
-            });
+            var replaceModel = entities.Select(record =>
+                new ReplaceOneModel<TEntity>(
+                    Builders<TEntity>.Filter.Eq(x => x.Id, record.Id),
+                    record)
+                {
+                    IsUpsert = true
+                });
 
             await Collection.BulkWriteAsync(replaceModel, cancellationToken: cancellationToken);
         }
 
         public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            await Collection.ReplaceOneAsync(x => x.Id == entity.Id,
+            var filter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
+
+            await Collection.ReplaceOneAsync(filter,
                                              entity,
                                              cancellationToken: cancellationToken);
         }
 
         public async Task UpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            var replaceModel = entities.Select(entity => new ReplaceOneModel<TEntity>(Builders<TEntity>.Filter.Where(x => x.Id == entity.Id), entity)
-            {
-                IsUpsert = false
-            });
+            var replaceModel = entities.Select(record =>
+                new ReplaceOneModel<TEntity>(
+                    Builders<TEntity>.Filter.Eq(x => x.Id, record.Id),
+                    record)
+                {
+                    IsUpsert = false
+                });
 
             await Collection.BulkWriteAsync(replaceModel, cancellationToken: cancellationToken);
         }

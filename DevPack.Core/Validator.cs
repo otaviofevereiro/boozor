@@ -2,7 +2,7 @@
 
 namespace DevPack.Data.Core
 {
-    public class EntityValidator<TEntity> : AbstractValidator<TEntity>
+    public class Validator<T> : AbstractValidator<T>
     {
     }
 }

@@ -24,7 +24,7 @@ namespace Boozor.Components.Forms
 
         private static void ValidateModel(EditContext editContext, ValidationMessageStore messages)
         {
-            var validatableEntity = editContext.Model as IValidatableEntity;
+            var validatableEntity = editContext.Model as IValidatableObject;
 
             if (validatableEntity == null)
                 throw new InvalidCastException($"O model {editContext.Model.GetType().Name} não pode ser validado, para isso é necessário herdar do tipo Entity<TEntity>");
@@ -43,7 +43,7 @@ namespace Boozor.Components.Forms
 
         private static void ValidateField(EditContext editContext, ValidationMessageStore messages, in FieldIdentifier fieldIdentifier)
         {
-            var validatableEntity = fieldIdentifier.Model as IValidatableEntity;
+            var validatableEntity = fieldIdentifier.Model as IValidatableObject;
 
             if (validatableEntity == null)
                 return;
