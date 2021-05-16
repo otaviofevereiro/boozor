@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.Json.Serialization;
 
-namespace DevPack.Data.Core
+namespace Boozor.Core
 {
     public class Result : IResult
     {

@@ -10,8 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DevPack.Core\DevPack.Data.Core.csproj" />
-    <ProjectReference Include="..\DevPack.Data\DevPack.Data.csproj" />
+    <ProjectReference Include="..\DevPack.Core\Boozor.Core.csproj" />
   </ItemGroup>
 
 </Project>

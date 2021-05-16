@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace DevPack.Data.Core
+namespace Boozor.Core
 {
     public class EntityResultCollection<TId>
     {

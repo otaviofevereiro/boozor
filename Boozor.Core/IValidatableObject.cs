@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System.Text.Json.Serialization;
 
-namespace DevPack.Data.Core
+namespace Boozor.Core
 {
     public interface IValidatableObject
     {

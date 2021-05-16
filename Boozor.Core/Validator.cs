@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace DevPack.Data.Core
+namespace Boozor.Core
 {
     public class Validator<T> : AbstractValidator<T>
     {

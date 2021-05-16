@@ -1,5 +1,5 @@
 ﻿using Boozor.Components.Common;
-using DevPack.Data.Core;
+using Boozor.Core;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -69,6 +69,7 @@ namespace Boozor.Components.Forms
 
         [Parameter]
         public TId EntityId { get; set; }
+
         /// <summary>
         /// A callback that will be invoked when the form is submitted and the
         /// <see cref="EditContext"/> is determined to be invalid.

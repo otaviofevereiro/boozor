@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DevPack.Core\DevPack.Data.Core.csproj" />
+	  <ProjectReference Include="..\Boozor.Core\Boozor.Core.csproj" />
 	</ItemGroup>
 
 </Project>

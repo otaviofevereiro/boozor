@@ -2,7 +2,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace DevPack.Data.Core
+namespace Boozor.Core
 {
     public abstract class ValidatableObject<T> : IValidatableObject
         where T : ValidatableObject<T>

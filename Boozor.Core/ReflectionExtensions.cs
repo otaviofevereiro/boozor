@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace DevPack.Data.Core
+namespace Boozor.Core
 {
     public static class ReflectionExtensions
     {
@@ -21,7 +21,7 @@ namespace DevPack.Data.Core
 
         public static string GetDisplay(this object obj)
         {
-            return GetDisplay(obj.GetType());
+            return obj.GetType().GetDisplay();
         }
 
         public static string GetDisplay(this Type type)

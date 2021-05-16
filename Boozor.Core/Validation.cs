@@ -1,4 +1,4 @@
-﻿namespace DevPack.Data.Core
+﻿namespace Boozor.Core
 {
     public class Validation
     {
