@@ -32,21 +32,21 @@ namespace DevPack.Data.Core
 
         public void AddAlert(string alert)
         {
-            EnsureList(_warnings);
+            EnsureList(ref _warnings);
 
             _warnings.Add(new Validation(alert));
         }
 
         public void AddError(string error)
         {
-            EnsureList(_errors);
+            EnsureList(ref _errors);
 
             _errors.Add(new Validation(error));
         }
 
         public void AddError(Validation validation)
         {
-            EnsureList(_errors);
+            EnsureList(ref _errors);
 
             _errors.Add(validation);
         }
@@ -56,7 +56,7 @@ namespace DevPack.Data.Core
             _informations.Add(new Validation(information));
         }
 
-        private void EnsureList(List<Validation> list)
+        private void EnsureList(ref List<Validation> list)
         {
             if (list == null)
                 list = new List<Validation>();

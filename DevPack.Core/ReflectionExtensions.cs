@@ -35,6 +35,7 @@ namespace DevPack.Data.Core
             return displayAttribute.Name;
         }
 
+        //TODO: Validar a necessidade disso
         public static void UpdateInstance<T>(this T current, T newer)
             where T : class
         {

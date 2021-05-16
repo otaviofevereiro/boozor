@@ -11,7 +11,7 @@ namespace DevPack.Data.Core
 
         protected ValidatableObject()
         {
-            validatorLazy = new Lazy<Validator<T>>(ConfigureInternal());
+            validatorLazy = new Lazy<Validator<T>>(() => ConfigureInternal());
         }
 
         [JsonIgnore]
@@ -39,7 +39,7 @@ namespace DevPack.Data.Core
 
         private Validator<T> ConfigureInternal()
         {
-            var validator = CreateValidator();
+            var validator = new Validator<T>();
 
             Configure(validator);
 

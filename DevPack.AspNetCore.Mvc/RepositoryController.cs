@@ -1,6 +1,7 @@
 ﻿using DevPack.Data;
 using DevPack.Data.Core;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -51,10 +52,21 @@ namespace DevPack.AspNetCore.Mvc
         [HttpPut]
         public async Task<IResult> PutAsync([FromBody] TEntity entity, CancellationToken cancellationToken = default)
         {
-            var result = entity.Validate();
+            IResult result = new Result();
 
-            if (result.IsValid)
-                await Repository.SaveAsync(entity, cancellationToken);
+            try
+            {
+                result = entity.Validate();
+
+                if (result.IsValid)
+                    await Repository.SaveAsync(entity, cancellationToken);
+
+                return result;
+            }
+            catch(Exception ex)
+            {
+                result.AddError(ex.Message);
+            }
 
             return result;
         }
