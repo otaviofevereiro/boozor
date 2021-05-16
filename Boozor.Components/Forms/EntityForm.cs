@@ -20,7 +20,7 @@ namespace Boozor.Components.Forms
         where TEntity : Entity<TEntity, TId>
     {
         private readonly Func<Task> _handleSubmitDelegate;
-        private EditContext? _fixedEditContext;
+        private EditContext _fixedEditContext;
         Result<TEntity> result = new();
 
         // Cache to avoid per-render allocations
@@ -36,7 +36,7 @@ namespace Boozor.Components.Forms
         /// Gets or sets a collection of additional attributes that will be applied to the created <c>form</c> element.
         /// </summary>
         [Parameter(CaptureUnmatchedValues = true)]
-        public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+        public IReadOnlyDictionary<string, object> AdditionalAttributes { get; set; }
 
         [Inject]
         public AppState AppState { get; set; }
@@ -45,7 +45,7 @@ namespace Boozor.Components.Forms
         /// Specifies the content to be rendered inside this <see cref="EditForm"/>.
         /// </summary>
         [Parameter]
-        public RenderFragment<EditContext>? ChildContent { get; set; }
+        public RenderFragment<EditContext> ChildContent { get; set; }
 
         [Inject]
         public HttpClient Client { get; set; }
@@ -56,7 +56,7 @@ namespace Boozor.Components.Forms
         /// from the <see cref="EditContext.Model"/> property.
         /// </summary>
         [Parameter]
-        public EditContext? EditContext { get; set; }
+        public EditContext EditContext { get; set; }
 
         /// <summary>
         /// Specifies the top-level model object for the form. An edit context will
