@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
-using Boozor.Common;
-using Curriculum.Business;
-using Curriculum.Entities.Base;
+using Boozor.Core;
+using DevPack.Data;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,27 +14,25 @@ namespace Curriculum.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class EntityController<TViewModel, TEntity> : ControllerBase
-        where TEntity : Entities.Base.Entity
+        where TEntity : Entity
     {
-        private readonly IEntityService<TEntity> entityService;
-        private readonly IMapper mapper;
+        private readonly IRepository<TEntity> _repository;
+        private readonly IMapper _mapper;
 
-        public EntityController(IEntityService<TEntity> entityService, IMapper mapper)
+        public EntityController(IRepository<TEntity> repository, IMapper mapper)
         {
-            this.entityService = entityService;
-            this.mapper = mapper;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Delete(string id, CancellationToken cancellationToken = default)
         {
             var result = new Result<TViewModel>();
 
             try
             {
-                var entity = await entityService.Delete(id, cancellationToken);
-
-                result.Item = mapper.Map<TEntity, TViewModel>(entity);
+                await _repository.DeleteAsync(id, cancellationToken);
 
                 return Ok(result);
             }
@@ -49,15 +45,14 @@ namespace Curriculum.Server.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             var result = new Result<IReadOnlyList<TViewModel>>();
 
             try
             {
-                var entities = entityService.AsQueryable();
-
-                result.Item = entities.Select(entity => mapper.Map<TEntity, TViewModel>(entity))
+                var entities = await _repository.AllAsync();
+                result.Item = entities.Select(entity => _mapper.Map<TEntity, TViewModel>(entity))
                                       .ToImmutableArray();
 
                 //Não utilizado projecto por que da erro com enums
@@ -74,38 +69,15 @@ namespace Curriculum.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Get(string id, CancellationToken cancellationToken = default)
         {
             var result = new Result<TViewModel>();
 
             try
             {
-                var entity = await entityService.Find(id, cancellationToken);
+                var entity = await _repository.FindAsync(id, cancellationToken);
 
-                result.Item = mapper.Map<TEntity, TViewModel>(entity);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                result.AddError(ex.Message);
-
-                return BadRequest(result);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] TViewModel view, CancellationToken cancellationToken = default)
-        {
-            var result = new Result<TViewModel>();
-
-            try
-            {
-                var entity = mapper.Map<TViewModel, TEntity>(view);
-
-                await entityService.Add(entity, cancellationToken);
-
-                result.Item = mapper.Map<TEntity, TViewModel>(entity);
+                result.Item = _mapper.Map<TEntity, TViewModel>(entity);
 
                 return Ok(result);
             }
@@ -124,11 +96,11 @@ namespace Curriculum.Server.Controllers
 
             try
             {
-                var entity = mapper.Map<TViewModel, TEntity>(view);
+                var entity = _mapper.Map<TViewModel, TEntity>(view);
 
-                await entityService.Update(entity, cancellationToken);
+                await _repository.SaveAsync(entity, cancellationToken);
 
-                result.Item = mapper.Map<TEntity, TViewModel>(entity);
+                result.Item = _mapper.Map<TEntity, TViewModel>(entity);
 
                 return Ok(result);
             }

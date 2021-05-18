@@ -3,14 +3,14 @@ using System.Text.Json;
 
 namespace Boozor.Core
 {
-    public abstract class Entity<TEntity, TId> : ValidatableObject<TEntity>, ICloneable
-        where TEntity : Entity<TEntity, TId>
+    public abstract class Entity<TEntity> : ValidatableObject<TEntity>, ICloneable
+        where TEntity : Entity<TEntity>
     {
         protected Entity()
         {
         }
 
-        public TId Id { get; set; }
+        public string Id { get; set; }
 
         public object Clone()
         {

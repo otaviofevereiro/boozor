@@ -1,7 +1,7 @@
-﻿using Boozor.Common;
-using FluentValidation;
+﻿using FluentValidation;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Boozor.Core;
 
 namespace Curriculum.Shared
 {
@@ -16,7 +16,12 @@ namespace Curriculum.Shared
 
         public string Name { get; set; }
 
-        protected override void Configure(EntityValidator<Person> validator)
+        public override string ToString()
+        {
+            return $"{BirthDate} - {Email} - {Name}";
+        }
+
+        protected override void Configure(Validator<Person> validator)
         {
             validator.RuleFor(x => x.BirthDate)
                      .NotEmpty();
@@ -29,11 +34,6 @@ namespace Curriculum.Shared
             validator.RuleFor(x => x.Name)
                      .NotEmpty()
                      .MaximumLength(250);
-        }
-
-        public override string ToString()
-        {
-            return $"{BirthDate} - {Email} - {Name}";
         }
     }
 }

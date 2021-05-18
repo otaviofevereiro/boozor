@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 
 namespace Boozor.Core
 {
@@ -41,6 +42,9 @@ namespace Boozor.Core
         {
             foreach (var property in typeof(T).GetProperties())
             {
+                if (!property.CanWrite || !property.CanRead)
+                    continue;
+
                 property.SetValue(current, property.GetValue(newer));
             }
         }

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Boozor.Core;
+using FluentValidation;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,7 +26,7 @@ namespace Curriculum.Shared
 
         public string Title { get; set; }
 
-        protected override void Configure(EntityValidator<Experience> validator)
+        protected override void Configure(Validator<Experience> validator)
         {
             validator.RuleFor(x => x.CompanyName)
                      .NotEmpty()

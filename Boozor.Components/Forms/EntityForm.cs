@@ -16,8 +16,8 @@ namespace Boozor.Components.Forms
     /// <summary>
     /// Renders a form element that cascades an <see cref="EditContext"/> to descendants.
     /// </summary>
-    public class EntityForm<TEntity, TId> : ComponentBase
-        where TEntity : Entity<TEntity, TId>
+    public class EntityForm<TEntity> : ComponentBase
+        where TEntity : Entity<TEntity>
     {
         private readonly Func<Task> _handleSubmitDelegate;
         private EditContext _fixedEditContext;
@@ -68,7 +68,7 @@ namespace Boozor.Components.Forms
 
 
         [Parameter]
-        public TId EntityId { get; set; }
+        public string EntityId { get; set; }
 
         /// <summary>
         /// A callback that will be invoked when the form is submitted and the
@@ -132,7 +132,8 @@ namespace Boozor.Components.Forms
         {
             if (firstRender)
             {
-                if (EntityId != null && !Entity.Id.Equals(default))
+                if (EntityId is not null && 
+                    Entity.Id is not null)
                 {
                     await GetEntity(EntityId);
                     StateHasChanged();
@@ -199,7 +200,7 @@ namespace Boozor.Components.Forms
             }
         }
 
-        private async Task GetEntity(TId entityId)
+        private async Task GetEntity(string entityId)
         {
             var response = await Execute(() => Client.GetAsync($"{RequestUri}\\{entityId}"));
 

@@ -1,4 +1,4 @@
-﻿using Curriculum.Entities.Base;
+﻿using DevPack.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;

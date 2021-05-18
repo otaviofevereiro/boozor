@@ -1,4 +1,3 @@
-using Curriculum.Business;
 using Curriculum.Server.Data;
 using Curriculum.Server.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -24,12 +23,10 @@ namespace Curriculum.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddDbContext<CurriculumContext>(options => options.UseNpgsql(Configuration.GetConnectionString("CurrriculumDb")));
             services.AddAutoMapper(typeof(CurriculumServerProfile));
-            services.UseBusinessLayer();
+            services.AddInMemoryDatabase<CurriculumContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +49,9 @@ namespace Curriculum.Server
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

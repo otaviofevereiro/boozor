@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Curriculum.Business;
 using Curriculum.Entities;
+using DevPack.Data;
 
 namespace Curriculum.Server.Controllers
 {
     public class ExperiencesController : EntityController<Shared.Experience, Entities.Experience>
     {
-        public ExperiencesController(IEntityService<Experience> entityService, IMapper mapper) : base(entityService, mapper)
+        public ExperiencesController(IRepository<Experience> entityService, IMapper mapper) : base(entityService, mapper)
         {
         }
     }

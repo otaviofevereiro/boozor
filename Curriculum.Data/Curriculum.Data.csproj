@@ -5,11 +5,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.1" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
-	</ItemGroup>
-
-	<ItemGroup>
+		<ProjectReference Include="..\..\DevPack.Data\DevPack.Data.EntityFramework\DevPack.Data.EntityFramework.csproj" />
+		<ProjectReference Include="..\..\DevPack.Data\DevPack.Data\DevPack.Data.csproj" />
 		<ProjectReference Include="..\Curriculum.Entities\Curriculum.Entities.csproj" />
 	</ItemGroup>
 

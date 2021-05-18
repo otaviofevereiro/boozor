@@ -1,4 +1,4 @@
-﻿using Curriculum.Entities.Base;
+﻿using DevPack.Data;
 using System;
 
 namespace Curriculum.Entities

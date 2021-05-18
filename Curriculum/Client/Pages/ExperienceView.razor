@@ -2,7 +2,7 @@
 
 <Modal Size="ModalSize.ExtraLarge" Title="Minha Modal" @ref="modal">
     <Body>
-        <EntityForm TEntity="Experience" Entity="experience" RequestUri="api/experiences" Title="Experience">
+        <EntityForm TEntity="Experience" TId="string" Entity="experience" RequestUri="api/experiences" Title="Experience">
             <TextField @bind-Value="experience.Title" />
             <TextField @bind-Value="experience.CompanyName" />
             <SelectEnumField @bind-Value="experience.EmploymentType"></SelectEnumField>

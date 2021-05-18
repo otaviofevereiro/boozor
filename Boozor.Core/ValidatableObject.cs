@@ -15,14 +15,9 @@ namespace Boozor.Core
         }
 
         [JsonIgnore]
-        public Validator<T> Validator => validatorLazy.Value;
+        internal Validator<T> Validator => validatorLazy.Value;
 
         IValidator IValidatableObject.Validator => Validator;
-
-        public static Validator<T> CreateValidator()
-        {
-            return Activator.CreateInstance<T>().Validator;
-        }
 
         public IResult Validate()
         {
