@@ -7,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
+using Curriculum.Entities;
+using DevPack.Data;
+using Curriculum.Data;
 
 namespace Curriculum.Server
 {

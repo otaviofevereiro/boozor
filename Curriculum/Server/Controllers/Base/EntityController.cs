@@ -16,9 +16,8 @@ namespace Curriculum.Server.Controllers
     public class EntityController<TViewModel, TEntity> : ControllerBase
         where TEntity : Entity
     {
-        private readonly IRepository<TEntity> _repository;
         private readonly IMapper _mapper;
-
+        private readonly IRepository<TEntity> _repository;
         public EntityController(IRepository<TEntity> repository, IMapper mapper)
         {
             _repository = repository;
@@ -71,22 +70,9 @@ namespace Curriculum.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id, CancellationToken cancellationToken = default)
         {
-            var result = new Result<TViewModel>();
+            var entity = await _repository.FindAsync(id, cancellationToken);
 
-            try
-            {
-                var entity = await _repository.FindAsync(id, cancellationToken);
-
-                result.Item = _mapper.Map<TEntity, TViewModel>(entity);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                result.AddError(ex.Message);
-
-                return BadRequest(result);
-            }
+            return EnsureToView(entity);
         }
 
         [HttpPut]
@@ -100,6 +86,24 @@ namespace Curriculum.Server.Controllers
 
                 await _repository.SaveAsync(entity, cancellationToken);
 
+                result.Item = _mapper.Map<TEntity, TViewModel>(entity);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+
+                return BadRequest(result);
+            }
+        }
+
+        protected IActionResult EnsureToView(TEntity entity)
+        {
+            var result = new Result<TViewModel>();
+
+            try
+            {
                 result.Item = _mapper.Map<TEntity, TViewModel>(entity);
 
                 return Ok(result);

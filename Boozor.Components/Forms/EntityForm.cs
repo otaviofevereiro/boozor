@@ -132,7 +132,7 @@ namespace Boozor.Components.Forms
         {
             if (firstRender)
             {
-                if (EntityId is not null && 
+                if (EntityId is not null &&
                     Entity.Id is not null)
                 {
                     await GetEntity(EntityId);
@@ -178,15 +178,8 @@ namespace Boozor.Components.Forms
             {
                 var response = await func.Invoke();
 
-                try
-                {
-                    //TODO: Validar erro aqui
-                    result = await response.Content.ReadFromJsonAsync<Result<TEntity>>();
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.ToString());
-                }
+                //TODO: Validar erro aqui
+                result = await response.Content.ReadFromJsonAsync<Result<TEntity>>();
 
                 //TODO: Validar a necessidade disso
                 if (result.IsValid)
