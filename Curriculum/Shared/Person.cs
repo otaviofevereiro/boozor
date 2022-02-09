@@ -1,39 +1,27 @@
 ﻿using FluentValidation;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Boozor.Core;
 
 namespace Curriculum.Shared
 {
-    public class Person : Entity<Person>
+    public class Person
     {
+        [Key]
+        [Required]
+        public int Id { get; set; }
+
         [Display(Name = "Birth Date")]
+        [Required]
         public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Current Email")]
-
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
+        [Required]
+        [StringLength(60)]
         public string Name { get; set; }
 
-        public override string ToString()
-        {
-            return $"{BirthDate} - {Email} - {Name}";
-        }
-
-        protected override void Configure(Validator<Person> validator)
-        {
-            validator.RuleFor(x => x.BirthDate)
-                     .NotEmpty();
-
-            validator.RuleFor(x => x.Email)
-                     .NotEmpty()
-                     .MaximumLength(250)
-                     .EmailAddress();
-
-            validator.RuleFor(x => x.Name)
-                     .NotEmpty()
-                     .MaximumLength(250);
-        }
     }
 }

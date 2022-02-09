@@ -1,16 +1,32 @@
 ﻿using AutoMapper;
-using Curriculum.Data;
-using Curriculum.Entities;
-using DevPack.Data;
+using Curriculum.Shared;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Curriculum.Server.Controllers
 {
-    public class PersonsController : EntityController<Shared.Person, Entities.Person>
+    [ApiController]
+    [Route("[controller]")]
+    public class PersonsController : ControllerBase
     {
-        public PersonsController(IRepository<Person> repo, IMapper mapper) : base(repo, mapper)
+        [HttpGet]
+        public Person Get()
         {
+            return new Person()
+            {
+                BirthDate = new DateTime(),
+                Email = "otavio.fevereiro@outlook.com",
+                Name = "Otavio Fevereiro",
+            };
+
+        }
+
+        [HttpPost]
+        public IActionResult Post(Person person)
+        {
+
+            return Ok();
         }
     }
 }

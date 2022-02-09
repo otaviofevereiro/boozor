@@ -1,12 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\DevPack.Data\DevPack.Data.EntityFramework\DevPack.Data.EntityFramework.csproj" />
-		<ProjectReference Include="..\..\DevPack.Data\DevPack.Data\DevPack.Data.csproj" />
 		<ProjectReference Include="..\Curriculum.Entities\Curriculum.Entities.csproj" />
 	</ItemGroup>
 

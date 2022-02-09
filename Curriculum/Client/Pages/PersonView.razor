@@ -1,14 +1,20 @@
 ﻿@page "/person"
 
-<EntityForm TEntity="Person" Entity="person" RequestUri="api/persons" Title="Person">
-    <TextField @bind-Value="person.Id" readonly />
+
+<EditForm Model="@person">
+    <DataAnnotationsValidator />
+    @*<ValidationSummary />*@
+
+    <NumberField @bind-Value="person.Id" readonly />
     <TextField @bind-Value="person.Name" />
     <TextField @bind-Value="person.Email" />
     <DateField @bind-Value="person.BirthDate" />
-</EntityForm>
+
+    <button type="submit">Save</button>
+</EditForm>
 
 
 @code {
-    Person person = new Person() { Id = "1" };
+    Person person = new Person() { Id = 1 };
 }
 

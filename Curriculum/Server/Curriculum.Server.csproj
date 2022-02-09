@@ -19,14 +19,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\DevPack.Data\DevPack.Data.EntityFramework\DevPack.Data.EntityFramework.csproj" />
-		<ProjectReference Include="..\..\..\DevPack.Data\DevPack.Data.Extensions.InMemory\DevPack.Data.Extensions.InMemory.csproj" />
-		<ProjectReference Include="..\..\..\DevPack.Data\DevPack.Data\DevPack.Data.csproj" />
-		<ProjectReference Include="..\..\Boozor.Core\Boozor.Core.csproj" />
-		<ProjectReference Include="..\..\Curriculum.Data\Curriculum.Data.csproj" />
-		<ProjectReference Include="..\..\Curriculum.Entities\Curriculum.Entities.csproj" />
 		<ProjectReference Include="..\Client\Curriculum.Client.csproj" />
 		<ProjectReference Include="..\Shared\Curriculum.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Controllers\Base\" />
+	  <Folder Include="Mappers\" />
 	</ItemGroup>
 
 

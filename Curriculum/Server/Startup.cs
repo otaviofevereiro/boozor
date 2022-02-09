@@ -1,15 +1,9 @@
-using Curriculum.Server.Data;
-using Curriculum.Server.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
-using Curriculum.Entities;
-using DevPack.Data;
-using Curriculum.Data;
 
 namespace Curriculum.Server
 {
@@ -28,8 +22,6 @@ namespace Curriculum.Server
         {
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddAutoMapper(typeof(CurriculumServerProfile));
-            services.AddInMemoryDatabase<CurriculumContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

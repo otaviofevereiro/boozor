@@ -10,8 +10,4 @@
 		<PackageReference Include="System.Text.Json" Version="5.0.1" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\..\Boozor.Core\Boozor.Core.csproj" />
-	</ItemGroup>
-
 </Project>

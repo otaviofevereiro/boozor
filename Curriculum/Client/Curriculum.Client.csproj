@@ -15,7 +15,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Boozor.Components\Boozor.Components.csproj" />
-		<ProjectReference Include="..\..\Boozor.Core\Boozor.Core.csproj" />
 		<ProjectReference Include="..\Shared\Curriculum.Shared.csproj" />
 	</ItemGroup>
 

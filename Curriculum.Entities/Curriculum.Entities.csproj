@@ -4,8 +4,4 @@
 		<TargetFramework>net5.0</TargetFramework>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\..\DevPack.Data\DevPack.Data\DevPack.Data.csproj" />
-	</ItemGroup>
-
 </Project>
