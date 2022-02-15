@@ -1,20 +1,26 @@
 ﻿@page "/person"
 
 
-<EditForm Model="@person">
-    <DataAnnotationsValidator />
-    @*<ValidationSummary />*@
 
+<View Model="@person" OnValidSubmit=OnValidSubmit>
     <NumberField @bind-Value="person.Id" readonly />
     <TextField @bind-Value="person.Name" />
     <TextField @bind-Value="person.Email" />
     <DateField @bind-Value="person.BirthDate" />
-
-    <button type="submit">Save</button>
-</EditForm>
-
+</View>
 
 @code {
-    Person person = new Person() { Id = 1 };
+    Person person = new()
+        {
+            Id = 1,
+            Name = "Otavio",
+            BirthDate = new DateTime(1990, 12, 26),
+            Email = "otavio@otavio.com.br"
+        };
+
+    public Task OnValidSubmit()
+    {
+        return Task.Delay(1000);
+    }
 }
 

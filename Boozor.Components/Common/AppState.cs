@@ -4,16 +4,16 @@ namespace Boozor.Components.Common
 {
     public class AppState
     {
-        public bool loading;
+        private bool _loading;
 
         public event Action<bool> LoadingChanged;
 
         public void SetLoading(bool loading)
         {
-            if (this.loading != loading)
-                this.loading = loading;
+            if (_loading != loading)
+                _loading = loading;
 
-            LoadingChanged?.Invoke(this.loading);
+            LoadingChanged?.Invoke(_loading);
         }
     }
 }

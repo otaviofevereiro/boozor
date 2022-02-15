@@ -16,11 +16,9 @@
 //    /// Renders a form element that cascades an <see cref="EditContext"/> to descendants.
 //    /// </summary>
 //    public class EntityForm<TEntity> : ComponentBase
-//        where TEntity : Entity<TEntity>
 //    {
 //        private readonly Func<Task> _handleSubmitDelegate;
 //        private EditContext _fixedEditContext;
-//        Result<TEntity> result = new();
 
 //        // Cache to avoid per-render allocations
 //        /// <summary>
@@ -157,6 +155,7 @@
 //                _fixedEditContext = EditContext ?? new EditContext(Entity!);
 //            }
 //        }
+
 //        RenderFragment CreateAlert() => builder =>
 //        {
 //            builder.OpenComponent<Alert>(0);

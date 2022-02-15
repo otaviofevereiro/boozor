@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Curriculum.Shared;
+﻿using Curriculum.Shared;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
