@@ -1,0 +1,36 @@
+﻿@page "/person"
+
+
+
+
+
+<ModalContent Title=Person StyleContent="border:none">
+    <Body>
+        <View Model="@person" OnValidSubmit=OnValidSubmit>
+            <NumberField @bind-Value="person.Id" readonly />
+            <TextField @bind-Value="person.Name"/>
+            <TextField @bind-Value="person.Email" /> 
+            <DateField @bind-Value="person.BirthDate" />
+        </View>
+    </Body>
+    <Footer>
+        <button class="btn btn-primary small">Sumbmit</button>
+    </Footer>
+
+</ModalContent>
+
+@code {
+    Person person = new()
+        {
+            Id = 1,
+            Name = "Otavio",
+            BirthDate = new DateTime(1990, 12, 26),
+            Email = "otavio@otavio.com.br"
+        };
+
+    public Task OnValidSubmit()
+    {
+        return Task.Delay(1000);
+    }
+}
+

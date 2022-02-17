@@ -1,5 +1,6 @@
-﻿<div class="modal @modalClass" tabindex="-1" role="dialog" style="display:@modalDisplay">
-    <div class="modal-dialog @GetModalSize()" role="document">
+﻿@*<div class="modal @modalClass" tabindex="-1" role="dialog" style="display:@modalDisplay">*@
+    @*<div class="modal-dialog @GetModalSize()" role="document">*@
+    @*<div class="modal-dialog modal-xl" role="document">*@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title">@Title</h6>
@@ -23,8 +24,8 @@
                 @Footer
             </div>
         </div>
-    </div>
-</div>
+    @*</div>*@
+@*</div>*@
 
 @if (showBackdrop)
 {
@@ -32,8 +33,8 @@
 }
 
 @code {
-    private string modalDisplay = "none;";
-    private string modalClass = "";
+    private string modalDisplay = "block;";
+    private string modalClass = "Show";
     private bool showBackdrop = false;
 
     [Parameter]

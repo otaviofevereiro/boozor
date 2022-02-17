@@ -7,6 +7,7 @@ namespace Boozor.Components.Fields
 {
     public abstract class Field<TValue> : InputBase<TValue>
     {
+        [Parameter] public int Columns { get; set; } = 12;
         [Parameter] public string Label { get; set; }
 
         protected abstract void BuildInput(RenderTreeBuilder builder, int sequence);
@@ -20,21 +21,16 @@ namespace Boozor.Components.Fields
 
         protected sealed override void BuildRenderTree(RenderTreeBuilder builder)
         {
+
             builder.OpenElement(0, "div");
-            builder.AddAttribute(1, "class", "form-group row");
+            builder.AddAttribute(0, "class", $"col-md-{Columns}");
             {
                 BuildLabel(builder);
+                BuildInput(builder, 0);
 
-                builder.OpenElement(0, "div");
-                builder.AddAttribute(0, "class", "col-10");
-                {
-                    BuildInput(builder, 0);
-
-                    builder.OpenComponent<ValidationMessage<TValue>>(0);
-                    builder.AddAttribute(1, "For", ValueExpression);
-                    builder.CloseComponent();
-                }
-                builder.CloseElement();
+                builder.OpenComponent<ValidationMessage<TValue>>(0);
+                builder.AddAttribute(1, "For", ValueExpression);
+                builder.CloseComponent();
             }
             builder.CloseElement();
         }
@@ -42,7 +38,7 @@ namespace Boozor.Components.Fields
         private void BuildLabel(RenderTreeBuilder builder)
         {
             builder.OpenElement(0, "label");
-            builder.AddAttribute(1, "class", "col-2 col-form-label");
+            builder.AddAttribute(1, "class", "form-label");
             builder.AddContent(0, Label);
             builder.CloseElement();
         }
