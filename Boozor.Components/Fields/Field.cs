@@ -23,7 +23,7 @@ namespace Boozor.Components.Fields
         {
 
             builder.OpenElement(0, "div");
-            builder.AddAttribute(0, "class", $"col-md-{Columns}");
+            builder.AddAttribute(0, "class", $"col-md-{Columns} col-sm-12");
             {
                 BuildLabel(builder);
                 BuildInput(builder, 0);

@@ -1,0 +1,51 @@
+﻿<Modal @ref=_modal>
+    <Header>
+    </Header>
+    <Body>
+        <span>@_message</span>
+    </Body>
+    <Footer>
+        <button class="btn btn-light small" @onclick=Cancel>@_cancel</button>
+        <button class="btn btn-danger small" @onclick=Confirm>@_ok</button>
+    </Footer>
+</Modal>
+
+@code {
+    private Modal _modal = new();
+    private string _message { get; set; }
+    private string _ok { get; set; }
+    private string _cancel { get; set; }
+    private MessageResult _result = MessageResult.None;
+
+    public async Task<MessageResult> ConfirmAsync(string title, string message, string okText = "Ok", string cancel = "Cancelar")
+    {
+        await Task.Yield();
+
+        _modal.Title = title;
+        _message = message;
+        _ok = okText;
+        _cancel = cancel;
+
+        _modal.OpenAsync();
+
+        while (_result == MessageResult.None)
+            await Task.Delay(10);
+
+        var result = _result;
+        _result = MessageResult.None;
+
+        return result;
+    }
+
+    private async Task Confirm()
+    {
+        _result = MessageResult.Ok;
+        _modal.OpenOrCloseAsync();
+    }
+
+    private async Task Cancel()
+    {
+        _result = MessageResult.Cancel;
+        _modal.OpenOrCloseAsync();
+    }
+}

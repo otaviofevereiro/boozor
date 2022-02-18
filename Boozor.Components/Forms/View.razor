@@ -1,40 +1,46 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+@using Boozor.Components.Modals
 @inject AppState _appState
 
-          @*StyleContent="border:none"*@
-<EditForm class="row g-3"
-          @ref=_editForm
-          Model=Model
-          OnValidSubmit=@(e=> Execute(OnValidSubmit))
-          OnInvalidSubmit=@(e=> Execute(OnInvalidSubmit))>
+<div class="col-md-@Columns col-sm-12">
+    <EditForm Model=Model
+              OnValidSubmit=@(e=> Execute(OnValidSubmit))
+              OnInvalidSubmit=@(e=> Execute(OnInvalidSubmit))>
+        <ModalContent Title=Person StyleContent="border:none">
+            <Body>
+                <DataAnnotationsValidator />
+                <div class="row g-3">
+                    @*TODO// Alerts*@
+                    @ChildContent
+                </div>
+            </Body>
+            <Footer>
+                <button class="btn btn-danger btn-sm" @onclick="Delete">Excluir</button>
+                <button type="submit" class="btn btn-success btn-sm">Salvar</button>
+            </Footer>
+        </ModalContent>
+    </EditForm>
+</div>
 
-    <DataAnnotationsValidator />
-
-    @*TODO// Alerts*@
-
-    @ChildContent
-
-    @*    <div class="form-group row">
-        <div class="col-sm-10">
-        <button type="submit" class="btn btn-success btn-sm">Salvar</button>
-        <button type="reset" class="btn btn-primary btn-sm">Cancelar</button>
-        <button type="button" class="btn btn-danger btn-sm">Deletar</button>
-        </div>
-        </div>*@
-</EditForm>
-
+<Message @ref=_message></Message>
 
 @code {
-    private EditForm _editForm;
+    private Message _message = new();
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public int Columns { get; set; } = 12;
 
     [Parameter]
     public EventCallback<EditContext> OnValidSubmit { get; set; }
 
     [Parameter]
     public EventCallback<EditContext> OnInvalidSubmit { get; set; }
+
+    [Parameter]
+    public EventCallback<EditContext> OnDelete { get; set; }
 
     [Parameter]
     public object Model { get; set; }
@@ -48,5 +54,13 @@
             await eventCallback.InvokeAsync();
 
         _appState.SetLoading(false);
+    }
+
+    private async Task Delete()
+    {
+        var result = await _message.ConfirmAsync("Excluir registro", "Tem certeza que deseja excluir o registro?");
+
+        if (result == MessageResult.Ok)
+            await OnDelete.InvokeAsync();
     }
 }

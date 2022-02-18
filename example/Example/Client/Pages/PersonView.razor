@@ -1,23 +1,11 @@
 ﻿@page "/person"
 
-
-
-
-
-<ModalContent Title=Person StyleContent="border:none">
-    <Body>
-        <View Model="@person" OnValidSubmit=OnValidSubmit>
-            <NumberField @bind-Value="person.Id" readonly />
-            <TextField @bind-Value="person.Name"/>
-            <TextField @bind-Value="person.Email" /> 
-            <DateField @bind-Value="person.BirthDate" />
-        </View>
-    </Body>
-    <Footer>
-        <button class="btn btn-primary small">Sumbmit</button>
-    </Footer>
-
-</ModalContent>
+<View Model="@person" OnValidSubmit=OnValidSubmit Columns=6>
+    <NumberField @bind-Value="person.Id" readonly Columns=4/>
+    <TextField @bind-Value="person.Name" Columns=8/>
+    <TextField @bind-Value="person.Email" />
+    <DateField @bind-Value="person.BirthDate" Columns=6 />
+</View>
 
 @code {
     Person person = new()

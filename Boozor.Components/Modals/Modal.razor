@@ -1,0 +1,86 @@
+﻿@inherits ModalContent;
+
+<div class="modal @modalClass" tabindex="-1" role="dialog" style="display:@modalDisplay">
+    <div class="modal-dialog modal-dialog-scrollable @GetModalSize()" role="document">
+        @{
+            base.BuildRenderTree(__builder);
+        }
+    </div>
+</div>
+
+@if (showBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private string modalDisplay = "none;";
+    private string modalClass = "";
+    private bool showBackdrop = false;
+
+    [Parameter]
+    public ModalSize Size { get; set; } = ModalSize.Default;
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+        if (Header == null)
+            Header = (__builder) =>
+            {
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick=CloseAsync></button>
+            };
+
+        base.OnInitialized();
+    }
+
+    public async Task OpenOrCloseAsync()
+    {
+        if (showBackdrop)
+            await CloseAsync();
+        else
+            await OpenAsync();
+    }
+
+    public async Task OpenAsync()
+    {
+        await Task.Yield();
+
+        modalDisplay = "block;";
+        modalClass = "Show";
+        showBackdrop = true;
+
+        StateHasChanged();
+    }
+
+    public async Task CloseAsync()
+    {
+        await Task.Yield();
+
+        modalDisplay = "none";
+        modalClass = "";
+        showBackdrop = false;
+
+        StateHasChanged();
+
+        await OnClose.InvokeAsync();
+    }
+
+    private string GetModalSize()
+    {
+        switch (Size)
+        {
+            case ModalSize.Small:
+                return "modal-sm";
+            case ModalSize.Large:
+                return "modal-lg";
+            case ModalSize.ExtraLarge:
+                return "modal-xl";
+            case ModalSize.Default:
+            default:
+                return string.Empty;
+        }
+    }
+}
