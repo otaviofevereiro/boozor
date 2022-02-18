@@ -8,10 +8,9 @@ namespace Boozor.Components.Common
 
         public event Action<bool> LoadingChanged;
 
-        public void SetLoading(bool loading)
+        public void Loading()
         {
-            if (_loading != loading)
-                _loading = loading;
+            _loading = !_loading;
 
             LoadingChanged?.Invoke(_loading);
         }

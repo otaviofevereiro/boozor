@@ -4,8 +4,8 @@
 
 <div class="col-md-@Columns col-sm-12">
     <EditForm Model=Model
-              OnValidSubmit=@(e=> Execute(OnValidSubmit))
-              OnInvalidSubmit=@(e=> Execute(OnInvalidSubmit))>
+              OnValidSubmit=@(async e=> await Execute(OnValidSubmit))
+              OnInvalidSubmit=@(async e=> await Execute(OnInvalidSubmit))>
         <ModalContent Title=Person StyleContent="border:none">
             <Body>
                 <DataAnnotationsValidator />
@@ -15,7 +15,7 @@
                 </div>
             </Body>
             <Footer>
-                <button class="btn btn-danger btn-sm" @onclick="Delete">Excluir</button>
+                <button type="button" class="btn btn-danger btn-sm" @onclick="Delete">Excluir</button>
                 <button type="submit" class="btn btn-success btn-sm">Salvar</button>
             </Footer>
         </ModalContent>
@@ -48,12 +48,12 @@
     private async Task Execute(EventCallback<EditContext> eventCallback)
     {
         await Task.Yield();
-        _appState.SetLoading(true);
+        _appState.Loading();
 
         if (eventCallback.HasDelegate)
             await eventCallback.InvokeAsync();
 
-        _appState.SetLoading(false);
+        _appState.Loading();
     }
 
     private async Task Delete()
@@ -61,6 +61,6 @@
         var result = await _message.ConfirmAsync("Excluir registro", "Tem certeza que deseja excluir o registro?");
 
         if (result == MessageResult.Ok)
-            await OnDelete.InvokeAsync();
+            await Execute(OnDelete);
     }
 }

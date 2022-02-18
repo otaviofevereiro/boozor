@@ -1,6 +1,6 @@
 ﻿@page "/person"
 
-<View Model="@person" OnValidSubmit=OnValidSubmit Columns=6>
+<View Model="@person" OnValidSubmit=OnValidSubmit OnDelete=OnDelete Columns=6>
     <NumberField @bind-Value="person.Id" readonly Columns=4/>
     <TextField @bind-Value="person.Name" Columns=8/>
     <TextField @bind-Value="person.Email" />
@@ -17,6 +17,11 @@
         };
 
     public Task OnValidSubmit()
+    {
+        return Task.Delay(1000);
+    }
+
+        public Task OnDelete()
     {
         return Task.Delay(1000);
     }
