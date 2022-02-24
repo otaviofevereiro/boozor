@@ -1,18 +1,11 @@
-﻿using System;
+﻿using Boozor.Components.Modals;
+using System;
 
 namespace Boozor.Components.Common
 {
-    public class AppState
+    public partial class AppState
     {
-        private bool _loading;
 
-        public event Action<bool> LoadingChanged;
 
-        public void Loading()
-        {
-            _loading = !_loading;
-
-            LoadingChanged?.Invoke(_loading);
-        }
     }
 }

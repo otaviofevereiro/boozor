@@ -58,9 +58,13 @@
 
     private async Task Delete()
     {
-        var result = await _message.ConfirmAsync("Excluir registro", "Tem certeza que deseja excluir o registro?");
+        var confirmation = new ConfirmationState()
+            {
+                Text = "Tem certeza que deseja excluir o registro?",
+                Title = "Excluir registro"
+            };
+        confirmation.OnOk += () => Execute(OnDelete);
 
-        if (result == MessageResult.Ok)
-            await Execute(OnDelete);
+        _appState.Show(confirmation);
     }
 }
