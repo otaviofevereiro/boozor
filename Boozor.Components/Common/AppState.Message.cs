@@ -20,16 +20,16 @@ namespace Boozor.Components.Common
 
         public void Confirmation(string text, string title, Action onOk = default, Action onCancel = default)
         {
-            MessageState state = new()
+            _messageState = new()
             {
                 Title = title,
                 Text = text
             };
 
-            state.AddButton("Cancelar", onCancel, "light")
-                 .AddButton("Ok", onOk, "primary");
+            _messageState.AddButton("Cancelar", onCancel, "light")
+                         .AddButton("Ok", onOk, "primary");
                  
-            MessageChange?.Invoke(state);
+            MessageChange?.Invoke(_messageState);
         }
     }
 }

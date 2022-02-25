@@ -38,12 +38,14 @@
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
-    private List<TModel> _selectedItens = new();
+    [Parameter]
+    public List<TModel> SelectedItens { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<List<TModel>> SelectedItensChanged { get; set; }
 
     public async Task<OrderType> Order(Func<TModel, object> valueFunc, OrderType orderType)
     {
-        count++;
-
         if (orderType == OrderType.None || orderType == OrderType.Descending)
         {
             Items = Items.OrderBy(valueFunc).ToList();
@@ -63,21 +65,23 @@
 
     private async Task SelectItem(TModel item)
     {
-        if (_selectedItens.Contains(item))
+        if (SelectedItens.Contains(item))
         {
-            _selectedItens.Remove(item);
+            SelectedItens.Remove(item);
             await OnUnselectItem.InvokeAsync(item);
         }
         else
         {
-            _selectedItens.Add(item);
+            SelectedItens.Add(item);
             await OnSelectItem.InvokeAsync(item);
         }
+
+        await SelectedItensChanged.InvokeAsync(SelectedItens);
     }
 
     private string GetClass(TModel item)
     {
-        if (_selectedItens.Contains(item))
+        if (SelectedItens.Contains(item))
         {
             return "table-primary";
         }
