@@ -8,6 +8,19 @@ namespace Boozor.Components.Tables
 {
     public class TitleContext<TModel> : DataTableContext<TModel>
     {
+        
+
+        public override void Render(RenderTreeBuilder builder, Column<TModel> column)
+        {
+            object objValue = GetValue(column.ValueExpression);
+
+            builder.OpenElement(0, "th");
+            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, () => OnClick(column.ValueExpression)));
+            builder.AddAttribute(3, "style", "cursor:pointer");
+            builder.AddContent(4, objValue);
+            builder.CloseElement();
+        }
+
         public override object GetValue(Expression<Func<TModel, object>> expression)
         {
             var memberExpression = GetMemberExpression(expression);
@@ -20,17 +33,6 @@ namespace Boozor.Components.Tables
                 return memberExpression.Member.Name;
             else
                 return displayAttribute.Name;
-        }
-
-        public override void Render(RenderTreeBuilder builder, Column<TModel> column)
-        {
-            object objValue = GetValue(column.ValueExpression);
-
-            builder.OpenElement(0, "th");
-            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, () => OnClick(column.ValueExpression)));
-            builder.AddAttribute(3, "style", "cursor:pointer");
-            builder.AddContent(4, objValue);
-            builder.CloseElement();
         }
 
         private MemberExpression GetMemberExpression(Expression<Func<TModel, object>> expression)

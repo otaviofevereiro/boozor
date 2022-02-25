@@ -8,12 +8,6 @@ using System.Threading.Tasks;
 
 namespace Boozor.Components.Tables
 {
-    public enum OrderType
-    {
-        None,
-        Ascending,
-        Descending
-    }
 
     public class DataTable<TModel> : ComponentBase, IDisposable
         where TModel : class

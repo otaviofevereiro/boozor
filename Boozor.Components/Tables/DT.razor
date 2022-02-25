@@ -1,0 +1,87 @@
+﻿@typeparam TModel
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <CascadingValue Value="this">
+                    @ChildContent
+                </CascadingValue>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Items)
+            {
+                <tr @onclick="() => SelectItem(item)" style="cursor:pointer" class="@GetClass(item)">
+                    <CascadingValue Value=@item IsFixed=true>
+                        @ChildContent
+                    </CascadingValue>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<TModel> OnSelectItem { get; set; }
+
+    [Parameter]
+    public EventCallback<TModel> OnUnselectItem { get; set; }
+
+    [Parameter]
+    public List<TModel> Items { get; set; }
+
+    [Parameter]
+    public EventCallback<List<TModel>> ItemsChanged { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private List<TModel> _selectedItens = new();
+
+    public async Task<OrderType> Order(Func<TModel, object> valueFunc, OrderType orderType)
+    {
+        count++;
+
+        if (orderType == OrderType.None || orderType == OrderType.Descending)
+        {
+            Items = Items.OrderBy(valueFunc).ToList();
+            orderType = OrderType.Ascending;
+        }
+        else
+        {
+            Items = Items.OrderByDescending(valueFunc).ToList();
+            orderType = OrderType.Descending;
+        }
+
+        await ItemsChanged.InvokeAsync(Items);
+        StateHasChanged();
+
+        return orderType;
+    }
+
+    private async Task SelectItem(TModel item)
+    {
+        if (_selectedItens.Contains(item))
+        {
+            _selectedItens.Remove(item);
+            await OnUnselectItem.InvokeAsync(item);
+        }
+        else
+        {
+            _selectedItens.Add(item);
+            await OnSelectItem.InvokeAsync(item);
+        }
+    }
+
+    private string GetClass(TModel item)
+    {
+        if (_selectedItens.Contains(item))
+        {
+            return "table-primary";
+        }
+
+        return default;
+    }
+}

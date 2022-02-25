@@ -1,0 +1,99 @@
+﻿@using System.Linq.Expressions
+@typeparam TModel
+
+@if (@Item == null)
+{
+    <th @onclick="async ()=> await Order()">@GetTitle()</th>
+}
+else
+{
+    <td>@GetValue()</td>
+}
+
+
+@code {
+    [Parameter]
+    public string Format { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public Expression<Func<TModel, object>> Value { get; set; }
+
+    [CascadingParameter]
+    public TModel Item { get; set; }
+
+    [CascadingParameter]
+    public DT<TModel> DataTable { get; set; }
+
+    private Func<TModel, object> _valueFunc;
+    private OrderType _orderType = OrderType.None;
+
+
+    protected override void OnInitialized()
+    {
+        _valueFunc = Value.Compile();
+
+        base.OnInitialized();
+    }
+
+    private object GetValue()
+    {
+        var value = _valueFunc?.Invoke(Item);
+
+        return FormatValue(value);
+    }
+
+    private string FormatValue(object objValue)
+    {
+        if (objValue == null)
+            return string.Empty;
+
+        if (string.IsNullOrEmpty(Format))
+            return objValue.ToString();
+
+        var dateTime = objValue as DateTime?;
+
+        if (dateTime.HasValue)
+            return dateTime.Value.ToString(Format);
+
+        return objValue.ToString();
+    }
+
+    public object GetTitle()
+    {
+        if (!string.IsNullOrEmpty(Title))
+            return Title;
+
+        var memberExpression = GetMemberExpression();
+        var property = typeof(TModel).GetProperty(memberExpression.Member.Name);
+
+        var displayAttribute = property?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), true)
+                                       ?.FirstOrDefault() as System.ComponentModel.DataAnnotations.DisplayAttribute;
+
+        if (displayAttribute == null || string.IsNullOrEmpty(displayAttribute.Name))
+            return memberExpression.Member.Name;
+        else
+            return displayAttribute.Name;
+    }
+
+    private MemberExpression GetMemberExpression()
+    {
+        var memberExpression = Value.Body as MemberExpression;
+
+        if (memberExpression == null)
+        {
+            var unaryExpression = Value.Body as UnaryExpression;
+            memberExpression = unaryExpression.Operand as MemberExpression;
+        }
+
+        return memberExpression;
+    }
+
+    private async Task Order()
+    {
+        _orderType = await DataTable.Order(_valueFunc, _orderType);
+    }
+
+}
