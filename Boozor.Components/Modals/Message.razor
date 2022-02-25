@@ -1,66 +1,43 @@
 ﻿@inject AppState _appState
 
-<Modal @ref=_modal Title=@_confirmationState.Title>
+<Modal @ref=_modal Title=@_messageState.Title>
     <Header>
     </Header>
     <Body>
-        <span>@_confirmationState.Text</span>
+        <span>@_messageState.Text</span>
     </Body>
     <Footer>
-        <button class="btn btn-light small" @onclick=Cancel>@_confirmationState.CancelText</button>
-        <button class="btn btn-danger small" @onclick=Ok>@_confirmationState.OkText</button>
+        @foreach (var button in @_messageState.Buttons)
+        {
+            async Task OnClick()
+            {
+                await _modal.OpenOrCloseAsync();
+
+                if(button.Action != null)
+                    button.Action();
+            }
+
+            <button class="btn btn-@button.Color small" @onclick=OnClick>@button.Text</button>
+        }
     </Footer>
 </Modal>
 
 @code {
-    //TODO: colocar Message no AppState
-
     private Modal _modal = new();
-    private MessageResult _result = MessageResult.None;
-    private ConfirmationState _confirmationState = new();
+    private MessageState _messageState = new();
 
     protected override void OnInitialized()
     {
-        _appState.ConfimationChange += OnConfirmationChange;
+        _appState.MessageChange += OnMessageChange;
 
         base.OnInitialized();
     }
 
-    public async void OnConfirmationChange(ConfirmationState confirmationState)
+    public async void OnMessageChange(MessageState messageState)
     {
-        _confirmationState = confirmationState;
+        _messageState = messageState;
         StateHasChanged();
 
         await _modal.OpenAsync();
-    }
-
-    public async Task<MessageResult> ConfirmAsync(string message, string title, string okText = "Ok", string cancel = "Cancelar")
-    {
-        await Task.Yield();
-
-        _confirmationState = new() { Text = message, Title = title, OkText = okText, CancelText = cancel };
-        _modal.Title = _confirmationState.Title;
-
-        await _modal.OpenAsync();
-
-        while (_result == MessageResult.None)
-            await Task.Delay(10);
-
-        var result = _result;
-        _result = MessageResult.None;
-
-        return result;
-    }
-
-    private async Task Ok()
-    {
-        _confirmationState.Ok();
-        await _modal.OpenOrCloseAsync();
-    }
-
-    private async Task Cancel()
-    {
-        _confirmationState.Cancel();
-        await _modal.OpenOrCloseAsync();
     }
 }

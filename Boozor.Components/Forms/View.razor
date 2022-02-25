@@ -22,8 +22,6 @@
     </EditForm>
 </div>
 
-<Message @ref=_message></Message>
-
 @code {
     private Message _message = new();
 
@@ -56,15 +54,10 @@
         _appState.Loading();
     }
 
-    private async Task Delete()
+    private void Delete()
     {
-        var confirmation = new ConfirmationState()
-            {
-                Text = "Tem certeza que deseja excluir o registro?",
-                Title = "Excluir registro"
-            };
-        confirmation.OnOk += () => Execute(OnDelete);
-
-        _appState.Show(confirmation);
+        _appState.Confirmation("Tem certeza que deseja excluir o registro?",
+                               "Excluir registro",
+                               onOk: async () => await Execute(OnDelete));
     }
 }
