@@ -8,7 +8,7 @@
                     @ChildContent
                 </CascadingValue>
 
-                @if(Toolbar is not null)
+                @if (Toolbar is not null)
                 {
                     <td></td>
                 }
@@ -23,9 +23,13 @@
 
                         <td>
                             @Toolbar
+                            @if (Delete == true)
+                            {
+                                <ColumnButton TModel=TModel Text="Excluir" Color="danger" OnClick="OnDelete"></ColumnButton>
+                            }
                         </td>
-                    </CascadingValue>
-                </tr>
+                </CascadingValue>
+            </tr>
             }
         </tbody>
     </table>
@@ -55,6 +59,9 @@
 
     [Parameter]
     public bool Multiselect { get; set; } = true;
+
+    [Parameter]
+    public bool Delete { get; set; } = false;
 
     [Parameter]
     public EventCallback<List<TModel>> SelectedItensChanged { get; set; }
@@ -105,6 +112,11 @@
         }
 
         await SelectedItensChanged.InvokeAsync(SelectedItens);
+    }
+
+    private void OnDelete(TModel item)
+    {
+        SelectedItens.Remove(item);
     }
 
     private string GetClass(TModel item)

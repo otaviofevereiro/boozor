@@ -7,7 +7,7 @@
     <DateField @bind-Value="_person.BirthDate" Columns=6 />
 </View>
 
-<DataTable TModel=Person @bind-Items=_persons OnSelectItem="OnSelectItem" Multiselect=false>
+<DataTable TModel=Person @bind-Items=_persons OnSelectItem="OnSelectItem" Multiselect=false Delete=true>
     <ChildContent>
         <Column TModel=Person Value="(p => p.Id)" />
         <Column TModel=Person Value="(p => p.Name)" />
