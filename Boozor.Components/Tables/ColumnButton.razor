@@ -1,0 +1,25 @@
+﻿@typeparam TModel
+
+<button type="button" class="btn btn-@Color btn-sm" @onclick="Click" @onclick:stopPropagation="true">@Text</button>
+
+
+@code {
+
+    //onclick="event.stopPropagation()"
+    [CascadingParameter]
+    public TModel Item { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public string Color { get; set; } = "primary";
+
+    [Parameter]
+    public EventCallback<TModel> OnClick { get; set; }
+
+    private async Task Click()
+    {
+        await OnClick.InvokeAsync(Item);
+    }
+}

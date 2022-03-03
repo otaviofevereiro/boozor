@@ -25,7 +25,7 @@ else
     public TModel Item { get; set; }
 
     [CascadingParameter]
-    public DT<TModel> DataTable { get; set; }
+    public DataTable<TModel> DataTable { get; set; }
 
     private Func<TModel, object> _valueFunc;
     private OrderType _orderType = OrderType.None;

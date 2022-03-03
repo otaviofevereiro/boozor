@@ -7,6 +7,11 @@
                 <CascadingValue Value="this">
                     @ChildContent
                 </CascadingValue>
+
+                @if(Toolbar is not null)
+                {
+                    <td></td>
+                }
             </tr>
         </thead>
         <tbody>
@@ -15,6 +20,10 @@
                 <tr @onclick="() => SelectItem(item)" style="cursor:pointer" class="@GetClass(item)">
                     <CascadingValue Value=@item IsFixed=true>
                         @ChildContent
+
+                        <td>
+                            @Toolbar
+                        </td>
                     </CascadingValue>
                 </tr>
             }
@@ -39,7 +48,13 @@
     public RenderFragment ChildContent { get; set; }
 
     [Parameter]
+    public RenderFragment Toolbar { get; set; }
+
+    [Parameter]
     public List<TModel> SelectedItens { get; set; } = new();
+
+    [Parameter]
+    public bool Multiselect { get; set; } = true;
 
     [Parameter]
     public EventCallback<List<TModel>> SelectedItensChanged { get; set; }
@@ -65,13 +80,26 @@
 
     private async Task SelectItem(TModel item)
     {
-        if (SelectedItens.Contains(item))
+        if (Multiselect)
         {
-            SelectedItens.Remove(item);
-            await OnUnselectItem.InvokeAsync(item);
+            if (SelectedItens.Contains(item))
+            {
+                SelectedItens.Remove(item);
+                await OnUnselectItem.InvokeAsync(item);
+            }
+            else
+            {
+                SelectedItens.Add(item);
+                await OnSelectItem.InvokeAsync(item);
+            }
         }
         else
         {
+            foreach (var selectedItem in SelectedItens)
+                await OnUnselectItem.InvokeAsync(item);
+
+            SelectedItens = new List<TModel>();
+
             SelectedItens.Add(item);
             await OnSelectItem.InvokeAsync(item);
         }

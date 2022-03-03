@@ -7,12 +7,19 @@
     <DateField @bind-Value="_person.BirthDate" Columns=6 />
 </View>
 
-<DT TModel=Person @bind-Items=_persons OnSelectItem="OnSelectItem">
-    <Col TModel=Person Value="(p => p.Id)" />
-    <Col TModel=Person Value="(p => p.Name)" />
-    <Col TModel=Person Value="(p => p.BirthDate)" />
-    <Col TModel=Person Value="(p => p.Email)" />
-</DT>
+<DataTable TModel=Person @bind-Items=_persons OnSelectItem="OnSelectItem" Multiselect=false>
+    <ChildContent>
+        <Column TModel=Person Value="(p => p.Id)" />
+        <Column TModel=Person Value="(p => p.Name)" />
+        <Column TModel=Person Value="(p => p.BirthDate)" />
+        <Column TModel=Person Value="(p => p.Email)" />
+    </ChildContent>
+
+    <Toolbar>
+        <ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect"/>
+        <ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect"/>
+    </Toolbar>
+</DataTable>
 
 @code {
     Person _person = new();
@@ -46,6 +53,11 @@
     }
 
     public void OnSelectItem(Person person)
+    {
+        _person = person;
+    }
+
+    public void CustomSelect(Person person)
     {
         _person = person;
     }
