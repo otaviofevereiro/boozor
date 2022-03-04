@@ -1,7 +1,7 @@
 ﻿@using Microsoft.JSInterop
 @inherits ModalContent;
 
-<div id="myModal" @ref=modal class="modal @modalClass" tabindex="-1">
+<div @ref=modal class="modal fade @GetModalSize()" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable @GetModalSize()" role="document">
         @{
             base.BuildRenderTree(__builder);
@@ -10,19 +10,15 @@
 </div>
 
 @code {
-    private string modalClass = "";
     private ElementReference modal;
+    private IJSObjectReference _module;
 
     [Parameter]
     public ModalSize Size { get; set; } = ModalSize.Default;
 
-    [Parameter]
-    public EventCallback OnClose { get; set; }
-
     [Inject]
     protected IJSRuntime JSRuntime { get; set; }
 
-    private IJSObjectReference _module;
 
     protected override async Task OnInitializedAsync()
     {
