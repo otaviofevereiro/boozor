@@ -1,6 +1,7 @@
-﻿@inherits ModalContent;
+﻿@using Microsoft.JSInterop
+@inherits ModalContent;
 
-<div class="modal @modalClass" tabindex="-1" role="dialog" style="display:@modalDisplay">
+<div id="myModal" @ref=modal class="modal @modalClass" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable @GetModalSize()" role="document">
         @{
             base.BuildRenderTree(__builder);
@@ -8,15 +9,9 @@
     </div>
 </div>
 
-@if (showBackdrop)
-{
-    <div class="modal-backdrop fade show"></div>
-}
-
 @code {
-    private string modalDisplay = "none;";
     private string modalClass = "";
-    private bool showBackdrop = false;
+    private ElementReference modal;
 
     [Parameter]
     public ModalSize Size { get; set; } = ModalSize.Default;
@@ -24,48 +19,30 @@
     [Parameter]
     public EventCallback OnClose { get; set; }
 
+    [Inject]
+    protected IJSRuntime JSRuntime { get; set; }
+
+    private IJSObjectReference _module;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/modal.js");
+    }
+
     protected override void OnInitialized()
     {
-
         if (Header == null)
             Header = (__builder) =>
             {
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick=CloseAsync></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick=Toggle></button>
             };
 
         base.OnInitialized();
     }
 
-    public async Task OpenOrCloseAsync()
+    public async Task Toggle()
     {
-        if (showBackdrop)
-            await CloseAsync();
-        else
-            await OpenAsync();
-    }
-
-    public async Task OpenAsync()
-    {
-        await Task.Yield();
-
-        modalDisplay = "block;";
-        modalClass = "Show";
-        showBackdrop = true;
-
-        StateHasChanged();
-    }
-
-    public async Task CloseAsync()
-    {
-        await Task.Yield();
-
-        modalDisplay = "none";
-        modalClass = "";
-        showBackdrop = false;
-
-        StateHasChanged();
-
-        await OnClose.InvokeAsync();
+        await _module.InvokeVoidAsync("toggle", modal);
     }
 
     private string GetModalSize()

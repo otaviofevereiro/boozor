@@ -11,7 +11,7 @@
         {
             async Task OnClick()
             {
-                await _modal.OpenOrCloseAsync();
+                await _modal.Toggle();
 
                 if(button.Action != null)
                     button.Action();
@@ -38,6 +38,6 @@
         _messageState = messageState;
         StateHasChanged();
 
-        await _modal.OpenAsync();
+        await _modal.Toggle();
     }
 }
