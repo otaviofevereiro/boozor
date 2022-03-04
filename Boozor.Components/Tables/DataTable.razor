@@ -23,19 +23,17 @@
 
                         <td>
                             @Toolbar
-                            @if (Delete == true)
-                            {
-                                <ColumnButton TModel=TModel Text="Excluir" Color="danger" OnClick="OnDelete"></ColumnButton>
-                            }
+                            <ColumnButton TModel=TModel Text="Excluir" Color="danger" OnClick="OnDelete" Visible=Delete />
                         </td>
-                </CascadingValue>
-            </tr>
+                    </CascadingValue>
+                </tr>
             }
         </tbody>
     </table>
 </div>
 
 @code {
+
     [Parameter]
     public EventCallback<TModel> OnSelectItem { get; set; }
 
@@ -114,9 +112,13 @@
         await SelectedItensChanged.InvokeAsync(SelectedItens);
     }
 
-    private void OnDelete(TModel item)
+    private async Task OnDelete(TModel item)
     {
-        SelectedItens.Remove(item);
+        Items.Remove(item);
+        await ItemsChanged.InvokeAsync(Items);
+
+        if (SelectedItens.Remove(item))
+            await SelectedItensChanged.InvokeAsync(SelectedItens);
     }
 
     private string GetClass(TModel item)

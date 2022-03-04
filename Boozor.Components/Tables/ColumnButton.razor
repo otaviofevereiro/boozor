@@ -1,9 +1,14 @@
 ﻿@typeparam TModel
 
-<button type="button" 
-        class="btn btn-@Color btn-sm" 
-        @onclick="Click" 
-        @onclick:stopPropagation="true">@Text</button>
+@if (Visible)
+{
+    <button type="button"
+        class="btn btn-@Color btn-sm"
+        @onclick="Click"
+        @onclick:stopPropagation="true">
+        @Text
+    </button>
+}
 
 @code {
 
@@ -19,6 +24,9 @@
 
     [Parameter]
     public EventCallback<TModel> OnClick { get; set; }
+
+    [Parameter]
+    public bool Visible { get; set; } = true;
 
     private async Task Click()
     {
