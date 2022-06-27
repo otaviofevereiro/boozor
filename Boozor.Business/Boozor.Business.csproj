@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DevPack" Version="1.0.22" />
+  </ItemGroup>
+
 </Project>

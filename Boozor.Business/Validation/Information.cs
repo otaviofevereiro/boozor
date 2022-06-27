@@ -1,6 +1,6 @@
 ﻿namespace Boozor.Business
 {
-    public class Class1
+    public class Information : Result
     {
 
     }
