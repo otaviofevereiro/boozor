@@ -2,6 +2,8 @@
 {
     public class Information : Result
     {
-
+        public Information(string message) : base(message)
+        {
+        }
     }
 }

@@ -2,7 +2,7 @@
 {
     public interface IValueObject
     {
-        public IReadOnlyCollection<Result> Results { get; }
+        IEnumerable<Result> GetResults();
         object? GetValue();
     }
 }

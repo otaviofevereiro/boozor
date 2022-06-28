@@ -20,6 +20,7 @@ namespace Boozor.Components.Fields
         {
             result = value;
             validationErrorMessage = null;
+
             return true;
         }
     }
