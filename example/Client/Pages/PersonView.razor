@@ -22,7 +22,11 @@
 </DataTable>
 
 @code {
-    Person _person = new();
+    Person _person = new(){
+        Name = "otavio",
+        Email = "a@a.com.br",
+        BirthDate = new DateTime(1990, 12, 26)
+    };
 
     List<Person> _persons = new()
         {
