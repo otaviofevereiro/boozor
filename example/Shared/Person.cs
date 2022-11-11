@@ -4,9 +4,6 @@ using System.Linq.Expressions;
 
 namespace Example.Shared
 {
-
-
-
     public abstract class Entity<TEntity> : IValidatableObject
         where TEntity : Entity<TEntity>
     {
@@ -24,7 +21,7 @@ namespace Example.Shared
         {
             _validations.Add(new(errorMessage, new[] { GetName(field) }));
         }
-        
+
         protected abstract void Validate();
 
         //TODO: remove to devpack
