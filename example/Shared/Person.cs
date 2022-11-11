@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Example
+namespace Example.Shared
 {
     public class Person
     {
