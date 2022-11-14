@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Example.Shared.csproj" />
-    <ProjectReference Include="..\..\Boozor.Components\Boozor.Components.csproj" />
+    <ProjectReference Include="..\..\src\Boozor.Components\Boozor.Components.csproj" />
   </ItemGroup>
 
 </Project>

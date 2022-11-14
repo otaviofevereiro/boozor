@@ -5,16 +5,16 @@ namespace Example.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class ValuesController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<ValuesController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public ValuesController(ILogger<ValuesController> logger)
         {
             _logger = logger;
         }
