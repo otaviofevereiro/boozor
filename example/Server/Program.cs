@@ -1,5 +1,5 @@
-using System.Reflection;
 using Example.Shared;
+using Boozor.Api;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,35 +38,3 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
-
-public static class Boozor
-{
-    public static IServiceCollection AddBoozor<TModelAssembly>(this IServiceCollection services)
-    {
-        var modelAssembly = Assembly.GetAssembly(typeof(TModelAssembly)) ?? throw new InvalidOperationException("Assembly not found.");
-
-        services.AddControllersWithViews()
-                .AddApplicationPart(modelAssembly);
-
-        BoozorContext boozorContext = new(modelAssembly);
-
-        services.AddSingleton(boozorContext);
-
-        return services;
-    }
-}
-
-public sealed class BoozorContext
-{
-    private readonly Assembly _modelAssembly;
-
-    public BoozorContext(Assembly modelAssembly)
-    {
-        _modelAssembly = modelAssembly;
-    }
-
-    public Type GetModelType(string typeName)
-    {
-        return _modelAssembly.GetType(typeName) ?? throw new InvalidOperationException($"Type {typeName} not found."); ;
-    }
-}

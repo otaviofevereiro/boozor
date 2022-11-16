@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 using System.Text.Json;
 
-namespace Example.Server.Controllers;
+namespace Boozor.Api;
 
 [ApiController]
 [Route("[controller]")]
