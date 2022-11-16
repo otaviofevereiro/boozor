@@ -1,5 +1,5 @@
 using Example.Shared;
-using Boozor.Api;
+using Boozor.Server;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);

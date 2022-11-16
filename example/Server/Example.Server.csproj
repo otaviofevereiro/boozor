@@ -10,6 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\Example.Client.csproj" />
     <ProjectReference Include="..\Shared\Example.Shared.csproj" />
-    <ProjectReference Include="..\..\src\Boozor.Api\Boozor.Api.csproj" />
+    <ProjectReference Include="..\..\src\Boozor.Server\Boozor.Server.csproj" />
   </ItemGroup>
 </Project>

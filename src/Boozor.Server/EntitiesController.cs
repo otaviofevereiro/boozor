@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
-namespace Boozor.Api;
+namespace Boozor.Server;
 
 [ApiController]
 [Route("[controller]")]

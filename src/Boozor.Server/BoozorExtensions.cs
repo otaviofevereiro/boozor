@@ -1,9 +1,9 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Boozor.Api;
+namespace Boozor.Server;
 
-public static class Boozor
+public static class BoozorExtensions
 {
     public static IServiceCollection AddBoozor<TModelAssembly>(this IServiceCollection services)
     {

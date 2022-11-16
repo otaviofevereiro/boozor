@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
-namespace Boozor.Model;
+namespace Boozor.Shared;
 
 public abstract class Entity<TEntity> : IValidatableObject
         where TEntity : Entity<TEntity>

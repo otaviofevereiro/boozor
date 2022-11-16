@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Boozor.Model;
+using Boozor.Shared;
 
 namespace Example.Shared
 {

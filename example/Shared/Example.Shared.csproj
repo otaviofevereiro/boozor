@@ -11,6 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Boozor.Model\Boozor.Model.csproj" />
+    <ProjectReference Include="..\..\src\Boozor.Shared\Boozor.Shared.csproj" />
   </ItemGroup>
 </Project>

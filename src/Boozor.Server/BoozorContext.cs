@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Boozor.Api;
+namespace Boozor.Server;
 
 public sealed class BoozorContext
 {
