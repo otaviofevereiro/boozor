@@ -27,7 +27,7 @@ public class EntitiesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromHeader] string type)
+    public async Task<IActionResult> PostAsync([FromHeader] string type)
     {
         Type entityType = _boozorContext.GetModelType(type);
         var entity = await DeserializeAsync(Request.Body, entityType);

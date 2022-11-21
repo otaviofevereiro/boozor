@@ -4,11 +4,9 @@ using Boozor.Shared;
 
 namespace Example.Shared
 {
-    public class Person : Entity<Person>
+    public class Person : IEntity
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
+        public static string EntityName => nameof(Person);
 
         [Display(Name = "Birth Date")]
         [Required]
@@ -23,10 +21,13 @@ namespace Example.Shared
         [StringLength(60)]
         public string? Name { get; set; }
 
-        protected override void Validate()
+
+        public Id Id { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Name == "otavio")
-                AddError(p => p.Name, "otavio nao pode");
+                yield return this.NewValidation(p => p.Name, "otavio nao pode");
         }
     }
 }
