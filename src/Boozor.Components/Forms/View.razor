@@ -3,14 +3,15 @@
 @inject AppState _appState
 
 <div class="col-md-@Columns col-sm-12">
-    <EditForm Model=Model
-              OnValidSubmit=@(async e=> await Execute(OnValidSubmit))
-              OnInvalidSubmit=@(async e=> await Execute(OnInvalidSubmit))>
-        <ModalContent Title=Person StyleContent="border:none">
+    <EditForm Model=Model OnValidSubmit=@(async e => await Execute(OnValidSubmit)) OnInvalidSubmit=@(async e => await
+        Execute(OnInvalidSubmit))>
+
+        <ModalContent Title=@Title StyleContent="border:none">
+
             <Body>
                 <DataAnnotationsValidator />
                 <div class="row g-3">
-                    @*TODO// Alerts*@
+                    @*TODO: <ValidationSummary /> *@
                     @ChildContent
                 </div>
             </Body>
@@ -35,6 +36,9 @@
     public EventCallback<EditContext> OnValidSubmit { get; set; }
 
     [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
     public EventCallback<EditContext> OnInvalidSubmit { get; set; }
 
     [Parameter]
@@ -56,8 +60,8 @@
 
     private void Delete()
     {
-        _appState.Confirmation("Tem certeza que deseja excluir o registro?",
-                               "Excluir registro",
-                               onOk: async () => await Execute(OnDelete));
+        _appState.Confirmation("Confirma a exclusão?",
+        "Excluir registro",
+        onOk: async () => await Execute(OnDelete));
     }
 }

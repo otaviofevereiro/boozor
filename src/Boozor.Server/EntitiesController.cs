@@ -29,10 +29,12 @@ public class EntitiesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromHeader] string type)
     {
-        Type entityType = _boozorContext.GetModelType(type);
+        ModelState.Clear();
+
+        var entityType = _boozorContext.GetModelType(type);
         var entity = await DeserializeAsync(Request.Body, entityType);
 
-        if (!TryValidateModel(entity, entityType.Name))
+        if (!TryValidateModel(entity, type))
             return ValidationProblem();
 
         return Ok();

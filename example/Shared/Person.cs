@@ -22,7 +22,7 @@ namespace Example.Shared
         public string? Name { get; set; }
 
 
-        public Id Id { get; set; }
+        public string? Id { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

@@ -1,7 +1,9 @@
 ﻿@page "/person"
 
-<View Model="@_person" OnValidSubmit=OnValidSubmit OnDelete=OnDelete Columns=6>
-    <NumberField @bind-Value="_person.Id" readonly Columns=4 />
+@inject HttpClient Http
+
+<View Model="@_person" Title="Person" OnValidSubmit=OnValidSubmit OnDelete=OnDelete Columns=6>
+    <TextField @bind-Value="_person.Id" readonly Columns=4 />
     <TextField @bind-Value="_person.Name" Columns=8 />
     <TextField @bind-Value="_person.Email" />
     <DateField @bind-Value="_person.BirthDate" Columns=6 />
@@ -16,39 +18,53 @@
     </ChildContent>
 
     <Toolbar>
-        <ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect"/>
-        <ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect"/>
+        <ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect" />
+        <ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect" />
     </Toolbar>
 </DataTable>
 
 @code {
-    Person _person = new(){
+
+    Person _person = new()
+    {
         Name = "otavio",
         Email = "a@a.com.br",
         BirthDate = new DateTime(1990, 12, 26)
     };
 
     List<Person> _persons = new()
+    {
+        new()
         {
-            new()
-            {
-                Id = "1",
-                Name = "Otavio",
-                BirthDate = new DateTime(1990, 12, 26),
-                Email = "otavio@otavio.com.br"
-            },
-            new()
-            {
-                Id = "2",
-                Name = "Carol",
-                BirthDate = new DateTime(1990, 05, 11),
-                Email = "otavio@otavio.com.br"
-            }
+            Id = "1",
+            Name = "Otavio",
+            BirthDate = new DateTime(1990, 12, 26),
+            Email = "otavio@otavio.com.br"
+        },
+        new()
+        {
+            Id = "2",
+            Name = "Carol",
+            BirthDate = new DateTime(1990, 05, 11),
+            Email = "otavio@otavio.com.br"
+        }
+    };
+
+    public async Task OnValidSubmit()
+    {
+        _person.Name = "otavio";
+
+        HttpRequestMessage request = new()
+        {
+            Method = HttpMethod.Post,
+            Content = JsonContent.Create(_person)
         };
 
-    public Task OnValidSubmit()
-    {
-        return Task.Delay(1000);
+        request.Headers.Add("type", typeof(Person).FullName);
+
+        var result = await Http.SendAsync(request);
+
+        
     }
 
     public Task OnDelete()
@@ -66,4 +82,3 @@
         _person = person;
     }
 }
-
