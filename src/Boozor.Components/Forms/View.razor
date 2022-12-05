@@ -1,11 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-@using Boozor.Components.Modals
+@using Boozor.Shared
 @inject AppState _appState
 
-<div class="col-md-@Columns col-sm-12">
-    <EditForm Model=Model OnValidSubmit=@(async e => await Execute(OnValidSubmit)) OnInvalidSubmit=@(async e => await
-        Execute(OnInvalidSubmit))>
+@typeparam TEntity where TEntity : IEntity
 
+<div class="col-md-@Columns col-sm-12">
+    <EditForm Model=Model OnValidSubmit=@SubmitAsync>
+        <EntityServer @ref=entityServer />
         <ModalContent Title=@Title StyleContent="border:none">
 
             <Body>
@@ -24,7 +25,8 @@
 </div>
 
 @code {
-    private Message _message = new();
+
+    EntityServer entityServer;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
@@ -33,35 +35,50 @@
     public int Columns { get; set; } = 12;
 
     [Parameter]
-    public EventCallback<EditContext> OnValidSubmit { get; set; }
+    public string Title { get; set; };
 
     [Parameter]
-    public string Title { get; set; }
+    public TEntity Model { get; set; }
 
-    [Parameter]
-    public EventCallback<EditContext> OnInvalidSubmit { get; set; }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
 
-    [Parameter]
-    public EventCallback<EditContext> OnDelete { get; set; }
+        if (string.IsNullOrEmpty(Title))
+            Title = GetTitle();
+        
+    }
 
-    [Parameter]
-    public object Model { get; set; }
 
-    private async Task Execute(EventCallback<EditContext> eventCallback)
+
+    private async Task Execute(Func<Task> func)
     {
         await Task.Yield();
         _appState.Loading();
 
-        if (eventCallback.HasDelegate)
-            await eventCallback.InvokeAsync();
+        await func();
 
         _appState.Loading();
+    }
+
+    private async void SubmitAsync()
+    {
+        await entityServer.SubmitAsync(Model);
     }
 
     private void Delete()
     {
         _appState.Confirmation("Confirma a exclusão?",
         "Excluir registro",
-        onOk: async () => await Execute(OnDelete));
+        onOk: async () => await Task.CompletedTask);
     }
+
+    private string GetTitle()
+    {
+        var titleAttribute = (TitleAttribute)Attribute.GetCustomAttribute(typeof(TEntity), typeof(TitleAttribute));
+
+        if (titleAttribute is not null)
+            return titleAttribute.Title;
+    }
+
 }

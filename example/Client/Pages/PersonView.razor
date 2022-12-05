@@ -2,7 +2,7 @@
 
 @inject HttpClient Http
 
-<View Model="@_person" Title="Person" OnValidSubmit=OnValidSubmit OnDelete=OnDelete Columns=6>
+<View Model="@_person" TEntity=Person Title="Person" Columns=6>
     <TextField @bind-Value="_person.Id" readonly Columns=4 />
     <TextField @bind-Value="_person.Name" Columns=8 />
     <TextField @bind-Value="_person.Email" />
@@ -63,8 +63,6 @@
         request.Headers.Add("type", typeof(Person).FullName);
 
         var result = await Http.SendAsync(request);
-
-        
     }
 
     public Task OnDelete()

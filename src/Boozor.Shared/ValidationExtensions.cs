@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace Boozor.Shared;
 
 //TODO: Refactor
-public static class Extensions
+public static class ValidationExtensions
 {
     public static ValidationResult NewValidation<TType, TKey>(this TType type, Expression<Func<TType, TKey>> field, string errorMessage)
     {

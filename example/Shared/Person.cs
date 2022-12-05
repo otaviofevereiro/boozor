@@ -4,10 +4,9 @@ using Boozor.Shared;
 
 namespace Example.Shared
 {
+    [Title("Person Entity")]
     public class Person : IEntity
     {
-        public static string EntityName => nameof(Person);
-
         [Display(Name = "Birth Date")]
         [Required]
         public DateTime? BirthDate { get; set; }

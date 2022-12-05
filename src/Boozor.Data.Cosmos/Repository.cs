@@ -45,11 +45,12 @@ public sealed class Repository
         );
     }
 
-    private ValueTask<Container> GetContainerAsync<TEntity>() where TEntity : IEntity
+    private ValueTask<Container> GetContainerAsync<TEntity>()
+        where TEntity : IEntity
     {
         ContainerOptions options = new()
         {
-            Id = TEntity.EntityName
+            Id = EntityExtensions.GetContainerId<TEntity>()
         };
 
         return _uow.GetContainerAsync(options);
