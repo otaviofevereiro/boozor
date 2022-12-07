@@ -35,21 +35,20 @@
     public int Columns { get; set; } = 12;
 
     [Parameter]
-    public string Title { get; set; };
+    public string Title { get; set; }
 
     [Parameter]
     public TEntity Model { get; set; }
+
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        if (string.IsNullOrEmpty(Title))
+        if (Title is null)
             Title = GetTitle();
-        
+
     }
-
-
 
     private async Task Execute(Func<Task> func)
     {
@@ -63,7 +62,9 @@
 
     private async void SubmitAsync()
     {
-        await entityServer.SubmitAsync(Model);
+        Func<Task> submitAsync = async () => await entityServer.SubmitAsync(Model);
+
+        await Execute(submitAsync);
     }
 
     private void Delete()
@@ -75,10 +76,13 @@
 
     private string GetTitle()
     {
-        var titleAttribute = (TitleAttribute)Attribute.GetCustomAttribute(typeof(TEntity), typeof(TitleAttribute));
+        var entityType = typeof(TEntity);
+        var titleAttribute = (TitleAttribute)Attribute.GetCustomAttribute(entityType, typeof(TitleAttribute));
 
         if (titleAttribute is not null)
             return titleAttribute.Title;
+
+        return entityType.Name;
     }
 
 }

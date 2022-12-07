@@ -1,15 +1,13 @@
 ﻿@page "/person"
 
-@inject HttpClient Http
-
-<View Model="@_person" TEntity=Person Title="Person" Columns=6>
-    <TextField @bind-Value="_person.Id" readonly Columns=4 />
-    <TextField @bind-Value="_person.Name" Columns=8 />
-    <TextField @bind-Value="_person.Email" />
-    <DateField @bind-Value="_person.BirthDate" Columns=6 />
+<View Model="@person" TEntity=Person Title="Person" Columns=6>
+    <TextField @bind-Value="person.Id" readonly Columns=4 />
+    <TextField @bind-Value="person.Name" Columns=8 />
+    <TextField @bind-Value="person.Email" />
+    <DateField @bind-Value="person.BirthDate" Columns=6 />
 </View>
 
-<DataTable TModel=Person @bind-Items=_persons OnSelectItem="OnSelectItem" Multiselect=false Delete=true>
+<DataTable TModel=Person @bind-Items=persons OnSelectItem="OnSelectItem" Multiselect=false Delete=true>
     <ChildContent>
         <Column TModel=Person Value="(p => p.Id)" />
         <Column TModel=Person Value="(p => p.Name)" />
@@ -25,14 +23,14 @@
 
 @code {
 
-    Person _person = new()
+    Person person = new()
     {
         Name = "otavio",
         Email = "a@a.com.br",
         BirthDate = new DateTime(1990, 12, 26)
     };
 
-    List<Person> _persons = new()
+    List<Person> persons = new()
     {
         new()
         {
@@ -50,21 +48,6 @@
         }
     };
 
-    public async Task OnValidSubmit()
-    {
-        _person.Name = "otavio";
-
-        HttpRequestMessage request = new()
-        {
-            Method = HttpMethod.Post,
-            Content = JsonContent.Create(_person)
-        };
-
-        request.Headers.Add("type", typeof(Person).FullName);
-
-        var result = await Http.SendAsync(request);
-    }
-
     public Task OnDelete()
     {
         return Task.Delay(1000);
@@ -72,11 +55,11 @@
 
     public void OnSelectItem(Person person)
     {
-        _person = person;
+        this.person = person;
     }
 
     public void CustomSelect(Person person)
     {
-        _person = person;
+        this.person = person;
     }
 }

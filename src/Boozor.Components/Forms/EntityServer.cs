@@ -10,7 +10,7 @@ using Boozor.Shared;
 
 namespace Boozor.Components.Forms;
 
-public class EntityServer : ComponentBase
+public sealed class EntityServer : ComponentBase
 {
     private const string _entitiesPath = "api/entities";
 
@@ -30,12 +30,12 @@ public class EntityServer : ComponentBase
     public async Task SubmitAsync<TEntity>(TEntity entity)
         where TEntity : IEntity
     {
-        HttpRequestMessage request = new();
+        using HttpRequestMessage request = new();
 
         request.RequestUri = _entitiesUri;
         request.Headers.Add("type", typeof(TEntity).FullName);
-        request.Method = entity.Id is null ? HttpMethod.Post : HttpMethod.Put;
-        request.Content = JsonContent.Create(entity);
+        request.Method = string.IsNullOrEmpty(entity.Id) ? HttpMethod.Post : HttpMethod.Put;
+        request.Content = JsonContent.Create(entity); ;
 
         var result = await HttpClient.SendAsync(request);
 
@@ -57,7 +57,7 @@ public class EntityServer : ComponentBase
         _entitiesUri = GetEntitiesUri();
 
         CurrentEditContext.OnValidationRequested += (s, e) => _messages?.Clear();
-        CurrentEditContext.OnFieldChanged += (s, e) => _messages?.Clear(e.FieldIdentifier);        
+        CurrentEditContext.OnFieldChanged += (s, e) => _messages?.Clear(e.FieldIdentifier);
     }
 
     private async Task<bool> Validate(HttpResponseMessage response)
@@ -77,7 +77,7 @@ public class EntityServer : ComponentBase
         _messages.Clear();
 
         foreach (var error in validationProblemDetails.Errors)
-            _messages?.Add(CurrentEditContext.Field(error.Key), error.Value);
+            _messages.Add(CurrentEditContext.Field(error.Key), error.Value);
 
         CurrentEditContext.NotifyValidationStateChanged();
 
@@ -95,13 +95,5 @@ public class EntityServer : ComponentBase
 
 file sealed record ValidationProblemDetails
 {
-
-    public int? Status { get; set; }
-
-
-    public string Title { get; set; }
-
-    public string Type { get; set; }
-
     public IDictionary<string, string[]> Errors { get; set; }
 }
