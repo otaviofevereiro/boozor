@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Boozor.Shared\Boozor.Shared.csproj" />
     <ProjectReference Include="..\Boozor.Data\Boozor.Data.csproj" />
   </ItemGroup>
 </Project>

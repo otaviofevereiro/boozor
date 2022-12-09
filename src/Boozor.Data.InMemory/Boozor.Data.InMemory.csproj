@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\Boozor.Shared\Boozor.Shared.csproj" />
+    <ProjectReference Include="..\Boozor.Data\Boozor.Data.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>

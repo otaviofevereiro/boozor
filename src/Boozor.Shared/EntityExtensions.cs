@@ -1,12 +1,9 @@
-namespace Boozor.Shared;
+namespace Boozor;
 
-public class EntityExtensions
+public static class EntityExtensions
 {
-    public static string GetContainerId<TEntity>()
-        where TEntity : IEntity
+    public static string GetContainerId(this Type type)
     {
-        var type = typeof(TEntity);
-
-        return type.FullName!.Replace(type.Assembly.FullName!, "");
+        return type.FullName!.Replace($"{type.Assembly.GetName().Name}."!, "");
     }
 }

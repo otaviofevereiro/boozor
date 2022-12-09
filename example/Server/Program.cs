@@ -1,13 +1,13 @@
 using Example.Shared;
-using Boozor.Server;
-using Microsoft.AspNetCore.ResponseCompression;
+using Boozor;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddBoozor<Person>();
-//builder.Services.AddRazorPages();
+builder.Services.AddBoozor<Person>()
+                .AddInMemoryDatabase();
 
 var app = builder.Build();
 
@@ -15,6 +15,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+    app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
+       string.Join("\n", endpointSources.SelectMany(source => source.Endpoints)));
 }
 else
 {
@@ -23,7 +25,6 @@ else
     app.UseHsts();
 }
 
-app.UsePathBase("/api");
 app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
@@ -39,3 +40,6 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+public partial class Program { }
+

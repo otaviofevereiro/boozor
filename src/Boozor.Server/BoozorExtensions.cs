@@ -1,7 +1,8 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Boozor.Server;
 
-namespace Boozor.Server;
+namespace Boozor;
 
 public static class BoozorExtensions
 {
@@ -14,8 +15,6 @@ public static class BoozorExtensions
 
         BoozorContext boozorContext = new(modelAssembly);
 
-        services.AddSingleton(boozorContext);
-
-        return services;
+        return services.AddSingleton(boozorContext);
     }
 }

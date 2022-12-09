@@ -3,7 +3,7 @@ using Boozor.Shared;
 
 namespace Boozor.Data;
 
-public sealed class Repository
+public sealed class Repository : IRepository
 {
     private readonly Uow _uow;
 
@@ -12,48 +12,89 @@ public sealed class Repository
         _uow = uow;
     }
 
-    public async Task UpsertAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default)
-        where TEntity : IEntity
+    public async Task CreateAsync(Type entityType, IEntity entity, CancellationToken cancellationToken = default)
     {
-        Container container = await GetContainerAsync<TEntity>();
+        Validate(entityType, entity);
 
-        TEntity createdItem = await container.UpsertItemAsync<TEntity>(
+        entity.Id = Guid.NewGuid().ToString();
+
+        Container container = await GetContainerAsync(entityType, cancellationToken);
+
+        await container.CreateItemAsync<object>(
             item: entity,
-            partitionKey: new PartitionKey(entity.Id!)
+            partitionKey: new PartitionKey(entity.Id),
+            cancellationToken: cancellationToken
         );
     }
 
-    public async Task DeleteAsync<TEntity>(string id, CancellationToken cancellationToken = default)
-        where TEntity : IEntity
+    public async Task UpdateAsync(Type entityType, IEntity entity, CancellationToken cancellationToken = default)
     {
-        Container container = await GetContainerAsync<TEntity>();
+        Validate(entityType, entity);
 
-        TEntity createdItem = await container.DeleteItemAsync<TEntity>(
-            id: id,
-            partitionKey: new PartitionKey(id)
+        if (string.IsNullOrEmpty(entity.Id))
+            throw new InvalidOperationException("Id cannot be empty");
+
+        Container container = await GetContainerAsync(entityType, cancellationToken);
+
+        await container.UpsertItemAsync<object>(
+            item: entity,
+            partitionKey: new PartitionKey(entity.Id!),
+            cancellationToken: cancellationToken
         );
     }
 
-    public async Task GetAsync<TEntity>(string id, CancellationToken cancellationToken = default)
-        where TEntity : IEntity
+    public async Task DeleteAsync(Type entityType, string id, CancellationToken cancellationToken = default)
     {
-        Container container = await GetContainerAsync<TEntity>();
+        Validate(entityType, id);
 
-        TEntity createdItem = await container.ReadItemAsync<TEntity>(
+        Container container = await GetContainerAsync(entityType, cancellationToken);
+
+        await container.DeleteItemAsync<object>(
             id: id,
-            partitionKey: new PartitionKey(id)
+            partitionKey: new PartitionKey(id),
+            cancellationToken: cancellationToken
         );
     }
 
-    private ValueTask<Container> GetContainerAsync<TEntity>()
-        where TEntity : IEntity
+    public async Task<object?> GetAsync(Type entityType, string id, CancellationToken cancellationToken = default)
+    {
+        Validate(entityType, id);
+
+        Container container = await GetContainerAsync(entityType, cancellationToken);
+
+        return await container.ReadItemAsync<object>(
+            id: id,
+            partitionKey: new PartitionKey(id),
+            cancellationToken: cancellationToken
+        );
+    }
+
+    private ValueTask<Container> GetContainerAsync(Type entityType, CancellationToken cancellationToken)
     {
         ContainerOptions options = new()
         {
-            Id = EntityExtensions.GetContainerId<TEntity>()
+            Id = entityType.GetContainerId()
         };
 
-        return _uow.GetContainerAsync(options);
+        return _uow.GetContainerAsync(options, cancellationToken);
+    }
+
+    private static void Validate(Type entityType, string id)
+    {
+        if (entityType is null)
+            throw new ArgumentNullException(nameof(entityType));
+
+        if (string.IsNullOrEmpty(id))
+            throw new ArgumentNullException(nameof(id));
+    }
+
+    private static void Validate(Type entityType, IEntity entity)
+    {
+        if (entityType is null)
+            throw new ArgumentNullException(nameof(entityType));
+
+        if (entity is null)
+            throw new ArgumentNullException(nameof(entity));
     }
 }
 

@@ -5,10 +5,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.31.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\example\Shared\Example.Shared.csproj" />
+    <ProjectReference Include="..\Boozor.Data.InMemory\Boozor.Data.InMemory.csproj" />
     <ProjectReference Include="..\Boozor.Data\Boozor.Data.csproj" />
   </ItemGroup>
 </Project>

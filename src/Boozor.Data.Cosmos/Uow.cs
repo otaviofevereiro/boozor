@@ -10,7 +10,7 @@ public sealed class Uow
 
     public Uow(Database database)
     {
-        _containers = new(async options => await CreateContainerAsync(options));
+        _containers = new(async (options, cancellationToken) => await CreateContainerAsync(options, cancellationToken));
 
         CosmosClient _client = new(accountEndpoint: Environment.GetEnvironmentVariable("COSMOS_ENDPOINT")!,
                                    authKeyOrResourceToken: Environment.GetEnvironmentVariable("COSMOS_KEY")!);
@@ -18,33 +18,34 @@ public sealed class Uow
         _database = database;
     }
 
-    public ValueTask<Container> GetContainerAsync(ContainerOptions options)
+    internal ValueTask<Container> GetContainerAsync(ContainerOptions options, CancellationToken cancellationToken)
     {
-        return _containers.GetOrCreateAsync(options);
+        return _containers.GetOrCreateAsync(options, cancellationToken);
     }
 
 
-    private async Task<Container> CreateContainerAsync(ContainerOptions options)
+    private async Task<Container> CreateContainerAsync(ContainerOptions options, CancellationToken cancellationToken)
     {
         try
         {
-            return await InternalCreateConteinerAsync(options);
+            return await InternalCreateConteinerAsync(options, cancellationToken);
         }
         catch (Exception) //TODO: not exists exception
         {
-            return await InternalCreateConteinerAsync(options);
+            return await InternalCreateConteinerAsync(options, cancellationToken);
         }
     }
 
-    private async Task<Container> InternalCreateConteinerAsync(ContainerOptions options)
+    private async Task<Container> InternalCreateConteinerAsync(ContainerOptions options, CancellationToken cancellationToken)
     {
         try
         {
-            await _semaphoreContainer.WaitAsync();
+            await _semaphoreContainer.WaitAsync(cancellationToken);
 
             return await _database.CreateContainerIfNotExistsAsync(
                 id: options.Id,
-                partitionKeyPath: options.PartitionKeyPath
+                partitionKeyPath: options.PartitionKeyPath,
+                cancellationToken: cancellationToken
             );
         }
         finally

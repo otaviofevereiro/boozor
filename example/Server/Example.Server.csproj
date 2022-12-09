@@ -6,10 +6,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0" />
+    <InternalsVisibleTo Include="Boozor.Server.IntegrationTests" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Client\Example.Client.csproj" />
     <ProjectReference Include="..\Shared\Example.Shared.csproj" />
     <ProjectReference Include="..\..\src\Boozor.Server\Boozor.Server.csproj" />
+    <ProjectReference Include="..\..\src\Boozor.Extensions.Data.InMemory\Boozor.Extensions.Data.InMemory.csproj" />
   </ItemGroup>
 </Project>
