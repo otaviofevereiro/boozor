@@ -24,7 +24,7 @@ public class UnitTest1 : IClassFixture<WebApplicationFactory<Program>>
         var client = _factory.CreateClient();
 
         Person person = new()
-        {
+        { 
             BirthDate = new DateTime(1990, 01, 01),
             Email = "teste@teste.com",
             Name = "teste"
