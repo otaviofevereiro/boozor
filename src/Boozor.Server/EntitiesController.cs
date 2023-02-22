@@ -36,7 +36,7 @@ public sealed class EntitiesController : ControllerBase
     public async Task<IActionResult> Get(string id)
     {
         var entityType = GetEntityType();
-        var entity = await repository.GetAsync(entityType, id);
+        var entity = await repository.GetAsync<object>(entityType, id);
 
         if (entity is null)
             return NotFound(new { Id = id });
@@ -99,10 +99,10 @@ public sealed class EntitiesController : ControllerBase
         return boozorContext.GetModelType(type);
     }
 
-    private async Task<IEntity> DeserializeAsync(Stream utf8Json, Type type)
+    private async Task<IValidatableEntity> DeserializeAsync(Stream utf8Json, Type type)
     {
         var value = await JsonSerializer.DeserializeAsync(utf8Json, type, jsonOptions) ?? throw new InvalidOperationException();
 
-        return (IEntity)value;
+        return (IValidatableEntity)value;
     }
 }

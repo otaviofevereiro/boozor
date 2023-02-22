@@ -3,6 +3,9 @@ using Boozor.Shared;
 
 namespace Boozor.Data;
 
+
+
+
 public sealed class Repository : IRepository
 {
     private readonly Uow _uow;
@@ -56,13 +59,13 @@ public sealed class Repository : IRepository
         );
     }
 
-    public async Task<object?> GetAsync(Type entityType, string id, CancellationToken cancellationToken = default)
+    public async Task<T> GetAsync<T>(Type entityType, string id, CancellationToken cancellationToken = default)
     {
         Validate(entityType, id);
 
         Container container = await GetContainerAsync(entityType, cancellationToken);
 
-        return await container.ReadItemAsync<object>(
+        return await container.ReadItemAsync<T>(
             id: id,
             partitionKey: new PartitionKey(id),
             cancellationToken: cancellationToken

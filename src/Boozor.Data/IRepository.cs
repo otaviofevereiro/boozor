@@ -10,6 +10,18 @@ public interface IRepository
 
     Task DeleteAsync(Type entityType, string id, CancellationToken cancellationToken = default);
 
-    Task<object?> GetAsync(Type entityType, string id, CancellationToken cancellationToken = default);
+    Task<T> GetAsync<T>(Type entityType, string id, CancellationToken cancellationToken = default);
+}
 
+public interface IRepository<TEntity>
+    where TEntity : IEntity
+{
+    Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+    Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+    Task DeleteAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<TEntity> GetAsync(string id, CancellationToken cancellationToken = default);
+    
 }

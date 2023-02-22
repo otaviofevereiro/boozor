@@ -34,16 +34,16 @@ public class Repository : IRepository
         throw new InvalidOperationException($"The Id does not exists on container {entityType.FullName}");
     }
 
-    public Task<object?> GetAsync(Type entityType, string id, CancellationToken cancellationToken = default)
+    public Task<T> GetAsync<T>(Type entityType, string id, CancellationToken cancellationToken = default)
     {
         Validate(entityType, id);
 
         var container = GetOrCreateContainer(entityType);
 
         if (container.TryGetValue(id, out object? entity))
-            return Task.FromResult<object?>(entity);
+            return Task.FromResult((T)entity);
 
-        return Task.FromResult<object?>(null);
+        return Task.FromResult(default(T));
     }
 
     public Task UpdateAsync(Type entityType, IEntity entity, CancellationToken cancellationToken = default)

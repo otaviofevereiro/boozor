@@ -9,6 +9,7 @@ public static class InMemoryExtensions
 {
     public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services)
     {
-        return services.AddSingleton<IRepository, Repository>();
+        return services.AddSingleton<IRepository, Repository>()
+                        .AddSingleton(typeof(IRepository<>), typeof(Repository<>));
     }
 }
