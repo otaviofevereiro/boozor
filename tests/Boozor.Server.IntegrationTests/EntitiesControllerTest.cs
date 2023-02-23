@@ -1,5 +1,4 @@
 using Example.Shared;
-using Example.Server;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -69,6 +68,39 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
 
         Assert.NotNull(updatedPerson);
         Assert.Equivalent(person, updatedPerson);
+    }
+
+       [Fact]
+    public async Task Delete_EndpointsReturnSuccessAndDeleteEntity()
+    {
+        // Arrange
+        var client = factory.CreateClient();
+        var repository = factory.Services.GetRequiredService<IRepository<Person>>();
+        var personType = typeof(Person);
+        var person = CreateValidPerson();
+        var insertResponse = await PostAsync(client, personType, person);
+
+        var id = GetId(insertResponse);
+
+        //Action
+        HttpResponseMessage response = await DeleteAsync(client, personType, id);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        var insertedPerson = await repository.GetAsync(id);
+
+        Assert.Null(insertedPerson);
+    }
+
+    private static Task<HttpResponseMessage> DeleteAsync(HttpClient client, Type personType, string id)
+    {
+        HttpRequestMessage request = new();
+        request.RequestUri = new Uri(client.BaseAddress!, $"api/entities/{id}");
+        request.Method = HttpMethod.Delete;
+        request.Headers.Add("type", personType.FullName);
+
+        return client.SendAsync(request);
     }
 
     private static Task<HttpResponseMessage> PutAsync(HttpClient client, Type personType, Person person)

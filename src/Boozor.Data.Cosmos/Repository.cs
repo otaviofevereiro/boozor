@@ -59,7 +59,7 @@ public sealed class Repository : IRepository
         );
     }
 
-    public async Task<T> GetAsync<T>(Type entityType, string id, CancellationToken cancellationToken = default)
+    public async Task<T?> GetAsync<T>(Type entityType, string id, CancellationToken cancellationToken = default)
     {
         Validate(entityType, id);
 

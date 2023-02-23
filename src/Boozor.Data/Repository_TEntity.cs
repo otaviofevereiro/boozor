@@ -23,9 +23,9 @@ public sealed class Repository<TEntity> : IRepository<TEntity>
         return repository.DeleteAsync(entityType, id, cancellationToken);
     }
 
-    public Task<TEntity> GetAsync(string id, CancellationToken cancellationToken = default)
+    public Task<TEntity?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        return repository.GetAsync<TEntity>(entityType, id, cancellationToken);
+        return repository.GetAsync<TEntity?>(entityType, id, cancellationToken);
     }
 
     public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
