@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Boozor.Shared;
 
-namespace Boozor.Server.Authentication;
+namespace Boozor.Shared.Authentication;
 
 public class User : IEntity
 {
@@ -11,5 +10,4 @@ public class User : IEntity
     [Required]
     public string? Hash { get; set; }
     public string? Id { get; set; }
-
 }

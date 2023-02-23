@@ -1,4 +1,5 @@
 using Boozor.Data;
+using Boozor.Shared.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,12 +61,12 @@ public class UserController : ControllerBase
     [HttpPut("login/{id}")]
     public async Task<IActionResult> Login(Login login)
     {
-        var user = await repository.GetAsync(login.Id);
+        var user = await repository.GetAsync(login!.Id);
 
         if (user is null)
             return Forbid();
 
-        var result = hasher.VerifyHashedPassword(login, user.Hash, login.Password);
+        var result = hasher.VerifyHashedPassword(login, user!.Hash, login!.Password);
 
         if (result == PasswordVerificationResult.Success)
             return Ok();

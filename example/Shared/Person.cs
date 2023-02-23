@@ -5,7 +5,7 @@ using Boozor.Shared;
 namespace Example.Shared
 {
     [Title("Person Entity")]
-    public class Person : IEntity
+    public class Person : IValidatableEntity
     {
         [Display(Name = "Birth Date")]
         [Required]

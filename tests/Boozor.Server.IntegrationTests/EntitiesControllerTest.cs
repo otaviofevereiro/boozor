@@ -19,12 +19,15 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
         this.factory = factory;
     }
 
+    //TODO get
+    //TODO delete
+
     [Fact]
     public async Task Post_EndpointsReturnSuccessAndCorrectEntity()
     {
         // Arrange
         var client = factory.CreateClient();
-        var repository = factory.Services.GetRequiredService<IRepository>();
+        var repository = factory.Services.GetRequiredService<IRepository<Person>>();
         var personType = typeof(Person);
         var person = CreateValidPerson();
 
@@ -33,14 +36,13 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        
+
         var id = GetId(response);
-        var insertedPerson = (await repository.GetAsync(personType, id)) as Person;
+        person.Id = id;
+        var insertedPerson = await repository.GetAsync(id);
 
         Assert.NotNull(insertedPerson);
-        Assert.Equal(person.BirthDate, insertedPerson.BirthDate);
-        Assert.Equal(person.Name, insertedPerson.Name);
-        Assert.Equal(person.Email, insertedPerson.Email);
+        Assert.Equivalent(person, insertedPerson);
     }
 
     [Fact]
@@ -48,7 +50,7 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
     {
         // Arrange
         var client = factory.CreateClient();
-        var repository = factory.Services.GetRequiredService<IRepository>();
+        var repository = factory.Services.GetRequiredService<IRepository<Person>>();
         var personType = typeof(Person);
         var person = CreateValidPerson();
         var insertResponse = await PostAsync(client, personType, person);
@@ -63,13 +65,10 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
         // Assert
         response.EnsureSuccessStatusCode();
 
-        var updatedPerson = (await repository.GetAsync(personType, id)) as Person;
+        var updatedPerson = await repository.GetAsync(id);
 
         Assert.NotNull(updatedPerson);
-        Assert.Equal(person.BirthDate, updatedPerson.BirthDate);
-        Assert.Equal(person.Name, updatedPerson.Name);
-        Assert.Equal(person.Email, updatedPerson.Email);
-
+        Assert.Equivalent(person, updatedPerson);
     }
 
     private static Task<HttpResponseMessage> PutAsync(HttpClient client, Type personType, Person person)

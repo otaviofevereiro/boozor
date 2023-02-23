@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Boozor.Shared;
 
-namespace Boozor.Server.Authentication;
+namespace Boozor.Shared.Authentication;
 
 public record Login : IEntity
 {
@@ -12,9 +12,4 @@ public record Login : IEntity
     public string? Password { get; set; }
 
     public string? Id { get; set; }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        yield break;
-    }
 }

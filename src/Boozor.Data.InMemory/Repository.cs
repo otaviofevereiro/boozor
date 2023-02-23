@@ -54,8 +54,9 @@ public class Repository : IRepository
             throw new InvalidOperationException("Id cannot be empty");
 
         var container = GetOrCreateContainer(entityType);
-
-        if (container.TryUpdate(entity.Id!, entity, entity))
+        
+        if (container.TryGetValue(entity.Id!, out object? currentEntity) &&
+            container.TryUpdate(entity.Id!, entity, currentEntity))
             return Task.FromResult(entity);
 
         throw new InvalidOperationException($"The Id does not exists on container {entityType.FullName}");
