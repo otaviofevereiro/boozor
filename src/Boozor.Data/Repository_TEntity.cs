@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Boozor.Shared;
 
 namespace Boozor.Data;
@@ -26,6 +27,11 @@ public sealed class Repository<TEntity> : IRepository<TEntity>
     public Task<TEntity?> GetAsync(string id, CancellationToken cancellationToken = default)
     {
         return repository.GetAsync<TEntity?>(entityType, id, cancellationToken);
+    }
+
+    public Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return repository.GetAsync(entityType, predicate, cancellationToken);
     }
 
     public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)

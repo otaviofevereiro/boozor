@@ -3,13 +3,11 @@ using Boozor.Shared;
 
 namespace Boozor.Shared.Authentication;
 
-public record Login : IEntity
+public record Login 
 {
     [Required]
-    public string? User { get; set; }
+    public string? Email { get; set; }
 
     [Required]
     public string? Password { get; set; }
-
-    public string? Id { get; set; }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Linq.Expressions;
 using Boozor.Shared;
 
 namespace Boozor.Data.InMemory;
@@ -46,6 +47,21 @@ public class Repository : IRepository
         return Task.FromResult(default(T));
     }
 
+    public Task<T?> GetAsync<T>(Type entityType, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        if (entityType is null)
+            throw new ArgumentNullException(nameof(entityType));
+
+        if (predicate is null)
+            throw new ArgumentNullException(nameof(predicate));
+
+        var entity = GetOrCreateContainer(entityType).AsEnumerable()
+                                                     .Select(x => (T)x.Value)
+                                                     .FirstOrDefault(predicate.Compile());
+
+        return Task.FromResult(entity);
+    }
+
     public Task UpdateAsync(Type entityType, IEntity entity, CancellationToken cancellationToken = default)
     {
         Validate(entityType, entity);
@@ -54,7 +70,7 @@ public class Repository : IRepository
             throw new InvalidOperationException("Id cannot be empty");
 
         var container = GetOrCreateContainer(entityType);
-        
+
         if (container.TryGetValue(entity.Id!, out object? currentEntity) &&
             container.TryUpdate(entity.Id!, entity, currentEntity))
             return Task.FromResult(entity);

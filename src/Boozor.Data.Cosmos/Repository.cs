@@ -1,9 +1,9 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Boozor.Shared;
+using Microsoft.Azure.Cosmos.Linq;
+using System.Linq.Expressions;
 
 namespace Boozor.Data;
-
-
 
 
 public sealed class Repository : IRepository
@@ -70,6 +70,24 @@ public sealed class Repository : IRepository
             partitionKey: new PartitionKey(id),
             cancellationToken: cancellationToken
         );
+    }
+
+    public async Task<T?> GetAsync<T>(Type entityType, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        Container container = await GetContainerAsync(entityType, cancellationToken);
+        QueryRequestOptions requestOptions = new() { MaxItemCount = 1 };
+        using var interator = container.GetItemLinqQueryable<T>(requestOptions: requestOptions)
+                                       .Where(predicate)
+                                       .ToFeedIterator<T>();
+
+        while (interator.HasMoreResults)
+        {
+            var response = await interator.ReadNextAsync();
+
+            return response.FirstOrDefault();
+        }
+
+        return default;
     }
 
     private ValueTask<Container> GetContainerAsync(Type entityType, CancellationToken cancellationToken)
