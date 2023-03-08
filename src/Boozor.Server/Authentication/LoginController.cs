@@ -36,11 +36,3 @@ public class LoginController : ControllerBase
             return BadRequest();
     }
 }
-
-public class User : IEntity
-{
-    public string? Email { get; set; }
-    public string? Name { get; set; }
-    public string? Hash { get; set; }
-    public string? Id { get; set; }
-}

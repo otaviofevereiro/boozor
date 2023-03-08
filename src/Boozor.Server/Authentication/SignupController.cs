@@ -29,8 +29,14 @@ public class SignupController : ControllerBase
             Hash = hasher.HashPassword(signup, signup.Hash!),
         };
 
-        await repository.CreateAsync(user, cancellationToken);
+        var result = user.Validate();
 
-        return Created(string.Empty, new { id = signup.Id });
+        if (result.Valid)
+        {
+            await repository.CreateAsync(user, cancellationToken);
+            return Created(string.Empty, new { id = signup.Id });
+        }
+
+        return BadRequest();
     }
 }

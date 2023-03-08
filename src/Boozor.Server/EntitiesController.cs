@@ -99,10 +99,10 @@ public sealed class EntitiesController : ControllerBase
         return boozorContext.GetModelType(type);
     }
 
-    private async Task<IValidatableEntity> DeserializeAsync(Stream utf8Json, Type type)
+    private async Task<IEntity> DeserializeAsync(Stream utf8Json, Type type)
     {
         var value = await JsonSerializer.DeserializeAsync(utf8Json, type, jsonOptions) ?? throw new InvalidOperationException();
 
-        return (IValidatableEntity)value;
+        return (IEntity)value;
     }
 }
