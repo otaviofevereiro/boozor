@@ -13,10 +13,6 @@ public record Signup : IValidatableObject
     public string? Name { get; set; }
 
     [Required]
-    public string? Hash { get; set; }
-    public string? Id { get; set; }
-
-    [Required]
     [MinLength(6)]
     [MaxLength(255)]
     [PasswordPropertyText]

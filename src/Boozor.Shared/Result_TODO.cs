@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace System;
 
-public class Result
+public sealed class Result
 {
     private readonly ValidationResult[]? _validations;
 
@@ -20,7 +20,7 @@ public class Result
     public ValidationContext Context { get; }
 
     public bool Invalid => !Valid;
-    public bool Valid { get; } = false;
+    public bool Valid { get; } = true;
     public IReadOnlyCollection<ValidationResult>? Validations => _validations;
 }
 

@@ -9,8 +9,6 @@ namespace Boozor.Server.IntegrationTests;
 
 public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
 {
-    private static readonly JsonSerializerOptions options = new() { PropertyNameCaseInsensitive = true };
-
     private readonly WebApplicationFactory<Program> factory;
 
     public EntitiesTest(WebApplicationFactory<Program> factory)
@@ -36,7 +34,7 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
         // Assert
         response.EnsureSuccessStatusCode();
 
-        var id = GetId(response);
+        var id = response.GetId();
         person.Id = id;
         var insertedPerson = await repository.GetAsync(id);
 
@@ -54,7 +52,7 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
         var person = CreateValidPerson();
         var insertResponse = await PostAsync(client, personType, person);
 
-        var id = GetId(insertResponse);
+        var id = insertResponse.GetId();
         person.Id = id;
         person.Name = "New Name";
 
@@ -70,7 +68,7 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equivalent(person, updatedPerson);
     }
 
-       [Fact]
+    [Fact]
     public async Task Delete_EndpointsReturnSuccessAndDeleteEntity()
     {
         // Arrange
@@ -80,7 +78,7 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
         var person = CreateValidPerson();
         var insertResponse = await PostAsync(client, personType, person);
 
-        var id = GetId(insertResponse);
+        var id = insertResponse.GetId();
 
         //Action
         HttpResponseMessage response = await DeleteAsync(client, personType, id);
@@ -123,22 +121,6 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
         request.Content = JsonContent.Create(person);
 
         return client.SendAsync(request);
-    }
-
-
-    private static string GetId(HttpResponseMessage response)
-    {
-        var content = JsonSerializer.Deserialize<JsonElement>(response.Content.ReadAsStream(), options);
-
-        Assert.NotNull(content);
-
-        var id = content.GetProperty("id").GetString();
-
-        Assert.NotNull(id);
-        Assert.NotEmpty(id);
-        Assert.True(Guid.TryParse(id, out Guid _));
-
-        return id;
     }
 
     private static Person CreateValidPerson()

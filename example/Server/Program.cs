@@ -33,6 +33,7 @@ app.UseCors(cors => cors.AllowAnyMethod()
                         .AllowAnyHeader()
                         .SetIsOriginAllowed(origin => true)
                         .AllowCredentials());
+app.UseBoozor();
 
 
 //app.MapRazorPages();

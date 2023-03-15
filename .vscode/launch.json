@@ -17,7 +17,7 @@
             "preLaunchTask": "build-server",
             "program": "${workspaceFolder}/example/Server/bin/Debug/net7.0/Example.Server.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/example/Server",
+            "cwd": "${workspaceFolder}/example/Server/",
             "stopAtEntry": false,
             "console": "integratedTerminal"
         },

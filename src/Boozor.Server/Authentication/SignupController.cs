@@ -22,21 +22,28 @@ public class SignupController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post(Signup signup, CancellationToken cancellationToken)
     {
-        User user = new()
-        {
-            Email = signup.Email,
-            Name = signup.Name,
-            Hash = hasher.HashPassword(signup, signup.Hash!),
-        };
+        if (!ModelState.IsValid)
+            return ValidationProblem();
+
+        User user = CreateUser(signup);
 
         var result = user.Validate();
 
-        if (result.Valid)
-        {
-            await repository.CreateAsync(user, cancellationToken);
-            return Created(string.Empty, new { id = signup.Id });
-        }
+        if (result.Invalid)
+            return BadRequest();
 
-        return BadRequest();
+        await repository.CreateAsync(user, cancellationToken);
+        
+        return Created(string.Empty, new { id = user.Id });
+    }
+
+    private User CreateUser(Signup signup)
+    {
+        return new()
+        {
+            Email = signup.Email,
+            Name = signup.Name,
+            Hash = hasher.HashPassword(signup, signup.Password!),
+        };
     }
 }
