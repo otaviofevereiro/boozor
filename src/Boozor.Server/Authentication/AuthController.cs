@@ -22,7 +22,7 @@ public class AuthController : Controller
     }
 
     [HttpPost("signin")]
-    public async Task<IActionResult> OnPostAsync([FromBody]Signin signin)
+    public async Task<IActionResult> SigninAsync([FromBody]Signin signin)
     {
         if (!ModelState.IsValid)
             return ValidationProblem();
@@ -50,7 +50,7 @@ public class AuthController : Controller
     }
 
     [Authorize]
-    [HttpGet("signout")]
+    [HttpPut("signout")]
     public async Task SignOutAsync()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
