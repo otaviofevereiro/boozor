@@ -8,7 +8,6 @@
     <EditForm Model=Model OnValidSubmit=@SubmitAsync>
         <EntityServer @ref=entityServer />
         <ModalContent Title=@Title StyleContent="border:none">
-
             <Body>
                 <DataAnnotationsValidator />
                 <div class="row g-3">
@@ -17,7 +16,10 @@
                 </div>
             </Body>
             <Footer>
-                <button type="button" class="btn btn-danger btn-sm" @onclick="Delete">Excluir</button>
+                @if (!string.IsNullOrEmpty(Model.Id))
+                {
+                    <button type="button" class="btn btn-danger btn-sm" @onclick="Delete">Excluir</button>
+                }
                 <button type="submit" class="btn btn-success btn-sm">Salvar</button>
             </Footer>
         </ModalContent>

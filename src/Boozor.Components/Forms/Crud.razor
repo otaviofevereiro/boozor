@@ -1,0 +1,55 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Boozor.Shared
+@inject AppState _appState
+
+@typeparam TEntity where TEntity : IEntity, new()
+
+<View Model=Model TEntity=TEntity Title=@Title Columns=6>
+    @Fields
+</View>
+
+@* <DataTable TModel=TEntity @bind-Items=Entities OnSelectItem="OnSelectItem" Multiselect=false Delete=true>
+    <Columns>
+        @Columns
+    </Columns>
+
+     <Toolbar>
+        <ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect" />
+        <ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect" />
+    </Toolbar>
+</DataTable> *@
+
+
+@code {
+
+    [Parameter]
+    public RenderFragment Fields { get; set; }
+
+    [Parameter]
+    public RenderFragment Columns { get; set; }
+
+    [Parameter]
+    public TEntity Model { get; set; } = new();//TODO: View.GetTitle
+
+    [Parameter]
+    public List<TEntity> Entities { get; set; } = new();
+
+    [Parameter]
+
+    public string Title { get; set; }
+
+    public Task OnDelete()
+    {
+        return Task.Delay(1000);
+    }
+
+    public void OnSelectItem(TEntity entity)
+    {
+        Model = entity;
+    }
+
+    public void CustomSelect(TEntity entity)
+    {
+        Model = entity;
+    }
+}
