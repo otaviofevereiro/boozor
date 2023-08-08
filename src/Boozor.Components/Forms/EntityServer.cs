@@ -27,7 +27,7 @@ public sealed class EntityServer : ComponentBase
     [Parameter]
     public EventCallback<EditContext> OnSubmit { get; set; }
 
-    public async Task SubmitAsync<TEntity>(TEntity entity)
+    public async Task<bool> SubmitAsync<TEntity>(TEntity entity)
         where TEntity : IEntity
     {
         using HttpRequestMessage request = new();
@@ -39,7 +39,7 @@ public sealed class EntityServer : ComponentBase
 
         var result = await HttpClient.SendAsync(request);
 
-        await Validate(result);
+        return await Validate(result);
     }
 
     protected override void OnInitialized()

@@ -1,6 +1,6 @@
 ﻿@page "/person2"
 
-<Crud TEntity=Person Title="Person">
+<Crud TEntity=Person Title="Person" Model=Person>
     <Fields>
         <TextField @bind-Value="Person.Id" readonly Columns=4 />
         <TextField @bind-Value="Person.Name" Columns=8 />

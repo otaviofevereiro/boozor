@@ -4,51 +4,49 @@
 
 @typeparam TEntity where TEntity : IEntity, new()
 
-<View Model=Model TEntity=TEntity Title=@Title Columns=6>
+<View Model=Model TEntity=TEntity Title=@Title>
     @Fields
 </View>
 
-@* <DataTable TModel=TEntity @bind-Items=Entities OnSelectItem="OnSelectItem" Multiselect=false Delete=true>
-    <Columns>
+<DataTable TModel=TEntity @bind-Items=Entities OnSelectItem="OnSelectItem" Multiselect=false Delete=true>
+    <ChildContent>
         @Columns
-    </Columns>
+    </ChildContent>
 
-     <Toolbar>
-        <ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect" />
-        <ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect" />
-    </Toolbar>
-</DataTable> *@
+    @* <Toolbar>
+    <ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect" />
+    <ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect" />
+    </Toolbar> *@
+</DataTable>
 
 
 @code {
 
-    [Parameter]
+    [Parameter, EditorRequired]
     public RenderFragment Fields { get; set; }
 
-    [Parameter]
+    [Parameter, EditorRequired]
     public RenderFragment Columns { get; set; }
 
-    [Parameter]
-    public TEntity Model { get; set; } = new();//TODO: View.GetTitle
+    [Parameter, EditorRequired]
+    public TEntity Model { get; set; } = new();
 
     [Parameter]
+    public string Title { get; set; }//TODO: View.GetTitle
+
     public List<TEntity> Entities { get; set; } = new();
-
-    [Parameter]
-
-    public string Title { get; set; }
 
     public Task OnDelete()
     {
         return Task.Delay(1000);
     }
 
-    public void OnSelectItem(TEntity entity)
+    private void OnSelectItem(TEntity entity)
     {
         Model = entity;
     }
 
-    public void CustomSelect(TEntity entity)
+    private void CustomSelect(TEntity entity)
     {
         Model = entity;
     }

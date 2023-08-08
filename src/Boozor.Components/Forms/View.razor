@@ -8,6 +8,7 @@
     <EditForm Model=Model OnValidSubmit=@SubmitAsync>
         <EntityServer @ref=entityServer />
         <ModalContent Title=@Title StyleContent="border:none">
+
             <Body>
                 <DataAnnotationsValidator />
                 <div class="row g-3">
@@ -52,21 +53,9 @@
 
     }
 
-    private async Task Execute(Func<Task> func)
-    {
-        await Task.Yield();
-        _appState.Loading();
-
-        await func();
-
-        _appState.Loading();
-    }
-
     private async void SubmitAsync()
     {
-        Func<Task> submitAsync = async () => await entityServer.SubmitAsync(Model);
-
-        await Execute(submitAsync);
+        bool result = await _appState.Loading(async () => await entityServer.SubmitAsync(Model));
     }
 
     private void Delete()

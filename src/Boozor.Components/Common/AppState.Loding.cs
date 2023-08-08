@@ -18,5 +18,21 @@ namespace Boozor.Components.Common
 
             LoadingChanged?.Invoke(_loading);
         }
+
+        private async Task Loading(Func<Task> func)
+        {
+            await Task.Yield();
+            Loading();
+            await func();
+            Loading();
+        }
+
+        private async Task Loading<T>(Func<Task<T>> func)
+        {
+            await Task.Yield();
+            Loading();
+            await func();
+            Loading();
+        }
     }
 }
