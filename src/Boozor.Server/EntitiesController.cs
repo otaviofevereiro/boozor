@@ -55,7 +55,7 @@ public sealed class EntitiesController : ControllerBase
 
         await repository.CreateAsync(entityType, entity, cancellationToken);
 
-        return CreatedAtAction(nameof(Get), new { id = entity.Id }, new { id = entity.Id });
+        return CreatedAtAction(nameof(Get), new { id = entity.Id }, entity);
     }
 
     [HttpPut]
@@ -69,7 +69,7 @@ public sealed class EntitiesController : ControllerBase
 
         await repository.UpdateAsync(entityType, entity);
 
-        return Ok();
+        return Ok(entity);
     }
 
     [HttpDelete("{id}")]

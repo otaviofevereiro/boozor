@@ -26,7 +26,6 @@ public class SignupController : ControllerBase
             return ValidationProblem();
 
         User user = CreateUser(signup);
-
         var result = user.Validate();
 
         if (result.Invalid)

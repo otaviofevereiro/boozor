@@ -1,65 +1,20 @@
 ﻿@page "/person"
 
-<View Model="@person" TEntity=Person Title="Person" Columns=6>
-    <TextField @bind-Value="person.Id" readonly Columns=4 />
-    <TextField @bind-Value="person.Name" Columns=8 />
-    <TextField @bind-Value="person.Email" />
-    <DateField @bind-Value="person.BirthDate" Columns=6 />
-</View>
-
-<DataTable TModel=Person @bind-Items=persons OnSelectItem="OnSelectItem" Multiselect=false Delete=true>
-    <ChildContent>
+<View @bind-Model=Person Title="Person">
+    <Fields>
+        <TextField @bind-Value="Person.Id" readonly Columns=4 />
+        <TextField @bind-Value="Person.Name" Columns=8 />
+        <TextField @bind-Value="Person.Email" />
+        <DateField @bind-Value="Person.BirthDate" Columns=6 />
+    </Fields>
+    <Columns>
         <Column TModel=Person Value="(p => p.Id)" />
         <Column TModel=Person Value="(p => p.Name)" />
         <Column TModel=Person Value="(p => p.BirthDate)" />
         <Column TModel=Person Value="(p => p.Email)" />
-    </ChildContent>
-
-    <Toolbar>
-        <ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect" />
-        <ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect" />
-    </Toolbar>
-</DataTable>
+    </Columns>
+</View>
 
 @code {
-
-    Person person = new()
-    {
-        Name = "otavio",
-        Email = "a@a.com.br",
-        BirthDate = new DateTime(1990, 12, 26)
-    };
-
-    List<Person> persons = new()
-    {
-        new()
-        {
-            Id = "1",
-            Name = "Otavio",
-            BirthDate = new DateTime(1990, 12, 26),
-            Email = "otavio@otavio.com.br"
-        },
-        new()
-        {
-            Id = "2",
-            Name = "Carol",
-            BirthDate = new DateTime(1990, 05, 11),
-            Email = "otavio@otavio.com.br"
-        }
-    };
-
-    public Task OnDelete()
-    {
-        return Task.Delay(1000);
-    }
-
-    public void OnSelectItem(Person person)
-    {
-        this.person = person;
-    }
-
-    public void CustomSelect(Person person)
-    {
-        this.person = person;
-    }
+    public Person Person { get; set; } = new() { Name = "a", Email = "a@a.com", BirthDate = DateTime.Now };
 }

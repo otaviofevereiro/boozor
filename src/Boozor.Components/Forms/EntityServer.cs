@@ -27,7 +27,7 @@ public sealed class EntityServer : ComponentBase
     [Parameter]
     public EventCallback<EditContext> OnSubmit { get; set; }
 
-    public async Task<bool> SubmitAsync<TEntity>(TEntity entity)
+    public async Task<Result<TEntity>> SubmitAsync<TEntity>(TEntity entity)
         where TEntity : IEntity
     {
         using HttpRequestMessage request = new();
@@ -37,9 +37,10 @@ public sealed class EntityServer : ComponentBase
         request.Method = string.IsNullOrEmpty(entity.Id) ? HttpMethod.Post : HttpMethod.Put;
         request.Content = JsonContent.Create(entity); ;
 
-        var result = await HttpClient.SendAsync(request);
+        var response = await HttpClient.SendAsync(request);
+        bool isValid = await Validate(response);
 
-        return await Validate(result);
+        return await isValid.WhenValidAsync(() => response.Content.ReadFromJsonAsync<TEntity>());
     }
 
     protected override void OnInitialized()

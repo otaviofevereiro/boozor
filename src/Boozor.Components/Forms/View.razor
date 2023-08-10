@@ -4,7 +4,7 @@
 
 @typeparam TEntity where TEntity : IEntity
 
-<div class="col-md-@Columns col-sm-12">
+<div class="col-md-@ColumnsSize col-sm-12">
     <EditForm Model=Model OnValidSubmit=@SubmitAsync>
         <EntityServer @ref=entityServer />
         <ModalContent Title=@Title StyleContent="border:none">
@@ -13,7 +13,7 @@
                 <DataAnnotationsValidator />
                 <div class="row g-3">
                     @*TODO: <ValidationSummary /> *@
-                    @ChildContent
+                    @Fields
                 </div>
             </Body>
             <Footer>
@@ -27,53 +27,60 @@
     </EditForm>
 </div>
 
+<DataTable TModel=TEntity @bind-Items=entities OnSelectItem=SetModelAsync Multiselect=false Delete=true>
+    <ChildContent>
+        @Columns
+    </ChildContent>
+
+    @* <Toolbar>
+    <ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect" />
+    <ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect" />
+    </Toolbar> *@
+</DataTable>
+
 @code {
 
-    EntityServer entityServer;
+    private EntityServer entityServer;
+    private List<TEntity> entities = new();
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    [Parameter] public TEntity Model { get; set; }
+    [Parameter] public EventCallback<TEntity> ModelChanged { get; set; }
+    [Parameter, EditorRequired] public RenderFragment Fields { get; set; }
+    [Parameter, EditorRequired] public RenderFragment Columns { get; set; }
 
-    [Parameter]
-    public int Columns { get; set; } = 12;
+    [Parameter] public int ColumnsSize { get; set; } = 12;
 
-    [Parameter]
-    public string Title { get; set; }
+    [Parameter] public string Title { get; set; }
 
-    [Parameter]
-    public TEntity Model { get; set; }
-
-
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
-        base.OnInitialized();
-
         if (Title is null)
-            Title = GetTitle();
-
+            Title = TitleAttribute.GetTitle<TEntity>();
     }
 
     private async void SubmitAsync()
     {
-        bool result = await _appState.Loading(async () => await entityServer.SubmitAsync(Model));
+        await _appState.Loading(async () =>
+        {
+            var result = await entityServer.SubmitAsync(Model);
+
+            if (result.Valid)
+               await SetModelAsync(result.Content);
+
+        });
+    }
+    private async Task SetModelAsync(TEntity entity)
+    {
+        Model = entity;
+        entities.Add(entity);
+        await ModelChanged.InvokeAsync();
     }
 
     private void Delete()
     {
+        //TODO: constante de mensagens
         _appState.Confirmation("Confirma a exclusão?",
         "Excluir registro",
-        onOk: async () => await Task.CompletedTask);
+        onOk: async () => await Task.CompletedTask);//:TODO remove
     }
-
-    private string GetTitle()
-    {
-        var entityType = typeof(TEntity);
-        var titleAttribute = (TitleAttribute)Attribute.GetCustomAttribute(entityType, typeof(TitleAttribute));
-
-        if (titleAttribute is not null)
-            return titleAttribute.Title;
-
-        return entityType.Name;
-    }
-
 }
