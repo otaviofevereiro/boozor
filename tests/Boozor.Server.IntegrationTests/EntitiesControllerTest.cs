@@ -127,8 +127,8 @@ public class EntitiesTest : IClassFixture<WebApplicationFactory<Program>>
     {
         return new()
         {
-            BirthDate = new DateTime(1990, 01, 01),
-            Email = "teste@teste.com",
+            // BirthDate = new DateTime(1990, 01, 01),
+            // Email = "teste@teste.com",
             Name = "teste"
         };
     }

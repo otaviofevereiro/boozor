@@ -2,10 +2,10 @@
 @using Boozor.Shared
 @inject AppState _appState
 
-@typeparam TEntity where TEntity : IEntity
+@typeparam TEntity where TEntity : IEntity, new()
 
 <div class="col-md-@ColumnsSize col-sm-12">
-    <EditForm Model=Model OnValidSubmit=@SubmitAsync>
+    <EditForm Model=model OnValidSubmit=@SubmitAsync>
         <EntityServer @ref=entityServer />
         <ModalContent Title=@Title StyleContent="border:none">
 
@@ -17,7 +17,7 @@
                 </div>
             </Body>
             <Footer>
-                @if (!string.IsNullOrEmpty(Model.Id))
+                @if (!string.IsNullOrEmpty(model.Id))
                 {
                     <button type="button" class="btn btn-danger btn-sm" @onclick="Delete">Excluir</button>
                 }
@@ -27,7 +27,7 @@
     </EditForm>
 </div>
 
-<DataTable TModel=TEntity @bind-Items=entities OnSelectItem=SetModelAsync Multiselect=false Delete=true>
+<DataTable TModel=TEntity @bind-Items=entities OnSelectItem=SetModel Multiselect=false Delete=true>
     <ChildContent>
         @Columns
     </ChildContent>
@@ -42,9 +42,8 @@
 
     private EntityServer entityServer;
     private List<TEntity> entities = new();
+    private TEntity model = new();
 
-    [Parameter] public TEntity Model { get; set; }
-    [Parameter] public EventCallback<TEntity> ModelChanged { get; set; }
     [Parameter, EditorRequired] public RenderFragment Fields { get; set; }
     [Parameter, EditorRequired] public RenderFragment Columns { get; set; }
 
@@ -62,18 +61,20 @@
     {
         await _appState.Loading(async () =>
         {
-            var result = await entityServer.SubmitAsync(Model);
+            var result = await entityServer.SubmitAsync(model);
 
             if (result.Valid)
-               await SetModelAsync(result.Content);
+                SetModel(result.Content);
 
         });
     }
-    private async Task SetModelAsync(TEntity entity)
+    private void SetModel(TEntity entity)
     {
-        Model = entity;
+        entities.RemoveAll(x => x.Id == entity.Id);
         entities.Add(entity);
-        await ModelChanged.InvokeAsync();
+        model = entity;
+        
+        StateHasChanged();
     }
 
     private void Delete()

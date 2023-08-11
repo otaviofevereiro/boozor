@@ -39,7 +39,7 @@ namespace Boozor.Components.Fields
         {
             builder.OpenElement(0, "label");
             builder.AddAttribute(1, "class", "form-label");
-            builder.AddContent(0, Label);
+            builder.AddContent(2, Label);
             builder.CloseElement();
         }
 
