@@ -4,7 +4,7 @@ using System;
 
 namespace Boozor.Components.Fields
 {
-    public class CheckboxField : Field<bool>
+    public class CheckboxField : FieldBKP<bool>
     {
         /// <inheritdoc />
         protected override void BuildInput(RenderTreeBuilder builder, int sequence)

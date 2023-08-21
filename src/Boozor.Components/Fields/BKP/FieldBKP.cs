@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Boozor.Components.Fields
 {
-    public abstract class Field<TValue> : InputBase<TValue>
+    public abstract class FieldBKP<TValue> : InputBase<TValue>
     {
         [Parameter] public int Columns { get; set; } = 12;
         [Parameter] public string Label { get; set; }

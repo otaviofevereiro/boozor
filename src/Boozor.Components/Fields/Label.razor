@@ -5,45 +5,28 @@
 
 <div class="col-md-{@Columns} col-sm-12">
     <label class="form-label">
-        @Label
+        @Text
     </label>
-    <InputText class="form-control" @bind-Value:get=value @bind-Value:set=Set />
-    <ValidationMessage For="(()=> value)" />
+    @ChildContent
 </div>
 
 
 @code {
-    private PropertyInfo propertyInfo;
-
-    [Parameter] public Expression<Func<TModel, object>> Value { get; set; }
     [Parameter] public int Columns { get; set; } = 12;
-    [Parameter] public string Label { get; set; }
-    [CascadingParameter] public EditContext EditContext { get; set; }
-
-    private string value;
-
+    [Parameter] public string Text { get; set; }
+    [Parameter] public Expression<Func<TModel, object>> For { get; set; }
+    [Parameter] public RenderFragment ChildContent {get;set;}
+    PropertyInfo propertyInfo;
 
     protected override void OnParametersSet()
     {
-        EditContext.OnFieldChanged += OnFieldChange;
-        propertyInfo = GetPropertyInfo(Value);
-        Label = EnsureLabel(Label);
+        Text = EnsureLabel(Text);
+        propertyInfo =  propertyInfo ?? GetPropertyInfo(For);
 
         base.OnParametersSet();
     }
 
-    public void OnFieldChange(object obj, FieldChangedEventArgs e)
-    {
-        if (e.FieldIdentifier.FieldName == propertyInfo.Name)
-            value = (string)propertyInfo.GetValue(EditContext.Model);
-    }
-
-    public void Set(string value)
-    {
-        propertyInfo.SetValue(EditContext.Model, value);
-    }
-
-
+//TODO:
     private PropertyInfo GetPropertyInfo<TType, TReturn>(Expression<Func<TType, TReturn>> property)
     {
         LambdaExpression lambda = property;

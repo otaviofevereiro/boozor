@@ -2,8 +2,8 @@
 
 <View TEntity=Person Title="Person">
     <Fields>
-        <DynamicField TModel=Person Value="(p => p.Id)" Columns=4 />
-        <DynamicField TModel=Person Value="(p => p.Name)" Columns=8 />
+        <TextField TModel=Person For="(p => p.Id)" Columns=4 />
+        <TextField TModel=Person For="(p => p.Name)" Columns=8 />
     </Fields>
     <Columns>
         <Column TModel=Person Value="(p => p.Id)" />

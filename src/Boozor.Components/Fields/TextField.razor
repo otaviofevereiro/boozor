@@ -1,0 +1,25 @@
+﻿@using System.Linq.Expressions
+@using System.Reflection;
+@using Microsoft.AspNetCore.Components.Forms
+@inherits Field<TModel, string>
+@typeparam TModel
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        ChildContent = CreateComponent();
+        base.OnInitialized();
+    }
+
+    private RenderFragment CreateComponent() => __builder =>
+    {
+        <InputText class="form-control" @bind-Value="Value"></InputText>
+    };
+
+}
+

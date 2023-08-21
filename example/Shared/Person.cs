@@ -18,7 +18,7 @@ namespace Example.Shared
 
         [Required]
         [StringLength(60)]
-        public string? Name { get; set; }
+        public string? Name { get; set; } = "Teste";
 
 
         public string? Id { get; set; }
