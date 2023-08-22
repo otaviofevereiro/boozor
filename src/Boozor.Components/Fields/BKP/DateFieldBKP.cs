@@ -10,7 +10,7 @@ namespace Boozor.Components.Fields
     /// An input component for editing date values.
     /// Supported types are <see cref="DateTime"/> and <see cref="DateTimeOffset"/>.
     /// </summary>
-    public class DateField<TValue> : FieldBKP<TValue>
+    public class DateFieldBKP<TValue> : FieldBKP<TValue>
     {
         private const string DateFormat = "yyyy-MM-dd"; // Compatible with HTML date inputs
 

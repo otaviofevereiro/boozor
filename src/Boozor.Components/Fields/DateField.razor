@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-@inherits Field<TModel, string>
+@inherits Field<TModel, DateTime?>
 @typeparam TModel
 
 @{
@@ -8,12 +8,13 @@
 
 @code {
 
+
     //TODO: additionalattributes, cssclass
     protected override void OnInitialized()
     {
         ChildContent = __builder =>
         {
-            <InputText Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+            <InputDate TValue="DateTime?" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
                 AdditionalAttributes="AdditionalAttributes" />
         };
 

@@ -4,24 +4,35 @@
 @typeparam TModel
 @typeparam TValue
 
-<div class="col-md-{@Columns} col-sm-12">
+<div class="col-md-@Columns col-sm-12">
     <label class="form-label">
         @Label
     </label>
     @ChildContent
-    <ValidationMessage For="GetValueExpression<TValue>()"/>
+    <ValidationMessage For="GetValueExpression()" />
 </div>
 
 @code {
+
     [Parameter] public string Label { get; set; }
     [Parameter] public Expression<Func<TModel, object>> For { get; set; }
     [Parameter] public int Columns { get; set; }
     [CascadingParameter] public EditContext EditContext { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object> AdditionalAttributes { get; set; } = new Dictionary<string, Object>();
 
     public TValue Value { get; set; }
 
     private PropertyInfo propertyInfo;
+
+    protected override void OnParametersSet()
+    {
+        AdditionalAttributes = new Dictionary<string, object>(AdditionalAttributes.Append(new("class", "form-control")));
+        base.OnParametersSet();
+    }
+
+
 
     protected override void OnInitialized()
     {
@@ -32,10 +43,11 @@
         base.OnInitialized();
     }
 
-    public void OnFieldChange(object obj, FieldChangedEventArgs e)
+    protected Expression<Func<TValue>> GetValueExpression()
     {
-        if (e.FieldIdentifier.FieldName == propertyInfo.Name)
-            GetValue();
+        var constant = Expression.Constant(EditContext.Model);
+        var exp = Expression.Property(constant, propertyInfo.Name);
+        return Expression.Lambda<Func<TValue>>(exp);
     }
 
     protected void Set(TValue value)
@@ -46,6 +58,12 @@
     private void GetValue()
     {
         Value = (TValue)propertyInfo.GetValue(EditContext.Model);
+    }
+
+    private void OnFieldChange(object obj, FieldChangedEventArgs e)
+    {
+        if (e.FieldIdentifier.FieldName == propertyInfo.Name)
+            GetValue();
     }
 
     private void EnsureLabel()
@@ -61,13 +79,6 @@
             Label = propertyInfo.Name;
         else
             Label = displayAttribute.Name;
-    }
-
-    protected Expression<Func<TPropertyType>> GetValueExpression<TPropertyType>()
-    {
-        var constant = Expression.Constant(EditContext.Model);
-        var exp = Expression.Property(constant, propertyInfo.Name);
-        return Expression.Lambda<Func<TPropertyType>>(exp);
     }
 
     private PropertyInfo GetPropertyInfo<TType, TReturn>(Expression<Func<TType, TReturn>> property)

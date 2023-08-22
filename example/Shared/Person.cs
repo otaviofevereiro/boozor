@@ -7,9 +7,9 @@ namespace Example.Shared
     [Title("Person Entity")]
     public class Person : IEntity
     {
-        // [Display(Name = "Birth Date")]
-        // [Required]
-        // public DateTime? BirthDate { get; set; }
+        [Display(Name = "Birth Date")]
+        [Required]
+        public DateTime? BirthDate { get; set; }
 
         // [Display(Name = "Current Email")]
         // [Required]

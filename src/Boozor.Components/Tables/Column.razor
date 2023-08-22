@@ -19,7 +19,7 @@ else
     public string Title { get; set; }
 
     [Parameter]
-    public Expression<Func<TModel, object>> Value { get; set; }
+    public Expression<Func<TModel, object>> For { get; set; }
 
     [CascadingParameter]
     public TModel Item { get; set; }
@@ -33,7 +33,7 @@ else
 
     protected override void OnInitialized()
     {
-        _valueFunc = Value.Compile();
+        _valueFunc = For.Compile();
 
         base.OnInitialized();
     }
@@ -80,11 +80,11 @@ else
 
     private MemberExpression GetMemberExpression()
     {
-        var memberExpression = Value.Body as MemberExpression;
+        var memberExpression = For.Body as MemberExpression;
 
         if (memberExpression == null)
         {
-            var unaryExpression = Value.Body as UnaryExpression;
+            var unaryExpression = For.Body as UnaryExpression;
             memberExpression = unaryExpression.Operand as MemberExpression;
         }
 
