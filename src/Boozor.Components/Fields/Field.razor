@@ -14,13 +14,19 @@
 
 @code {
 
+    private Dictionary<string, object> additionaAttributes = new();
+
     [Parameter] public string Label { get; set; }
     [Parameter] public Expression<Func<TModel, object>> For { get; set; }
     [Parameter] public int Columns { get; set; }
     [CascadingParameter] public EditContext EditContext { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object> AdditionalAttributes { get; set; } = new Dictionary<string, Object>();
+    public IReadOnlyDictionary<string, object> AdditionalAttributes
+    {
+        get => additionaAttributes;
+        set { additionaAttributes = value.ToDictionary(p => p.Key, p => p.Value); }
+    }
 
     public TValue Value { get; set; }
 
@@ -28,11 +34,15 @@
 
     protected override void OnParametersSet()
     {
-        AdditionalAttributes = new Dictionary<string, object>(AdditionalAttributes.Append(new("class", "form-control")));
+        string cssClass = "form-control";
+
+        if (additionaAttributes.TryGetValue("class", out object current))
+            additionaAttributes["class"] = cssClass += current;
+        else
+            additionaAttributes.Add("class", cssClass);
+
         base.OnParametersSet();
     }
-
-
 
     protected override void OnInitialized()
     {
