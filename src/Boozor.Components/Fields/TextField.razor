@@ -1,25 +1,81 @@
 ﻿@using System.Linq.Expressions
 @using System.Reflection;
 @using Microsoft.AspNetCore.Components.Forms
-@inherits Field<TModel, string>
 @typeparam TModel
 
-@{
-    base.BuildRenderTree(__builder);
-}
-
+<div class="col-md-{@Columns} col-sm-12">
+    <label class="form-label">
+        @Label
+    </label>
+    <InputText Value=@Value ValueChanged="Set" class="form-control"
+        ValueExpression="GetValueExpression<string>()" />
+</div>
 
 @code {
+    [Parameter] public string Label { get; set; }
+    [Parameter] public Expression<Func<TModel, object>> For { get; set; }
+    [Parameter] public int Columns { get; set; }
+    [CascadingParameter] public EditContext EditContext { get; set; }
+
+    public string Value { get; set; }
+
+    private PropertyInfo propertyInfo;
+
     protected override void OnInitialized()
     {
-        ChildContent = CreateComponent();
+        propertyInfo = GetPropertyInfo(For);
+        EditContext.OnFieldChanged += OnFieldChange;
+        EnsureLabel();
+        Value = (string)GetValue();
         base.OnInitialized();
     }
 
-    private RenderFragment CreateComponent() => __builder =>
+    public void OnFieldChange(object obj, FieldChangedEventArgs e)
     {
-        <InputText class="form-control" @bind-Value="Value"></InputText>
-    };
+        if (e.FieldIdentifier.FieldName == propertyInfo.Name)
+            Value = (string)propertyInfo.GetValue(EditContext.Model);
+    }
 
+    private void Set<T>(T value)
+    {
+        propertyInfo.SetValue(EditContext.Model, value);
+    }
+
+    private object GetValue()
+    {
+        return propertyInfo.GetValue(EditContext.Model);
+    }
+
+    private void EnsureLabel()
+    {
+        if (!string.IsNullOrEmpty(Label))
+            return;
+
+        var displayAttribute = propertyInfo.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute),
+        true)
+        .FirstOrDefault() as System.ComponentModel.DataAnnotations.DisplayAttribute;
+
+        if (displayAttribute == null || string.IsNullOrEmpty(displayAttribute.Name))
+            Label = propertyInfo.Name;
+        else
+            Label = displayAttribute.Name;
+    }
+
+    private Expression<Func<TPropertyType>> GetValueExpression<TPropertyType>()
+    {
+        var constant = Expression.Constant(EditContext.Model);
+        var exp = Expression.Property(constant, propertyInfo.Name);
+        return Expression.Lambda<Func<TPropertyType>>(exp);
+    }
+
+    private PropertyInfo GetPropertyInfo<TType, TReturn>(Expression<Func<TType, TReturn>> property)
+    {
+        LambdaExpression lambda = property;
+        var memberExpression = lambda.Body is UnaryExpression expression
+        ? (MemberExpression)expression.Operand
+        : (MemberExpression)lambda.Body;
+
+        return (PropertyInfo)memberExpression.Member;
+    }
 }
 

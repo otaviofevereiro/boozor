@@ -14,7 +14,7 @@
 @code {
     [Parameter] public int Columns { get; set; } = 12;
     [Parameter] public string Text { get; set; }
-    [Parameter] public Expression<Func<TModel, object>> For { get; set; }
+    [Parameter, EditorRequired] public Expression<Func<TModel, object>> For { get; set; }
     [Parameter] public RenderFragment ChildContent {get;set;}
     PropertyInfo propertyInfo;
 
