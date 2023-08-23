@@ -5,6 +5,8 @@
         <TextField TModel=Person For="(p => p.Id)" Columns=4 readonly/>
         <TextField TModel=Person For="(p => p.Name)" Columns=8 />
         <DateField TModel="Person" For="(p=> p.BirthDate)" Columns="3" />
+        <CheckboxField TModel="Person" For="(p=> p.Active)" Columns="3" />
+
     </Fields>
     <Columns>
         <Column TModel=Person For="(p => p.Id)" />

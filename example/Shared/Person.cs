@@ -23,6 +23,8 @@ namespace Example.Shared
 
         public string? Id { get; set; }
 
+        public bool Active { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Name == "otavio")

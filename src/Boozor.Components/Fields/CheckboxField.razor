@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@inherits Field<TModel, bool>
+@typeparam TModel
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+
+    protected override string CssClass => "form-check-input";
+
+    //TODO: additionalattributes, cssclass
+    protected override void OnInitialized()
+    {
+        ChildContent = __builder =>
+        {
+            <div class="form-check">
+                <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+                   AdditionalAttributes="AdditionalAttributes" />
+            </div>
+        };
+
+        base.OnInitialized();
+    }
+
+}
+
+
