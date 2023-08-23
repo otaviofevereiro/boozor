@@ -1,4 +1,6 @@
 ﻿@using System.Linq.Expressions
+@using Microsoft.AspNetCore.Components.Forms;
+
 @typeparam TModel
 
 @if (@Item == null)
@@ -7,7 +9,16 @@
 }
 else
 {
-    <td>@GetValue()</td>
+    <td>
+    @if (_value is bool value)
+        {
+            <input type="checkbox" class="form-check-input" @bind=value readonly />
+        }
+        else
+        {
+            @FormatValue()
+        }
+    </td>
 }
 
 
@@ -29,36 +40,36 @@ else
 
     private Func<TModel, object> _valueFunc;
     private OrderType _orderType = OrderType.None;
+    private object _value;
 
-
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         _valueFunc = For.Compile();
 
+        if (Item is not null)
+            _value = _valueFunc?.Invoke(Item);
+        base.OnParametersSet();
+    }
+
+    protected override void OnInitialized()
+    {
         base.OnInitialized();
     }
 
-    private object GetValue()
+    private string FormatValue()
     {
-        var value = _valueFunc?.Invoke(Item);
-
-        return FormatValue(value);
-    }
-
-    private string FormatValue(object objValue)
-    {
-        if (objValue == null)
+        if (_value == null)
             return string.Empty;
 
         if (string.IsNullOrEmpty(Format))
-            return objValue.ToString();
+            return _value.ToString();
 
-        var dateTime = objValue as DateTime?;
+        var dateTime = _value as DateTime?;
 
         if (dateTime.HasValue)
             return dateTime.Value.ToString(Format);
 
-        return objValue.ToString();
+        return _value.ToString();
     }
 
     public object GetTitle()
@@ -69,8 +80,9 @@ else
         var memberExpression = GetMemberExpression();
         var property = typeof(TModel).GetProperty(memberExpression.Member.Name);
 
-        var displayAttribute = property?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), true)
-                                       ?.FirstOrDefault() as System.ComponentModel.DataAnnotations.DisplayAttribute;
+        var displayAttribute = property?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute),
+        true)
+        ?.FirstOrDefault() as System.ComponentModel.DataAnnotations.DisplayAttribute;
 
         if (displayAttribute == null || string.IsNullOrEmpty(displayAttribute.Name))
             return memberExpression.Member.Name;
@@ -78,6 +90,7 @@ else
             return displayAttribute.Name;
     }
 
+    //TODO:refactor
     private MemberExpression GetMemberExpression()
     {
         var memberExpression = For.Body as MemberExpression;
