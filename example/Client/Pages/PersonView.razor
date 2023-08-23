@@ -11,7 +11,7 @@
     <Columns>
         <Column TModel=Person For="(p => p.Id)" />
         <Column TModel=Person For="(p => p.Name)" />
-        <Column TModel="Person" For="(p=> p.BirthDate)" />
+        <Column TModel="Person" For="(p=> p.BirthDate)" Format="dd/MM/yyyy" />
         <Column TModel="Person" For="(p=> p.Active)" />
     </Columns>
 </View>
