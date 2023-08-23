@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+@using System;
 @inherits Field<TModel, TValue>
-    
+
 @typeparam TModel
 @typeparam TValue
 
@@ -9,17 +10,18 @@
 }
 
 @code {
+
+    //int, long, decimal, double, Single
     protected override void OnInitialized()
     {
         ChildContent = __builder =>
         {
-            <InputDate TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-                AdditionalAttributes="AdditionalAttributes"/>
+            <InputNumber Value="@Value" TValue="TValue" ValueChanged="Set" ValueExpression="GetValueExpression()"
+                AdditionalAttributes="AdditionalAttributes" />
         };
 
         base.OnInitialized();
     }
-
 }
 
 

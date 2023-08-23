@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace Boozor.Components.Fields
 {
-    public class NumberField<TValue> : FieldBKP<TValue>
+    public class NumberFieldBKP<TValue> : FieldBKP<TValue>
     {
         private readonly string stepAttributeValue = EnsureType();
 

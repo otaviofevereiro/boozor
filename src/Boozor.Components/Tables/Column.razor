@@ -5,7 +5,7 @@
 
 @if (@Item == null)
 {
-    <th @onclick="async ()=> await Order()">@GetTitle()</th>
+    <th @onclick="OrderAsync">@GetTitle()</th>
 }
 else
 {
@@ -24,7 +24,7 @@ else
 
 @code {
     [Parameter]
-    public string Format { get; set; }
+    public string Format { get; set; } = "dd/MM/yyyy";
 
     [Parameter]
     public string Title { get; set; }
@@ -104,7 +104,7 @@ else
         return memberExpression;
     }
 
-    private async Task Order()
+    private async Task OrderAsync()
     {
         _orderType = await DataTable.Order(_valueFunc, _orderType);
     }

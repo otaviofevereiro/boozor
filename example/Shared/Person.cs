@@ -9,12 +9,12 @@ namespace Example.Shared
     {
         [Display(Name = "Birth Date")]
         [Required]
-        public DateTime? BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; } = DateTime.Now;
 
-        // [Display(Name = "Current Email")]
-        // [Required]
-        // [EmailAddress]
-        // public string? Email { get; set; }
+        [Display(Name = "Current Email")]
+        [Required]
+        [EmailAddress]
+        public string? Email { get; set; } = "a@a.com.br";
 
         [Required]
         [StringLength(60)]
@@ -24,6 +24,8 @@ namespace Example.Shared
         public string? Id { get; set; }
 
         public bool Active { get; set; }
+        public decimal? Value { get; set; }
+
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
