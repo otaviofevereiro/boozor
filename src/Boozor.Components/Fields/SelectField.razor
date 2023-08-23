@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@inherits Field<TModel, object>
+@typeparam TModel
+@typeparam TValue
+
+@code {
+
+    [Parameter] public IReadOnlyDictionary<object, string> Items { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+
+
+        ChildContent = __builder =>
+        {
+            <InputSelect TValue="object" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+                AdditionalAttributes="AdditionalAttributes">
+
+                @foreach (var item in Items)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
+            </InputSelect>
+        };
+
+        base.OnInitialized();
+    }
+
+}
+
+

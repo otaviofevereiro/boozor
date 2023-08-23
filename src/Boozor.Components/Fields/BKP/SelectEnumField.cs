@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Boozor.Components.Fields
 {
-    public class SelectEnumField<TValue> : SelectField<TValue>
+    public class SelectEnumField<TValue> : SelectFieldBKP<TValue>
     {
         protected override IEnumerable<KeyValuePair<object, string>> GetItens()
         {

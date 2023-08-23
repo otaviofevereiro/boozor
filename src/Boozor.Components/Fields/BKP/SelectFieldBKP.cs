@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Boozor.Components.Fields
 {
-    public abstract class SelectField<TValue> : FieldBKP<TValue>
+    public abstract class SelectFieldBKP<TValue> : FieldBKP<TValue>
     {
         private readonly Type _nullableUnderlyingType = Nullable.GetUnderlyingType(typeof(TValue));
         private IReadOnlyCollection<KeyValuePair<object, string>> itens;

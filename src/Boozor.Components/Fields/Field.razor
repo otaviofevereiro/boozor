@@ -23,6 +23,7 @@
     [Parameter] public int Columns { get; set; }
     [CascadingParameter] public EditContext EditContext { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
+
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object> AdditionalAttributes
     {
@@ -49,9 +50,10 @@
         propertyInfo = GetPropertyInfo(For);
         EditContext.OnFieldChanged += OnFieldChange;
         EnsureLabel();
-        GetValue();
+        FillValue();
         base.OnInitialized();
     }
+
 
     protected Expression<Func<TValue>> GetValueExpression()
     {
@@ -60,22 +62,28 @@
         return Expression.Lambda<Func<TValue>>(exp);
     }
 
-    protected void Set(TValue value)
+    protected virtual void Set(TValue value)
     {
         propertyInfo.SetValue(EditContext.Model, value);
     }
 
-    private void GetValue()
+    protected virtual void FillValue()
     {
-        Value = (TValue)propertyInfo.GetValue(EditContext.Model);
+        Value = GetValue();
+    }
+
+    protected virtual TValue GetValue()
+    {
+        return (TValue)propertyInfo.GetValue(EditContext.Model);
     }
 
     private void OnFieldChange(object obj, FieldChangedEventArgs e)
     {
         if (e.FieldIdentifier.FieldName == propertyInfo.Name)
-            GetValue();
+            FillValue();
     }
 
+    //TODO:refactor
     private void EnsureLabel()
     {
         if (!string.IsNullOrEmpty(Label))
@@ -91,6 +99,7 @@
             Label = displayAttribute.Name;
     }
 
+    //TODO:refactor
     private PropertyInfo GetPropertyInfo<TType, TReturn>(Expression<Func<TType, TReturn>> property)
     {
         LambdaExpression lambda = property;
