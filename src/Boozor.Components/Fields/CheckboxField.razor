@@ -8,15 +8,16 @@
 
 @code {
 
-    protected override string CssClass => "form-check-input";
-
     protected override void OnInitialized()
     {
         ChildContent = __builder =>
         {
-            <div class="form-check">
-                <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-                   AdditionalAttributes="AdditionalAttributes" />
+            <div class="col-md-@Columns col-sm-12">
+                <div class="form-check">
+                    <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+                        class="form-check-input" />
+                    <label class="form-label">@Label</label>
+                </div>
             </div>
         };
 

@@ -8,12 +8,19 @@
 
 @code {
 
+
+
     protected override void OnInitialized()
     {
         ChildContent = __builder =>
         {
-            <InputText Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-                AdditionalAttributes="AdditionalAttributes" />
+            <div class="col-md-@Columns col-sm-12">
+                <label class="form-label" for="@PropertyName">
+                    @Label
+                </label>
+                <InputText id="@PropertyName" class="form-control" placeholder="@Placeholder" Value="@Value" ValueChanged="Set"
+                    ValueExpression="GetValueExpression()" />
+            </div>
         };
 
         base.OnInitialized();

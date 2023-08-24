@@ -4,46 +4,23 @@
 @typeparam TModel
 @typeparam TValue
 
-<div class="col-md-@Columns col-sm-12">
-    <label class="form-label">
-        @Label
-    </label>
-    @ChildContent
-    <ValidationMessage For="GetValueExpression()" />
-</div>
+@ChildContent
+<ValidationMessage For="GetValueExpression()" />
 
 @code {
 
-    protected virtual string CssClass => "form-control";
-
-    private Dictionary<string, object> additionaAttributes = new();
-
     [Parameter] public string Label { get; set; }
+    [Parameter] public string Placeholder { get; set; }
     [Parameter] public Expression<Func<TModel, object>> For { get; set; }
     [Parameter] public int Columns { get; set; }
     [CascadingParameter] public EditContext EditContext { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
 
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object> AdditionalAttributes
-    {
-        get => additionaAttributes;
-        set { additionaAttributes = value.ToDictionary(p => p.Key, p => p.Value); }
-    }
-
     public TValue Value { get; set; }
 
+    public string PropertyName => propertyInfo.Name;
+
     private PropertyInfo propertyInfo;
-
-    protected override void OnParametersSet()
-    {
-        if (additionaAttributes.TryGetValue("class", out object current))
-            additionaAttributes["class"] = $"{CssClass} {current}";
-        else
-            additionaAttributes.Add("class", CssClass);
-
-        base.OnParametersSet();
-    }
 
     protected override void OnInitialized()
     {

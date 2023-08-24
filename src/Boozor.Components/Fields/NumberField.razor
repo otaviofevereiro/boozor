@@ -16,8 +16,13 @@
     {
         ChildContent = __builder =>
         {
-            <InputNumber Value="@Value" TValue="TValue" ValueChanged="Set" ValueExpression="GetValueExpression()"
-                AdditionalAttributes="AdditionalAttributes" />
+            <div class="col-md-@Columns col-sm-12">
+                <label class="form-label">
+                    @Label
+                </label>
+                <InputNumber Value="@Value" TValue="TValue" ValueChanged="Set" ValueExpression="GetValueExpression()"
+                    class="form-control" />
+            </div>
         };
 
         base.OnInitialized();

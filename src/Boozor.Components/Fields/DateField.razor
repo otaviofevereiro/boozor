@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @inherits Field<TModel, TValue>
-    
+
 @typeparam TModel
 @typeparam TValue
 
@@ -13,8 +13,13 @@
     {
         ChildContent = __builder =>
         {
-            <InputDate TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-                AdditionalAttributes="AdditionalAttributes"/>
+            <div class="col-md-@Columns col-sm-12">
+                <label class="form-label">
+                    @Label
+                </label>
+                <InputDate TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+                    class="form-control" />
+            </div>
         };
 
         base.OnInitialized();
