@@ -2,27 +2,16 @@
 @inherits Field<TModel, bool>
 @typeparam TModel
 
-@{
-    base.BuildRenderTree(__builder);
-}
+<div class="col-md-@Columns col-sm-12">
+    <div class="form-check">
+        <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+            class="form-check-input" />
+        <label class="form-label">@Label</label>
+    </div>
+</div>
 
 @code {
 
-    protected override void OnInitialized()
-    {
-        ChildContent = __builder =>
-        {
-            <div class="col-md-@Columns col-sm-12">
-                <div class="form-check">
-                    <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-                        class="form-check-input" />
-                    <label class="form-label">@Label</label>
-                </div>
-            </div>
-        };
-
-        base.OnInitialized();
-    }
 
 }
 

@@ -16,6 +16,9 @@
     [CascadingParameter] public EditContext EditContext { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
 
+    @* [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object> AdditionalAttributes { get; set; } *@
+
     public TValue Value { get; set; }
 
     public string PropertyName => propertyInfo.Name;

@@ -4,26 +4,16 @@
 @typeparam TModel
 @typeparam TValue
 
-@{
-    base.BuildRenderTree(__builder);
-}
+<div class="col-md-@Columns col-sm-12">
+    <label class="form-label">
+        @Label
+    </label>
+    <InputDate TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+        class="form-control" />
+</div>
 
 @code {
-    protected override void OnInitialized()
-    {
-        ChildContent = __builder =>
-        {
-            <div class="col-md-@Columns col-sm-12">
-                <label class="form-label">
-                    @Label
-                </label>
-                <InputDate TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-                    class="form-control" />
-            </div>
-        };
 
-        base.OnInitialized();
-    }
 
 }
 

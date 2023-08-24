@@ -3,31 +3,22 @@
 @typeparam TModel
 @typeparam TValue
 
+<div class="col-md-@Columns col-sm-12">
+    <label class="form-label">
+        @Label
+    </label>
+    <InputSelect TValue="object" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()" class="form-control">
+
+        @foreach (var item in Items)
+        {
+            <option value="@item.Key">@item.Value</option>
+        }
+    </InputSelect>
+</div>
+
 @code {
 
     [Parameter] public IReadOnlyDictionary<object, string> Items { get; set; }
-
-
-    protected override void OnInitialized()
-    {
-        ChildContent = __builder =>
-        {
-            <div class="col-md-@Columns col-sm-12">
-                <label class="form-label">
-                    @Label
-                </label>
-                <InputSelect TValue="object" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()">
-
-                    @foreach (var item in Items)
-                    {
-                        <option value="@item.Key">@item.Value</option>
-                    }
-                </InputSelect>
-            </div>
-        };
-
-        base.OnInitialized();
-    }
 
 }
 
