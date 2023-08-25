@@ -4,8 +4,10 @@
 @typeparam TModel
 @typeparam TValue
 
-@ChildContent
-<ValidationMessage For="GetValueExpression()" />
+<div class="col-md-@Columns col-sm-12">
+   @ChildContent
+   <ValidationMessage For="GetValueExpression()" /> 
+</div>
 
 @code {
 
@@ -14,7 +16,7 @@
     [Parameter] public Expression<Func<TModel, object>> For { get; set; }
     [Parameter] public int Columns { get; set; }
     [CascadingParameter] public EditContext EditContext { get; set; }
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    protected virtual RenderFragment ChildContent { get; }
 
     @* [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object> AdditionalAttributes { get; set; } *@

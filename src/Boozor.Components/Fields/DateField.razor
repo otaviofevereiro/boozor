@@ -4,16 +4,17 @@
 @typeparam TModel
 @typeparam TValue
 
-<div class="col-md-@Columns col-sm-12">
-    <label class="form-label">
-        @Label
-    </label>
-    <InputDate TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-        class="form-control" />
-</div>
+@{
+    base.BuildRenderTree(__builder);
+}
 
 @code {
-
+    protected override RenderFragment ChildContent => __builder =>
+    {
+        <label class="form-label"> @Label </label>
+        <InputDate TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+            class="form-control" />
+    };
 
 }
 
