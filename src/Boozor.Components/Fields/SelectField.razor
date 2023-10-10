@@ -10,7 +10,7 @@
 
 @code {
 
-    [Parameter] public IReadOnlyDictionary<object, string> Items { get; set; }
+    [Parameter] public IReadOnlyDictionary<TValue, string> Items { get; set; }
 
     protected override RenderFragment ChildContent => __builder =>
     {

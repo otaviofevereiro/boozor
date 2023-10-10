@@ -8,7 +8,7 @@
         <TextField TModel=Person For="(p => p.Email)" Columns=6 />
         <DateField TModel="Person" TValue="DateTime?" For="(p=> p.BirthDate)" Columns="3" />
         <NumberField TModel="Person" TValue="decimal?" For="(p=> p.Value)" />
-        <SelectField TModel="Person" TValue="string?" Items="@States" For="(p=> p.State)" />
+        <SelectField TModel="Person" TValue="string" Items="@States" For="(p=> p.State)" />
     </Fields>
     <Columns>
         <Column TModel=Person For="(p => p.Id)" />
@@ -22,5 +22,5 @@
 
 @code {
 
-    private IReadOnlyDictionary<object, string> States = State.Items.ToDictionary(x=> (object)x.Id!, x => x.Acronym);
+    private IReadOnlyDictionary<string, string> States = State.Items.ToDictionary(x=> x.Id!, x => x.Acronym);
 }
