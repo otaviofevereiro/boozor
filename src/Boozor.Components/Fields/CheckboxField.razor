@@ -11,7 +11,8 @@
     protected override RenderFragment ChildContent => __builder =>
     {
         <div class="form-check">
-            <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()" class="form-check-input" />
+            <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()" class="form-check-input"
+                readonly=@ReadOnly />
             <label class="form-label">@Label</label>
         </div>
     };

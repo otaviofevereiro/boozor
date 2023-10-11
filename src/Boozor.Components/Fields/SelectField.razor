@@ -19,7 +19,7 @@
                 @Label
             </label>
             <InputSelect TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-                class="form-control">
+                readonly=@ReadOnly class="form-control">
 
                 @foreach (var item in Items)
                 {

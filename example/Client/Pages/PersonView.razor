@@ -2,7 +2,7 @@
 
 <View TEntity=Person Title="Person">
     <Fields>
-        <TextField TModel="Person" For="(p => p.Id)" Columns=6 />
+        <TextField TModel="Person" For="(p => p.Id)" Columns=6 ReadOnly/>
         <CheckboxField TModel="Person" For="(p=> p.Active)" Columns="6" />
         <TextField TModel=Person For="(p => p.Name)" Columns=6 />
         <TextField TModel=Person For="(p => p.Email)" Columns=6 />

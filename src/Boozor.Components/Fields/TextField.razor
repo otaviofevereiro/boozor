@@ -2,7 +2,7 @@
 @inherits Field<TModel, string>
 @typeparam TModel
 
-@{ 
+@{
     base.BuildRenderTree(__builder);
 }
 
@@ -11,7 +11,7 @@
     {
         <label class="form-label" for="@PropertyName"> @Label</label>
         <InputText id="@PropertyName" class="form-control" placeholder="@Placeholder" Value="@Value" ValueChanged="Set"
-            ValueExpression="GetValueExpression()" />
+            ValueExpression="GetValueExpression()" readonly=@ReadOnly />
     };
 }
 

@@ -11,13 +11,13 @@
 }
 
 @code {
-    
+
     protected override RenderFragment ChildContent => __builder =>
     {
 
         <label class="form-label"> @Label </label>
         <InputNumber Value="@Value" TValue="TValue" ValueChanged="Set" ValueExpression="GetValueExpression()"
-            class="form-control" />
+            class="form-control" readonly=@ReadOnly />
     };
 
 }
