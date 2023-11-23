@@ -1,8 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-@inherits Field<TModel, TValue>
+@inherits Field<TModel, DateTime?>
 
 @typeparam TModel
-@typeparam TValue
 
 @{
     base.BuildRenderTree(__builder);
@@ -12,10 +11,8 @@
     protected override RenderFragment ChildContent => __builder =>
     {
         <label class="form-label"> @Label </label>
-        <InputDate TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()" class="form-control"
-            readonly=@ReadOnly />
+        <InputDate TValue="DateTime?" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+            class="form-control" readonly=@ReadOnly />
     };
 
 }
-
-

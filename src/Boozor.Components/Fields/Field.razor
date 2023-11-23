@@ -17,19 +17,15 @@
     [Parameter] public int Columns { get; set; }
     [CascadingParameter] public EditContext EditContext { get; set; }
     [Parameter] public bool ReadOnly { get; set; } = false;
-
-    protected virtual RenderFragment ChildContent { get; }
-
-
+    
     public TValue Value { get; set; }
-
     public string PropertyName => propertyInfo.Name;
-
+    protected virtual RenderFragment ChildContent { get; }
     private PropertyInfo propertyInfo;
 
     protected override void OnInitialized()
     {
-        propertyInfo = GetPropertyInfo(For);
+        propertyInfo = For.GetPropertyInfo();
         EditContext.OnFieldChanged += OnFieldChange;
         EnsureLabel();
         FillValue();
@@ -41,6 +37,7 @@
     {
         var constant = Expression.Constant(EditContext.Model);
         var exp = Expression.Property(constant, propertyInfo.Name);
+        
         return Expression.Lambda<Func<TValue>>(exp);
     }
 
@@ -79,17 +76,6 @@
             Label = propertyInfo.Name;
         else
             Label = displayAttribute.Name;
-    }
-
-    //TODO:refactor
-    private PropertyInfo GetPropertyInfo<TType, TReturn>(Expression<Func<TType, TReturn>> property)
-    {
-        LambdaExpression lambda = property;
-        var memberExpression = lambda.Body is UnaryExpression expression
-        ? (MemberExpression)expression.Operand
-        : (MemberExpression)lambda.Body;
-
-        return (PropertyInfo)memberExpression.Member;
     }
 }
 

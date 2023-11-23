@@ -41,9 +41,10 @@ public class Person : IEntity
     public string? Id { get; set; }
 
     public bool Active { get; set; }
-    public decimal? Value { get; set; }
-    public string? State { get; set; }
 
+    public decimal? Value { get; set; }
+
+    public Relation<State>? State { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

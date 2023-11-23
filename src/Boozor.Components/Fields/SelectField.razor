@@ -1,8 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-@inherits Field<TModel, TValue>
+@using System.Linq.Expressions;
+@using System.Reflection;
+@using Boozor.Shared;
+@inherits Field<TModel, Relation<TItem>>
 @typeparam TModel
-@typeparam TValue
+@typeparam TItem where TItem : IEntity
 
+@* Enums, Data Relation, *@
 
 @{
     base.BuildRenderTree(__builder);
@@ -10,7 +14,15 @@
 
 @code {
 
-    [Parameter] public IReadOnlyDictionary<TValue, string> Items { get; set; }
+    [Parameter] public IEnumerable<TItem> Items { get; set; }
+    [Parameter] public Expression<Func<TItem, object>> DisplayFor { get; set; }
+    private PropertyInfo displayPropertyInfo;
+
+    protected override void OnParametersSet()
+    {
+        displayPropertyInfo = DisplayFor.GetPropertyInfo();
+        base.OnParametersSet();
+    }
 
     protected override RenderFragment ChildContent => __builder =>
     {
@@ -18,17 +30,19 @@
             <label class="form-label">
                 @Label
             </label>
-            <InputSelect TValue="TValue" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
+            <InputSelect TValue="Relation<TItem>" Value="@Value" ValueChanged="SetRelation" ValueExpression="GetValueExpression()"
                 readonly=@ReadOnly class="form-control">
 
                 @foreach (var item in Items)
                 {
-                    <option value="@item.Key">@item.Value</option>
+                    <option value="@item.Id">@displayPropertyInfo.GetValue(item)</option>
                 }
             </InputSelect>
         </div>
     };
 
+    private Relation<TItem> SetRelation(string item)
+    {
+        return new Relation<TItem>(item);
+    }
 }
-
-
