@@ -6,8 +6,6 @@
 @typeparam TModel
 @typeparam TItem where TItem : IEntity
 
-@* Enums, Data Relation, *@
-
 @{
     base.BuildRenderTree(__builder);
 }
@@ -30,19 +28,21 @@
             <label class="form-label">
                 @Label
             </label>
-            <InputSelect TValue="Relation<TItem>" Value="@Value" ValueChanged="SetRelation" ValueExpression="GetValueExpression()"
-                readonly=@ReadOnly class="form-control">
+            <InputSelect @bind-Value=selectedItem @onchange="OnChanged"
+            readonly=@ReadOnly class="form-control">
 
                 @foreach (var item in Items)
                 {
-                    <option value="@item.Id">@displayPropertyInfo.GetValue(item)</option>
+                    <option value="@item">@displayPropertyInfo.GetValue(item)</option>
                 }
             </InputSelect>
         </div>
     };
 
-    private Relation<TItem> SetRelation(string item)
+    string selectedItem;
+
+    private void OnChanged(ChangeEventArgs args)
     {
-        return new Relation<TItem>(item);
+        
     }
 }
