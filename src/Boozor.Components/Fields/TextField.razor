@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-@inherits Field<TModel, string>
-@typeparam TModel
+@inherits Field<string>
 
 @{
     base.BuildRenderTree(__builder);
@@ -11,8 +10,6 @@
     {
         <label class="form-label" for="@PropertyName"> @Label</label>
         <InputText id="@PropertyName" class="form-control" placeholder="@Placeholder" Value="@Value" ValueChanged="Set"
-            ValueExpression="GetValueExpression()" readonly=@ReadOnly />
+            ValueExpression="For" readonly=@ReadOnly />
     };
 }
-
-

@@ -1,7 +1,6 @@
 ﻿@using System.Linq.Expressions
 @using System.Reflection;
 @using Microsoft.AspNetCore.Components.Forms
-@typeparam TModel
 @typeparam TValue
 
 <div class="col-md-@Columns col-sm-12">
@@ -13,7 +12,7 @@
 
     [Parameter] public string Label { get; set; }
     [Parameter] public string Placeholder { get; set; }
-    [Parameter] public Expression<Func<TModel, object>> For { get; set; }
+    [Parameter] public Expression<Func<TValue>> For { get; set; }
     [Parameter] public int Columns { get; set; }
     [CascadingParameter] public EditContext EditContext { get; set; }
     [Parameter] public bool ReadOnly { get; set; } = false;

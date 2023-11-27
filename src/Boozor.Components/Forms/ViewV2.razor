@@ -1,0 +1,92 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Boozor.Shared
+@inject AppState _appState
+
+@typeparam TEntity where TEntity : IEntity
+
+<div class="col-md-@ColumnsSize col-sm-12">
+    <EditForm Model=Entity OnValidSubmit=@SubmitAsync>
+        <EntityServer @ref=entityServer />
+        <ModalContent Title=@Title StyleContent="border:none">
+
+            <Body>
+                <DataAnnotationsValidator />
+                <div class="row g-3">
+                    @* <ValidationSummary /> *@
+                    @Fields
+                </div>
+            </Body>
+            <Footer>
+                @if (!string.IsNullOrEmpty(Entity.Id))
+                {
+                    <button type="button" class="btn btn-danger btn-sm" @onclick="Delete">Excluir</button>
+                }
+                <button type="submit" class="btn btn-success btn-sm">Salvar</button>
+            </Footer>
+        </ModalContent>
+    </EditForm>
+</div>
+
+@* @{
+if (Columns is not null)
+{
+<DataTable TModel=TEntity @bind-Items=entities OnSelectItem=SetModel Multiselect=false Delete=true>
+<ChildContent>
+@Columns
+</ChildContent>
+
+<Toolbar>
+<ColumnButton Text="Custom" Color="danger" TModel=Person OnClick="CustomSelect" />
+<ColumnButton Text="Custom2" TModel=Person OnClick="CustomSelect" />
+</Toolbar>
+</DataTable>
+}
+} *@
+
+
+@code {
+
+    private EntityServer entityServer;
+    private List<TEntity> entities = new();
+
+    [Parameter, EditorRequired] public RenderFragment Fields { get; set; }
+    [Parameter] public RenderFragment Columns { get; set; }
+    [Parameter] public int ColumnsSize { get; set; } = 12;
+    [Parameter] public string Title { get; set; }
+    [Parameter, EditorRequired] public TEntity Entity { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        @* if (Title is null)
+Title = TitleAttribute.GetTitle<TEntity>(); *@
+    }
+
+    private async void SubmitAsync()
+    {
+        await _appState.Loading(async () =>
+        {
+            var result = await entityServer.SubmitAsync(Entity);
+
+            if (result.Valid)
+                SetModel(result.Content);
+
+        });
+    }
+
+    private void SetModel(TEntity entity)
+    {
+        entities.RemoveAll(x => x.Id == entity.Id);
+        entities.Add(entity);
+        Entity = entity;
+
+        StateHasChanged();
+    }
+
+    private void Delete()
+    {
+        //TODO: constante de mensagens
+        _appState.Confirmation("Confirma a exclusão?",
+        "Excluir registro",
+        onOk: async () => await Task.CompletedTask);//:TODO remove
+    }
+}
