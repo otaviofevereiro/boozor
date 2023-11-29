@@ -15,10 +15,12 @@
     {
 
         <label class="form-label"> @Label </label>
-        <InputNumber Value="@Value" TValue="TValue" ValueChanged="Set" ValueExpression="GetValueExpression()"
-            class="form-control" readonly=@ReadOnly />
+        <InputNumber Value="@Value" TValue="TValue" ValueChanged="Set" ValueExpression="For"
+            AdditionalAttributes="AdditionalAttributes" />
     };
 
+    protected override IEnumerable<KeyValuePair<string, object>> CustomAttributes()
+    {
+        yield return new("class", "form-control");
+    }
 }
-
-

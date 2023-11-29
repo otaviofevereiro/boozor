@@ -9,8 +9,12 @@
     protected override RenderFragment ChildContent => __builder =>
     {
         <label class="form-label"> @Label </label>
-        <InputDate TValue="DateTime?" Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()"
-            class="form-control" readonly=@ReadOnly />
+        <InputDate TValue="DateTime?" Value="@Value" ValueChanged="Set" ValueExpression="For"
+            AdditionalAttributes="AdditionalAttributes" />
     };
 
+    protected override IEnumerable<KeyValuePair<string, object>> CustomAttributes()
+    {
+        yield return new("class", "form-control");
+    }
 }

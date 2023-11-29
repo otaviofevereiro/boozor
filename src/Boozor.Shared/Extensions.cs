@@ -1,10 +1,18 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Boozor;
+namespace System;
 
+//TODO:refactor to devpack
 public static class Extensions
 {
+    public static IEnumerable<KeyValuePair<TKey, TValue>> Merge<TKey, TValue>(
+        this IEnumerable<KeyValuePair<TKey, TValue>> baseDictionary,
+        IEnumerable<KeyValuePair<TKey, TValue>> overwriteDictionary)
+    {
+        return overwriteDictionary.Union(baseDictionary).DistinctBy(x => x.Key);
+    }
+
     public static PropertyInfo GetPropertyInfo<TReturn>(this Expression<Func<TReturn>> property)
     {
         LambdaExpression lambda = property;
@@ -26,7 +34,6 @@ public static class Extensions
         return (PropertyInfo)expression.Member;
     }
 
-    //TODO:refactor
     public static PropertyInfo GetPropertyInfo<TType, TReturn>(this Expression<Func<TType, TReturn>> property)
     {
         LambdaExpression lambda = property;

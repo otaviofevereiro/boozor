@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+@using System;
 @inherits Field<string>
 
 @{
@@ -9,7 +10,11 @@
     protected override RenderFragment ChildContent => __builder =>
     {
         <label class="form-label" for="@PropertyName"> @Label</label>
-        <InputText id="@PropertyName" class="form-control" placeholder="@Placeholder" Value="@Value" ValueChanged="Set"
-            ValueExpression="For" readonly=@ReadOnly />
+        <InputText Value="@Value" ValueChanged="Set" ValueExpression="For" AdditionalAttributes="AdditionalAttributes" />
     };
+
+    protected override IEnumerable<KeyValuePair<string, object>> CustomAttributes()
+    {
+        yield return new("class", "form-control");
+    }
 }

@@ -2,12 +2,12 @@
 
 <ViewV2 Entity="person" Title="Person">
     <Fields>
-        <TextField For="(() => person.Id)" Columns=6 ReadOnly />
-        <CheckboxField For="(()=> person.Active)" Columns="6" />
+        <TextField For="(() => person.Id)" Columns=6 readonly/>
+        @* <CheckboxField For="(()=> person.Active)" Columns="6" />
         <TextField For="(()=> person.Name)" Columns=6 />
         <TextField For="(() => person.Email)" Columns=6 />
         <DateField For="(()=> person.BirthDate)" Columns="3" />
-        <NumberField TValue="decimal?" For="(()=> person.Value)" />
+        <NumberField TValue="decimal?" For="(()=> person.Value)" /> *@
         @* <SelectField TModel="Person" TItem="State" Items="@State.Items" For="(()=> person.State)" DisplayFor="(p=>
         p.Acronym)" /> *@
     </Fields>

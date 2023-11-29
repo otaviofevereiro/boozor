@@ -5,7 +5,7 @@
 
 <div class="col-md-@Columns col-sm-12">
     @ChildContent
-    <ValidationMessage For="GetValueExpression()" />
+    <ValidationMessage For="For" />
 </div>
 
 @code {
@@ -15,9 +15,11 @@
     [Parameter] public Expression<Func<TValue>> For { get; set; }
     [Parameter] public int Columns { get; set; }
     [CascadingParameter] public EditContext EditContext { get; set; }
-    [Parameter] public bool ReadOnly { get; set; } = false;
-    
-    public TValue Value { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object> AdditionalAttributes { get; set; }
+
+    protected TValue Value { get; set; }
     public string PropertyName => propertyInfo.Name;
     protected virtual RenderFragment ChildContent { get; }
     private PropertyInfo propertyInfo;
@@ -31,28 +33,32 @@
         base.OnInitialized();
     }
 
-
-    protected Expression<Func<TValue>> GetValueExpression()
+    protected override void OnParametersSet()
     {
-        var constant = Expression.Constant(EditContext.Model);
-        var exp = Expression.Property(constant, propertyInfo.Name);
-        
-        return Expression.Lambda<Func<TValue>>(exp);
-    }
+        var additional = CustomAttributes().Merge(AdditionalAttributes).ToDictionary(x => x.Key, x => x.Value);
+        additional.Add("id", PropertyName);
+        AdditionalAttributes = additional;
 
-    protected virtual void Set(TValue value)
+        base.OnParametersSet();
+    }
+    protected void Set(TValue value)
     {
         propertyInfo.SetValue(EditContext.Model, value);
     }
 
-    protected virtual void FillValue()
+    protected void FillValue()
     {
         Value = GetValue();
     }
 
-    protected virtual TValue GetValue()
+    protected TValue GetValue()
     {
         return (TValue)propertyInfo.GetValue(EditContext.Model);
+    }
+
+    protected virtual IEnumerable<KeyValuePair<string, object>> CustomAttributes()
+    {
+        return Array.Empty<KeyValuePair<string, object>>();
     }
 
     private void OnFieldChange(object obj, FieldChangedEventArgs e)
@@ -77,4 +83,3 @@
             Label = displayAttribute.Name;
     }
 }
-

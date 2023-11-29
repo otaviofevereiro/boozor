@@ -10,12 +10,14 @@
     protected override RenderFragment ChildContent => __builder =>
     {
         <div class="form-check">
-            <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="GetValueExpression()" class="form-check-input"
-                readonly=@ReadOnly />
+            <InputCheckbox Value="@Value" ValueChanged="Set" ValueExpression="For"
+                AdditionalAttributes="AdditionalAttributes" />
             <label class="form-label">@Label</label>
         </div>
     };
 
+    protected override IEnumerable<KeyValuePair<string, object>> CustomAttributes()
+    {
+        yield return new("class", "form-check-input");
+    }
 }
-
-
