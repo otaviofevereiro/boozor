@@ -10,6 +10,11 @@ public static class Extensions
         this IEnumerable<KeyValuePair<TKey, TValue>> baseDictionary,
         IEnumerable<KeyValuePair<TKey, TValue>> overwriteDictionary)
     {
+        if (baseDictionary is null)
+            return overwriteDictionary;
+        else if (overwriteDictionary is null)
+            return baseDictionary;
+
         return overwriteDictionary.Union(baseDictionary).DistinctBy(x => x.Key);
     }
 
