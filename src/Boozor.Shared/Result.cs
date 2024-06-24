@@ -34,7 +34,7 @@ public static class ResultExtensions
     {
         if (validations is not null)
             return new(!validations.Any(), validations.ToArray());
-
+            
         return new(false, Array.Empty<ValidationResult>());
     }
 }

@@ -3,7 +3,6 @@
 @using System.Reflection;
 @using Boozor.Shared;
 @inherits Field<Relation<TItem>>
-@typeparam TModel
 @typeparam TItem where TItem : IEntity
 
 @{
@@ -11,10 +10,10 @@
 }
 
 @code {
-
     [Parameter] public IEnumerable<TItem> Items { get; set; }
     [Parameter] public Expression<Func<TItem, object>> DisplayFor { get; set; }
     private PropertyInfo displayPropertyInfo;
+    private string _value => GetValue().Id;
 
     protected override void OnParametersSet()
     {
@@ -28,25 +27,27 @@
             <label class="form-label">
                 @Label
             </label>
-            <InputSelect @bind-Value=selectedItem @onchange="OnChanged" AdditionalAttributes="AdditionalAttributes">
-
+            <InputSelect Value="@_value" @onchange="((e) => OnValueChanged(e))" AdditionalAttributes="AdditionalAttributes">
                 @foreach (var item in Items)
                 {
-                    <option value="@item">@displayPropertyInfo.GetValue(item)</option>
+                    <option value="@item.Id">@displayPropertyInfo.GetValue(item)</option>
                 }
             </InputSelect>
         </div>
     };
 
-    string selectedItem;
-
-    private void OnChanged(ChangeEventArgs args)
+    private void OnValueChanged(ChangeEventArgs value)
     {
+        var parameter = Expression.Parameter(typeof(TItem), "x");
+        var equalExpression = Expression.Equal(For, Expression.Constant(value.Value?.ToString()));
+        var body = Expression.Lambda<Func<TItem, bool>>(equalExpression, parameter);
+        var item = Items.FirstOrDefault(body.Compile());
 
+        Set(new(item));
     }
 
     protected override IEnumerable<KeyValuePair<string, object>> CustomAttributes()
     {
-        yield return new("class", "form-control");
+        yield return new("class", "form-select");
     }
 }
