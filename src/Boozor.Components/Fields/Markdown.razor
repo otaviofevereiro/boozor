@@ -1,0 +1,49 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+<button @onclick="OnPreviewOrEdit" class="btn btn-success btn-sm">@previewOrEditText</button>
+
+
+@{
+    if (IsPreview())
+        @ToHtml()
+    else
+    {
+        <InputTextArea @bind-Value=markdown></InputTextArea>
+    }
+}
+
+@code
+{
+    enum Mode { Preview, Edit }
+
+    Mode currentMode = Mode.Preview;
+    string previewOrEditText = "Edit";
+    string markdown = "";
+
+    public MarkupString ToHtml()
+    {
+        Console.WriteLine(markdown);
+        Console.WriteLine(Markdig.Markdown.ToHtml(markdown));
+
+        return new MarkupString(Markdig.Markdown.ToHtml(markdown));
+    }
+
+    public void OnPreviewOrEdit()
+    {
+        if (IsPreview())
+        {
+            currentMode = Mode.Edit;
+            previewOrEditText = "Preview";
+        }
+        else
+        {
+            currentMode = Mode.Preview;
+            previewOrEditText = "Edit";
+        }
+    }
+
+    bool IsPreview()
+    {
+        return currentMode == Mode.Preview;
+    }
+}
